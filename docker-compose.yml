@@ -1,0 +1,12 @@
+# Docker Compose configuration for the Transcendence project
+
+# More info for include:
+# https://docs.docker.com/compose/compose-file/14-include/
+
+# Including the microservices
+include:
+  # - PgAdmin/docker-compose.yml
+  - FrontEnd/docker-compose.yml
+  - UserManagement/docker-compose.yml
+
+name: transcendence

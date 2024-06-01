@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+# Docker
+**/secrets/*
+
+# Visual Studio Code
+.vscode/*
+# include tasks.json
+!.vscode/tasks.json

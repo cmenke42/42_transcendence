@@ -1,0 +1,55 @@
+name: user_management
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: docker/dev.Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    # secrets:
+    #   - db-password
+    #   - django_superuser_password
+    volumes:
+      - api-data:/app
+    env_file:
+      - ./api/env.dev
+    ports:
+      - 127.0.0.1:8000:8000
+  db:
+    image: postgres:14
+    restart: unless-stopped
+    # secrets:
+    #   - db-password
+    volumes:
+      - db-data:/var/lib/db
+    env_file:
+      - ./api/env.dev
+    # environment:
+      # - POSTGRES_DB=user_management
+      # - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+    expose:
+      - 5432
+    healthcheck:
+      test: [ "CMD", "pg_isready", -U, "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  db-data:
+  api-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./api/django_application
+
+# secrets:
+#   db-password:
+#     file: secrets/db_password.txt
+#   django_superuser_password:
+#     file: secrets/django_superuser_password.txt

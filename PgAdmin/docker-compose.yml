@@ -1,0 +1,33 @@
+name: pgadmin
+
+services:
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:8.6
+    volumes:
+      - data_volume:/var/lib/pgadmin
+      - ./config:/etc/pgadmin
+      # # expected: server.key, server.cert
+      # - ./certs:/certs
+    restart: unless-stopped
+    ports:
+      # - "5050:443"
+      - "127.0.0.1:5050:80"
+    env_file:
+      - ./env.dev
+    # secrets:
+    #   - pgadmin_password
+
+volumes:
+  # preferred to use docker managed volume instead of bind mount,
+  # to avoid permission issue with session folder
+  data_volume:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     o: bind
+  #     device: ./data
+
+# secrets:
+#   pgadmin_password:
+#     file: ./secrets/pgadmin_password.txt
