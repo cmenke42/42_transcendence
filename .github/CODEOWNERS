@@ -18,3 +18,7 @@
 # User Management
 /UserManagement/api/docker/ @cmenke42
 /UserManagement/api/docker-compose.yml @cmenke42
+
+
+### FrontEnd
+/FrontEnd/angular_app/ @Ahsanbaloch

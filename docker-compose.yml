@@ -5,7 +5,7 @@
 
 # Including the microservices
 include:
-  # - PgAdmin/docker-compose.yml
+  - PgAdmin/docker-compose.yml
   - FrontEnd/docker-compose.yml
   - UserManagement/docker-compose.yml
 

@@ -15,7 +15,7 @@ services:
     volumes:
       - api-data:/app
     env_file:
-      - ./api/env.dev
+      - ./api/dev.env
     ports:
       - 127.0.0.1:8000:8000
   db:
@@ -26,7 +26,7 @@ services:
     volumes:
       - db-data:/var/lib/db
     env_file:
-      - ./api/env.dev
+      - ./api/dev.env
     # environment:
       # - POSTGRES_DB=user_management
       # - POSTGRES_PASSWORD_FILE=/run/secrets/db-password

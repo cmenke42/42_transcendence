@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: black;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+  
+  .login-card {
+    opacity: 0.4;
+    width: 400px;
+    max-width: 100%;
+    background: rgba(255, 255, 255, 0.9); /* Optional: Makes the card semi-transparent */
+  }
+  
+  .full-width {
+    width: 100%;
+  }

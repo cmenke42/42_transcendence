@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-# Build the base image.
+### Build the base image.
 ARG PYTHON_VERSION=3.12
 FROM python:${PYTHON_VERSION}-slim AS base
 
@@ -11,21 +11,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /app
 
-# Create a non-privileged user that the app will run under.
-ARG UID=10001
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid "${UID}" \
-    appuser
-
-
-# Builder stage for dependencies
+### Builder stage for dependencies
 FROM base AS builder
 
 # Install system dependencies
@@ -42,8 +29,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     #TODO change for produciton
     python -m pip install -r requirements.txt
 
-
-# Final stage
+### Final stage
 FROM base AS final
 
 WORKDIR /app
@@ -53,6 +39,20 @@ COPY --from=builder /usr/local /usr/local
 
 # Copy entrypoint script
 COPY ./docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+
+# Create a non-privileged user that the app will run under.
+ARG UID=10001
+ARG GID=10001
+RUN groupadd -g ${GID} appgroup && \
+    adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/nonexistent" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "${UID}" \
+    --gid "${GID}" \
+    appuser
 
 # Switch to the non-privileged user to run the application.
 USER appuser

@@ -1,0 +1,29 @@
+<body>
+<div class="container">
+  <div class="card login-card">
+    <div class="card-header">
+      <h5 class="card-title">Register</h5>
+    </div>
+    <div class="card-body">
+      <form #registrationForm="ngForm" (ngSubmit)="userRegisteration()">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" [(ngModel)]="user.email" name="email" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" [(ngModel)]="user.password" name="password" required>
+        </div>
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="!registrationForm.valid">Signup</button>
+        <p> Already have account? wanna 
+          <a routerLink="/login" class="btn btn-link">Login?</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
+</body>

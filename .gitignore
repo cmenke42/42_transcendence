@@ -38,3 +38,9 @@
 .vscode/*
 # include tasks.json
 !.vscode/tasks.json
+
+# environments
+**/.venv/
+**/.env/
+**/env/
+**/venv/
