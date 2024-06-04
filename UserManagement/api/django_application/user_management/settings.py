@@ -18,7 +18,6 @@ import argon2
 from datetime import timedelta
 from .utils import get_env_or_file_value
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -195,3 +194,12 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,
 }
 
+# ------------------------- Common default settings -----------------------------:
+USER_DEFAULT_HOMEPAGE = 'http://localhost:8000/api/v1/user/'
+
+
+# ----------------- OAUTH2.0  42 INTRA SETTINGS -----------------:
+API_42_AUTH_URL					= 'https://api.intra.42.fr/oauth/authorize'  # 42 Intra auth URL
+API_42_ACCESS_TOKEN_ENDPOINT	= 'https://api.intra.42.fr/oauth/token'		 # 42 Intra access token endpoint
+API_42_REDIRECT_URI				= 'http://localhost:8000/api/v1/call_back/'	 # 42 Intra redirect URI
+API_42_INTRA_ENTRYPOINT_URL		= 'https://api.intra.42.fr/v2/'				 # 42 Intra entrypoint URL

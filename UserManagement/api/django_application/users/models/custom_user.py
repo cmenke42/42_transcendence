@@ -30,13 +30,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
                                             help_text="Date when the user account was created",
     )
 
-    # Email verification for new users
+    # Email verification for new users      ## changed
     is_email_verified = models.BooleanField(default=False)
     email_verif_token= models.CharField(max_length=128, default="")
     email_verif_token_expires = models.DateTimeField(null=True, blank=True)
     #Password fogot mail
     user_recovery_code = models.CharField(max_length=128, default="")
     user_recovery_code_expires = models.DateTimeField(null=True, blank=True)
+    reset_password_link_accepted = models.BooleanField(default=False)
 
     objects = CustomUserManager()
 

@@ -31,15 +31,17 @@
 *.out
 *.app
 
-# Docker
+
+# Docker and secrets
 **/secrets/*
+.env
 
 # Visual Studio Code
 .vscode/*
 # include tasks.json
 !.vscode/tasks.json
 
-# environments
+# virtual environments
 **/.venv/
 **/.env/
 **/env/

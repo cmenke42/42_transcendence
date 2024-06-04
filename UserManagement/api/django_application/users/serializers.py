@@ -50,3 +50,35 @@ class UserRegisterSerializer(DynamicHyperlinkedModelSerializer):
         user.set_password(password)
         user.save()
         return user
+    
+# from django.core.exceptions import ObjectDoesNotExist 
+
+# class UserResetPasswordSerializer(DynamicHyperlinkedModelSerializer):
+#     class Meta:
+#         model = get_user_model()
+#         fields = ['email','password']
+#         extra_kwargs = {
+#             'password': {'write_only': True,
+#                          'validators': [validate_password] # criteria are definend in settings
+#                          },
+#         }
+#     def post(self, validated_data):
+#         email = validated_data.pop('email')
+#         password = validated_data.pop('password')
+#         try:
+#             user = get_user_model().objects.get(email=email)
+#         except ObjectDoesNotExist:
+#             raise serializers.ValidationError("User with this email does not exist.")
+#         if not user.reset_password_link_accepted:
+#             raise serializers.ValidationError("Reset link hasn't been activated.")
+#         user.reset_password_link_accepted = False
+#         user.set_password(password)
+#         user.save()
+#         return user
+
+# serializers.py
+from rest_framework import serializers
+
+class SetNewPasswordSerializer(serializers.Serializer):
+    new_password = serializers.CharField(write_only=True, required=True, min_length=8)
+
