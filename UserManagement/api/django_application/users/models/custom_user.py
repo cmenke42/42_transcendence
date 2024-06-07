@@ -6,6 +6,9 @@ from .custom_user_manager import CustomUserManager
 from user_profile.models import UserProfile
 
 from django.utils import timezone
+import random
+import datetime
+from django.core.mail import send_mail
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
@@ -30,7 +33,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
                                             help_text="Date when the user account was created",
     )
 
-    # Email verification for new users      ## changed
+    # Email verification for new users
     is_email_verified = models.BooleanField(default=False)
     email_verif_token= models.CharField(max_length=128, default="")
     email_verif_token_expires = models.DateTimeField(null=True, blank=True)
@@ -38,6 +41,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     user_recovery_code = models.CharField(max_length=128, default="")
     user_recovery_code_expires = models.DateTimeField(null=True, blank=True)
     reset_password_link_accepted = models.BooleanField(default=False)
+
+    # 2FA fields
+    is_2fa_enabled = models.BooleanField(default=False)
+    otp = models.CharField(
+        max_length=6,
+        blank=True,
+    )
+    otp_expiry = models.DateTimeField(blank=True, null=True)
 
     objects = CustomUserManager()
 
@@ -70,6 +81,27 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+    
+    def generate_otp(self):
+        """
+        Generate OTP and set it to the user object
+        """
+        self.otp = f"{random.randint(100000, 999999)}"
+        self.otp_expiry = timezone.now() + datetime.timedelta(minutes=2)
+        self.save()
+        
+        
+    def send_otp_email(self):
+        try:
+            send_mail(
+                "Your 2FA OTP Code",
+                f"Your OTP code is {self.otp}. It will expire in 2 minutes.",
+                "from@example.com",
+                [self.email],
+                fail_silently=False,
+            )
+        except Exception as e:
+            print(f"Error sending email: {e}")
 
     # def has_perm(self, perm, obj=None):
     #     "Does the user have a specific permission?"

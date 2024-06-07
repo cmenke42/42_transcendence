@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'user_profile',
     'user_login',
     'rest_framework.authtoken', #authtoken for authentication
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -189,9 +190,11 @@ CORS_ALLOW_CREDENTIALS = True
 
 # ------------------------ JWT settings -------------------------:
 SIMPLE_JWT = {
-    # 'REFRESH_TOKEN_LIFETIME': timedelta(seconds=20),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=15),
-    'ROTATE_REFRESH_TOKENS': True,
+    'ROTATE_REFRESH_TOKENS': False,
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    'BLACKLIST_AFTER_ROTATION': True,
+    
 }
 
 # ------------------------- Common default settings -----------------------------:

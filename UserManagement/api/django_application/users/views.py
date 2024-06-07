@@ -38,7 +38,8 @@ class CustomUserProfileViewSet(generics.RetrieveAPIView):
 
 
 class CustomUserApiList(generics.ListCreateAPIView):
-    #permission_classes = [IsOwnerOrAdminOnly]
+    permission_classes = [IsOwnerOrAdminOnly]
+    # permission_classes = [IsAdminUser]
     # permission_classes = [AllowAny] # for testing purposes
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
@@ -51,8 +52,8 @@ class CustomUserApiUpdate(generics.RetrieveUpdateAPIView):
     serializer_class = CustomUserSerializer
     
 class CustomUserApiDelete(generics.RetrieveDestroyAPIView):
-    #permission_classes = [IsOwnerOrAdminOnly]
-    permission_classes = [AllowAny] # for testing purposes
+    permission_classes = [IsOwnerOrAdminOnly]
+    # permission_classes = [AllowAny] # for testing purposes
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     
