@@ -65,3 +65,6 @@ ENTRYPOINT [ "entrypoint.sh" ]
 
 # Run the application.
 CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
+
+# check again for channels setting
+# CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "user_management.asgi:application"]

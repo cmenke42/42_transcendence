@@ -22,7 +22,8 @@ from .utils import get_env_or_file_value
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_env_or_file_value("SECRET_KEY")
+#TODO: make sure secret is onlz from env file in production
+SECRET_KEY = get_env_or_file_value("SECRET_KEY", "asjhdghasj")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_env_or_file_value("DEBUG", False)
@@ -35,6 +36,8 @@ WSGI_APPLICATION = 'user_management.wsgi.application'
 
 # Application definition
 INSTALLED_APPS = [
+    'channels',
+    'daphne',
     'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,8 +53,11 @@ INSTALLED_APPS = [
     'user_profile',
     'user_login',
     'rest_framework.authtoken', #authtoken for authentication
+
     'rest_framework_simplejwt.token_blacklist',
 ]
+
+
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -192,7 +198,7 @@ CORS_ALLOW_CREDENTIALS = True
 SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=15),
     'ROTATE_REFRESH_TOKENS': False,
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=2),
     'BLACKLIST_AFTER_ROTATION': True,
     
 }
@@ -207,6 +213,61 @@ API_42_ACCESS_TOKEN_ENDPOINT	= 'https://api.intra.42.fr/oauth/token'		 # 42 Intr
 API_42_REDIRECT_URI				= 'http://localhost:8000/api/v1/call_back/'	 # 42 Intra redirect URI
 API_42_INTRA_ENTRYPOINT_URL		= 'https://api.intra.42.fr/v2/'				 # 42 Intra entrypoint URL
 
+# --------------------Channels things---------------------------:
+ASGI_APPLICATION = 'user_management.routing.application'
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0:8000']
+
+CHANNEL_LAYERS = {
+    # 'default': {
+    #     'BACKEND': 'channels_redis.core.RedisChannelLayer',
+    #     'CONFIG': {
+    #         "hosts": [('127.0.0.1',6379)]
+    #     },
+    # },
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
+}
+
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#         },
+#         'channels': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#         },
+#     },
+# }
+
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels.layers.InMemoryChannelLayer',
+#     },
+# }
 
 
 

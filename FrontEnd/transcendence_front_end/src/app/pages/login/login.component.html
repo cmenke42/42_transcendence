@@ -1,0 +1,38 @@
+<body>
+<div class="container">
+  <div class="card login-card">
+    <div class="card-header">
+      <h5 class="card-title">Login</h5>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="loginUser()">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" [(ngModel)]="user.email" name="email">
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" [(ngModel)]="user.password" name="password">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+        <br>
+        <p> There isn't any account yet? wanna 
+        <a routerLink="/signup" class="btn btn-link">Register?</a>
+      </p>
+      </form>
+    </div>
+  </div>
+</div>
+@if(this.show2fa)
+{
+  <div class="modal">
+    <div class="modal-content">
+      <span class="close" (click)="closePopup()">&times;</span>
+      <p>2FA is required. An OTP has been sent to your email. Please enter the OTP:</p>
+      <input type="text" [(ngModel)]="user.otp" name="otp" placeholder="Enter OTP">
+      <button (click)="verifyOTP()">Verify OTP</button>
+    </div>
+  </div>
+}
+
+</body>

@@ -1,0 +1,8 @@
+<p>setting works!</p>
+<div>
+  <ul>
+    <li *ngFor="let m of messages">{{ m }}</li>
+  </ul>
+  <input [(ngModel)]="message" (keydown.enter)="sendMessage()" type="text">
+  <button (click)="sendMessage()">Send</button>
+</div>
