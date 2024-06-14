@@ -1,0 +1,5 @@
+{% extends "users/email/base_email_with_ignore.txt" %}
+{% block content %}
+Please click on the link below to confirm your email change request:
+{{ link }}
+{% endblock content %}

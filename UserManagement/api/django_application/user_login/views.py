@@ -9,6 +9,7 @@ from users.models import CustomUser
 from .serializers import  OTPVerifySerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.views.decorators.csrf import csrf_exempt
+from user_login.otp_service import OTPService
 
 
 # class MyObtainTokenPairView(TokenObtainPairView):
@@ -39,8 +40,8 @@ class MyObtainTokenPairView(TokenObtainPairView):
         
         if user.is_2fa_enabled:
             # Generate and send OTP
-            user.generate_otp()
-            user.send_otp_email()
+            OTPService.generate_otp(user)
+            OTPService.send_otp_email(user)
             return Response({
                 'detail': '2FA is required. An OTP has been sent to your email.',
                 'fa_pending': True,
@@ -48,7 +49,6 @@ class MyObtainTokenPairView(TokenObtainPairView):
             }, status=status.HTTP_200_OK)
         
         # If 2FA is not enabled, return the token as usual  
-         # If 2FA is not enabled, return the token as usual  
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 class VerifyOTPView(APIView):

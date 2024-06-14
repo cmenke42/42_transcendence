@@ -3,6 +3,7 @@ GREEN=\033[0;32m
 RESET=\033[0m
 
 MANAGE_PY_PATH = ./django_application/manage.py
+PROJECT_PATH = ./django_application
 
 run:
 	python $(MANAGE_PY_PATH) runserver
@@ -34,3 +35,15 @@ create_python_env:
 recreate_python_env:
 	rm -rf .venv
 	$(MAKE) create_python_env
+
+clear_migrations:
+	find $(PROJECT_PATH) -path "*/migrations/*.py" -not -name "__init__.py" -delete
+	find $(PROJECT_PATH) -path "*/migrations/*.pyc"  -delete
+
+refresh_migrations:
+	$(MAKE) clear_migrations
+	python $(MANAGE_PY_PATH) makemigrations
+
+clear_python_cache:
+	find $(PROJECT_PATH) -type d -name "__pycache__" -exec rm -r {} +
+	find $(PROJECT_PATH) -type f -name "*.pyc" -exec rm -f {} +

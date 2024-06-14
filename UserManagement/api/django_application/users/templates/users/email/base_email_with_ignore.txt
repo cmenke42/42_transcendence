@@ -1,0 +1,4 @@
+{% extends "users/email/base_email.txt" %}
+{% block footer %}
+If you didn't request this email, please ignore it. If you keep receiving this email, please contact us.
+{% endblock %}

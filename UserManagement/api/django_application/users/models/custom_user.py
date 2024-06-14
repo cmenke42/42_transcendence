@@ -1,14 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
-
-from .custom_user_manager import CustomUserManager
 from user_profile.models import UserProfile
-
-from django.utils import timezone
-import random
-import datetime
-from django.core.mail import send_mail
+from .custom_user_manager import CustomUserManager
+from ..utils.send_email_with_templates import send_email_with_templates
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
@@ -20,32 +15,24 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             },
         help_text="Will not be used as nickname in the game."
     )
-    is_active = models.BooleanField(verbose_name="active",
-                                    default=False,
-                                    help_text="Status of the user account",
-    )
-    is_admin = models.BooleanField(verbose_name="admin status",
-                                   default=False,
-                                   help_text="User can log into admin page?."
+    is_active = models.BooleanField(
+        verbose_name="active",
+        default=False,
+        help_text="Status of the user account",
     )
     is_intra_user = models.BooleanField(verbose_name="is intra user",
                                    default=False,
                                    help_text="Was user registered via 42 Intra?"
     )
     
-    date_of_creation = models.DateTimeField(verbose_name="account creation",
-                                            auto_now_add=True,
-                                            help_text="Date when the user account was created",
+    date_of_creation = models.DateTimeField(
+        verbose_name="account creation",
+        auto_now_add=True,
+        help_text="Date when the user account was created",
     )
 
     # Email verification for new users
     is_email_verified = models.BooleanField(default=False)
-    email_verif_token= models.CharField(max_length=128, default="")
-    email_verif_token_expires = models.DateTimeField(null=True, blank=True)
-    #Password fogot mail
-    user_recovery_code = models.CharField(max_length=128, default="")
-    user_recovery_code_expires = models.DateTimeField(null=True, blank=True)
-    reset_password_link_accepted = models.BooleanField(default=False)
 
     # 2FA fields
     is_2fa_enabled = models.BooleanField(default=False)
@@ -65,13 +52,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name : "user"
         verbose_name_plural: "users"
 
-    #TODO: is it needed since we dont use django admin portal??
-    @property
-    def is_staff(self):
-        """Can the user log into the django admin site?"""
-        #Simply said, all admins are staff
-        return self.is_admin
-
     def clean(self):
         """
         normalizes the email which is used as username and overrides the base
@@ -86,27 +66,24 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-    
-    def generate_otp(self):
+
+    def email_user(
+            self, subject, message=None,
+            from_email=None,
+            html_message_template_name=None,
+            text_message_template_name=None,
+            context=None,
+        ):
         """
-        Generate OTP and set it to the user object
+        Convenience method for sending an email to this user.
+        Context for templates can be passed as dictionary.
         """
-        self.otp = f"{random.randint(100000, 999999)}"
-        self.otp_expiry = timezone.now() + datetime.timedelta(minutes=2)
-        self.save()
-        
-        
-    def send_otp_email(self):
-        try:
-            send_mail(
-                "Your 2FA OTP Code",
-                f"Your OTP code is {self.otp}. It will expire in 2 minutes.",
-                "from@example.com",
-                [self.email],
-                fail_silently=False,
-            )
-        except Exception as e:
-            print(f"Error sending email: {e}")
+        send_email_with_templates(
+            subject, message,
+            from_email, [self.email],
+            html_message_template_name, text_message_template_name,
+            context,
+        )
 
     # def has_perm(self, perm, obj=None):
     #     "Does the user have a specific permission?"
@@ -117,31 +94,3 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     #     "Does the user have permissions to view the app `app_label`?"
     #     # Simplest possible answer: Yes, always
     #     return True
-
-
-
-# class CustomUser(AbstractBaseUser, PermissionsMixin):
-    
-#     email = models.EmailField(_("email address"), unique=True)
-#     # username = models.CharField(max_length=150, blank=True)
-#     is_staff = models.BooleanField(default=False)
-#     is_active = models.BooleanField(default=True)
-#     date_joined = models.DateTimeField(default=timezone.now)
-#     # Email verification for new users
-#     is_email_verified = models.BooleanField(default=False)
-#     email_verif_token= models.CharField(max_length=128, default="")
-#     email_verif_token_expires = models.DateTimeField(null=True, blank=True)
-#     #Password fogot mail
-#     user_recovery_code = models.CharField(max_length=12, default="")
-#     user_recovery_code_expires = models.DateTimeField (null=True, blank=True)
-
-
-#     USERNAME_FIELD = "email"
-#     REQUIRED_FIELDS = []
-
-#     objects = CustomUserManager()
-    
-    
-#     def __str__(self):
-#         return self.email
-

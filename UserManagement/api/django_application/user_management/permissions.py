@@ -1,28 +1,23 @@
-from rest_framework import permissions
+from rest_framework.permissions import BasePermission, IsAuthenticated
 
-from rest_framework.permissions import IsAdminUser
-# class IsAdminOrReadOnly(permissions.BasePermission):
-#     def has_permission(self, request, view):
-#         if request.method in permissions.SAFE_METHODS:
-#             return True        
-#         return bool(request.user and request.user.is_staff)
-    
 
-# class IsOwnerOrAdminOnly(permissions.BasePermission):
-#     def has_object_permission(self, request, view, obj):
-#         if (request.user.is_authenticated):
-#             return request.user.is_staff or obj == request.user
-        
+class IsSuperUser(BasePermission):
+    message = "Only superusers are allowed"
 
-class IsOwnerOrAdminOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        # Проверка на уровне запроса
-        return request.user.is_authenticated
+        return bool(request.user and request.user.is_superuser)
     
     def has_object_permission(self, request, view, obj):
-        # Проверка на уровне объекта
-        if request.user.is_authenticated:
-            return request.user.is_staff or obj == request.user
-        return False
+        return bool(request.user and request.user.is_superuser)
 
- 
+class IsUserSelf(BasePermission):
+    """
+    Custom permission to only allow users to view or edit their own user object.
+    """
+    message = "You are not the owner of this user object"
+
+    def has_permission(self, request, view):
+        return request.user.is_authenticated
+
+    def has_object_permission(self, request, view, obj):
+        return (obj == request.user)

@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'channels',
     'daphne',
     'corsheaders',
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -48,13 +48,16 @@ INSTALLED_APPS = [
     # API framework
     'rest_framework',
     # UserManagement
-    'people.apps.PeopleConfig',
+    'people',
     'users',
     'user_profile',
     'user_login',
     'rest_framework.authtoken', #authtoken for authentication
 
     'rest_framework_simplejwt.token_blacklist',
+
+    #TODO: remove
+    # 'django_extensions',
 ]
 
 
@@ -151,12 +154,16 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-    
+
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend"
     ],
 
+    #TODO: change visibility for OPTIONS request
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        # TODO: remove later or something since only neccesary to use browsable api easily
+        "rest_framework.authentication.SessionAuthentication",
+
         "rest_framework.authentication.TokenAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication"
     ],
@@ -172,6 +179,7 @@ EMAIL_HOST_USER     = get_env_or_file_value("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = get_env_or_file_value("EMAIL_HOST_PASSWORD")
 EMAIL_PORT          = get_env_or_file_value("EMAIL_PORT")
 EMAIL_USE_TLS       = get_env_or_file_value("EMAIL_USE_TLS")
+DEFAULT_FROM_EMAIL  = EMAIL_HOST_USER
 
 # Email content
 EMAIL_SUBJECT_FORGOT_PASSWORD	= 'Pong password recovery'
@@ -189,10 +197,11 @@ argon2.DEFAULT_TIME_COST          = 2          # Iterations count
 
 # ------------------------ login settings -------------------------:
 CORS_ORIGIN_ALLOW_ALL = False
-CSRF_TRUSTED_ORIGINS = ['http://localhost:4200/']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:4200']
 CORS_ALLOWED_ORIGINS = ['http://localhost:4200']
 CORS_ALLOW_CREDENTIALS = True
-#CSRF_COOKIE_HTTPONLY = False #should I set it or not?
+# CSRF_COOKIE_HTTPONLY = False #should I set it or not?
+CSRF_COOKIE_SECURE = not DEBUG
 
 # ------------------------ JWT settings -------------------------:
 SIMPLE_JWT = {
@@ -213,6 +222,21 @@ API_42_ACCESS_TOKEN_ENDPOINT	= 'https://api.intra.42.fr/oauth/token'		 # 42 Intr
 API_42_REDIRECT_URI				= 'http://localhost:8000/api/v1/call_back/'	 # 42 Intra redirect URI
 API_42_INTRA_ENTRYPOINT_URL		= 'https://api.intra.42.fr/v2/'				 # 42 Intra entrypoint URL
 
+# ----------------- 2FA SETTINGS -----------------:
+OTP_EXPIRY_MINUTES = 2
+# OTP_FROM_EMAIL = DEFAULT_FROM_EMAIL
+OTP_FROM_EMAIL = "from@example.com"
+
+
+# ----------------- ACCOUNT ACTIVATION SETTINGS -----------------:
+ACCOUNT_ACTIVATION_TIMEOUT_SECONDS = 60 * 60 * 24 # 24 hours
+FRONTEND_URL = "http://localhost:8000"
+
+# ----------------- PASSWORD RECOVERY SETTINGS -----------------:
+PASSWORD_RESET_TIMEOUT = 60 * 60 # 1 hour
+
+# ----------------- CHANGE EMAIL SETTINGS -----------------:
+EMAIL_CHANGE_TIMEOUT_SECONDS = 60 * 30 # 30 minutes
 # --------------------Channels things---------------------------:
 ASGI_APPLICATION = 'user_management.routing.application'
 

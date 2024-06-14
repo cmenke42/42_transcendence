@@ -20,7 +20,8 @@ from base64 import urlsafe_b64encode, urlsafe_b64decode
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 from users.models import CustomUser
-from users.serializers import UserRegisterSerializer
+# from users.serializers import UserRegisterSerializer
+from users.serializers import UserSerializer
 from user_profile.models import UserProfile
 from user_management.settings import	API_42_AUTH_URL, API_42_REDIRECT_URI, \
 										API_42_ACCESS_TOKEN_ENDPOINT, \
@@ -211,7 +212,8 @@ def signup_via_intra(user_profile_info):
 	#print('unused_password', unused_password)
 	unused_hashed_password = make_password(unused_password)
 	user_profile_info['password'] = unused_hashed_password
-	serializer = UserRegisterSerializer(data=user_profile_info)
+	# serializer = UserRegisterSerializer(data=user_profile_info)
+	serializer = UserSerializer(fields=('email', 'password'), data=user_profile_info)
 	try:
 		serializer.is_valid(raise_exception=True)
 		user = serializer.save()
