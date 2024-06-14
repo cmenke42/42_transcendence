@@ -3,15 +3,16 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import RegexValidator, MinLengthValidator
 from django.core.exceptions import ValidationError
-from users.utils import get_base_user_directory_path
+#from users.utils import get_base_user_directory_path
 import re
 
-def get_user_avatar_path(instance, filename):
-    """
-    Will return the path where to store the user avatar
-    """
-    base_path = get_base_user_directory_path(instance.user.id)
-    return "{0}/user_profile/avatar".format(base_path)
+# def get_user_avatar_path(instance, filename):
+#     """
+#     Will return the path where to store the user avatar
+#     """
+#     base_path = get_base_user_directory_path(instance.user.id)
+#     print ("***************** get_user_avatar_path ', {0}user_profile/avatar".format(base_path))
+#     return "{0}user_profile/avatar".format(base_path)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(
@@ -36,14 +37,22 @@ class UserProfile(models.Model):
                                 ],
     )
 
-    #will be stored as avatar.<extension>
-    #NOTE: The file is saved as part of saving the model in the database,
-    #so the actual file name used on disk cannot be relied on until after the model has been saved.
-    avatar = models.ImageField(verbose_name="avatar",
-                               upload_to=get_user_avatar_path,
-                               max_length=200,
-    )#TODO: add validation mechanism to check extension and no malicious content
+    # # will be stored as avatar.<extension>
+    # # NOTE: The file is saved as part of saving the model in the database,
+    # # so the actual file name used on disk cannot be relied on until after the model has been saved.
+    # avatar = models.ImageField(null = True, blank = True, verbose_name="avatar",
+    #                            upload_to=get_user_avatar_path,
+    #                            max_length=200, default='images/default.png',
+    # )#TODO: add validation mechanism to check extension and no malicious content
 
+    avatar = models.ImageField(null = True, blank = True, verbose_name="avatar",
+                               upload_to="",
+                               max_length=200, default='default.png',
+    )#TODO: add validation mechanism to check extension and no malicious content
+    
+    intra_avatar = models.URLField(verbose_name="intra_avatar",null = True, blank=True)
+   
+    
     ONLINE_STATUS_CHOICES = {
         "ON": "Online",
         "OF": "Offline",

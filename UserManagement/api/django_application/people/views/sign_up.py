@@ -43,7 +43,7 @@ def send_verif_email(user, subject):
 		raise e
 	user.save()
 
-
+from people.signals import user_registered
 # 3. verifies user's email and activates the account during registration
 @method_decorator(csrf_exempt, name='dispatch')
 class VerifyUserEmailView(APIView):
@@ -72,6 +72,7 @@ class VerifyUserEmailView(APIView):
 		user.email_verif_token = ""
 		user.email_verif_token_expires = None
 		user.save()
+		user_registered.send(sender=None, user=user)
 		return Response(data={'message': 'User\'s email has been verified'}, status=200)
 
 

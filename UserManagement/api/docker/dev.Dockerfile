@@ -29,6 +29,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     #TODO change for produciton
     python -m pip install -r requirements.txt
 
+
+
 ### Final stage
 FROM base AS final
 
@@ -53,6 +55,7 @@ RUN groupadd -g ${GID} appgroup && \
     --uid "${UID}" \
     --gid "${GID}" \
     appuser
+
 
 # Switch to the non-privileged user to run the application.
 USER appuser

@@ -50,6 +50,7 @@ class UserRegisterSerializer(DynamicHyperlinkedModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
     
 # from django.core.exceptions import ObjectDoesNotExist 
 

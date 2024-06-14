@@ -28,6 +28,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
                                    default=False,
                                    help_text="User can log into admin page?."
     )
+    is_intra_user = models.BooleanField(verbose_name="is intra user",
+                                   default=False,
+                                   help_text="Was user registered via 42 Intra?"
+    )
+    
     date_of_creation = models.DateTimeField(verbose_name="account creation",
                                             auto_now_add=True,
                                             help_text="Date when the user account was created",

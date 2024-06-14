@@ -69,7 +69,7 @@ def decrypt_query_param(encrypted_param):
         encrypted_data = encrypted_bytes[12:]
         aesgcm = AESGCM(key)
         decrypted_string = aesgcm.decrypt(nonce, encrypted_data, None)
-        print ('**DECRYPTED STATE', decrypted_string)
+        #print ('**DECRYPTED STATE', decrypted_string)
         return True 
     except Exception:
         return False  
@@ -91,7 +91,7 @@ def FortyTwoIntraLogin(request):
 	#print('----1.encrypted_state', encrypted_state)
 	auth_request = '{base_url}?client_id={client_id}&redirect_uri={redirect_uri}&response_type={response_type}&scope={scope}&state={state}'
 
-	print("fancy mark here??????", get_env_or_file_value("INTRA_UID_42"))
+	#print("fancy mark here??????", get_env_or_file_value("INTRA_UID_42"))
 	auth_request = auth_request.format(
 		base_url=API_42_AUTH_URL,
 		client_id=get_env_or_file_value("INTRA_UID_42"),
@@ -201,6 +201,7 @@ def retrieve_user_info(intra_access_token):
 	#print('USER PROFILE INFO: ', user_profile_info)
 	return user_profile_info
 
+
 #4 Create User with 42 Intra credentials
 @csrf_exempt
 @permission_classes([AllowAny])
@@ -216,11 +217,12 @@ def signup_via_intra(user_profile_info):
 		user = serializer.save()
 		user.is_active = True
 		user.is_email_verified = True
+		user.is_intra_user = True
 		user = serializer.save()  
   
 		user_profile = UserProfile.objects.get(user=user)
 		user_profile.online_status = "ON"
-		user_profile.avatar = user_profile_info['avatar']
+		user_profile.intra_avatar = user_profile_info['avatar']
 		user_profile.nickname = user_profile_info['nickname']
 		user_profile.save()
 
