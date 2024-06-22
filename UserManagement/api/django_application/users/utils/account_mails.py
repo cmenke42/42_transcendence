@@ -7,7 +7,6 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from ..utils.send_email_with_templates import send_email_with_templates
 
-
 from .tokens import account_activation_token_generator
 from .tokens import change_email_token_generator
 
@@ -21,8 +20,8 @@ def send_account_activation_email(user: 'CustomUser'):
     encoded_user_id = urlsafe_base64_encode(force_bytes(user.id))
     token = account_activation_token_generator.make_token(user)
     # TODO: adjust link so user goes to angular page
-    activation_link = "{FRONTEND_URL}{api_path}{encoded_user_id}/{token}/"
-    activation_link = activation_link.format(
+    link = "{FRONTEND_URL}{api_path}{encoded_user_id}/{token}/"
+    link = link.format(
         FRONTEND_URL=settings.FRONTEND_URL,
         api_path=reverse('user-activate'),
         encoded_user_id=encoded_user_id,
@@ -33,7 +32,7 @@ def send_account_activation_email(user: 'CustomUser'):
         text_message_template_name='users/email/account_activate_mail.txt',
         context={
             'user': user,
-            'activation_link': activation_link,
+            'link': link,
             'token_expires_seconds': settings.ACCOUNT_ACTIVATION_TIMEOUT_SECONDS,
         }
     )
@@ -45,8 +44,8 @@ def send_password_reset_email(user: 'CustomUser'):
     encoded_user_id = urlsafe_base64_encode(force_bytes(user.id))
     token = default_token_generator.make_token(user)
     # TODO: adjust link so user goes to angular page
-    reset_link = "{FRONTEND_URL}{api_path}{encoded_user_id}/{token}/"
-    reset_link = reset_link.format(
+    link = "{FRONTEND_URL}{api_path}{encoded_user_id}/{token}/"
+    link = link.format(
         FRONTEND_URL=settings.FRONTEND_URL,
         api_path=reverse('user-reset-password'),
         encoded_user_id=encoded_user_id,
@@ -57,7 +56,7 @@ def send_password_reset_email(user: 'CustomUser'):
         text_message_template_name='users/email/password_reset_mail.txt',
         context={
             'user': user,
-            'reset_link': reset_link,
+            'link': link,
             'token_expires_seconds': settings.PASSWORD_RESET_TIMEOUT,
         }
     )
@@ -78,7 +77,7 @@ def send_change_email_email(user: 'CustomUser', new_email):
         token=token
     )
     send_email_with_templates(
-            recipient_list=[new_email],
+            to=new_email,
             subject="Pong - Change Email",
             text_message_template_name='users/email/change_email_mail.txt',
             context={

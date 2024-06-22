@@ -1,0 +1,15 @@
+{% block subject %}
+{{ email_subject|default:"Pong" }}
+{% endblock subject %}
+{% block hello %}
+Hello,
+{% endblock hello %}
+{% block content %}
+{{some_data}}
+{% endblock content %}
+{% block regards %}
+Best regards,
+Your Pong Team
+{% endblock regards %}
+{% block footer %}
+{% endblock footer %}

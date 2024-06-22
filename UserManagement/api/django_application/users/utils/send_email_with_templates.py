@@ -1,40 +1,50 @@
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-from django.template import TemplateDoesNotExist, TemplateSyntaxError
+from typing import Optional
+
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.template import TemplateDoesNotExist, TemplateSyntaxError
+from django.template.loader import render_to_string
 
 from .exceptions import EmailSendingFailed
 
 def send_email_with_templates(
-        subject, message=None,
-        from_email=None, recipient_list=None,
-        html_message_template_name=None, text_message_template_name=None,
-        context=None,
-    ):
+    subject: str,
+    body: str = "",
+    from_email: Optional[str] = None,
+    to: Optional[str] = None,
+    html_message_template_name: Optional[str] = None,
+    text_message_template_name: Optional[str] = None,
+    context: Optional[dict] = None,
+):
     """
-    Send emails to a list of recipients.
+    Send email to a recipient.
     Context for templates can be passed as dictionary.
     """
-
     from_email = from_email or settings.DEFAULT_FROM_EMAIL
-    recipient_list = recipient_list or []
+    to = to or ""
     context = context or {}
     context['email_subject'] = subject
 
-    try:
-        if text_message_template_name:
-            message = render_to_string(text_message_template_name, context)
-    except (TemplateDoesNotExist, TemplateSyntaxError) as e:
-        raise EmailSendingFailed(f"Error rendering text message template: {e}") from e
+    # If a text message template is provided, render it
+    if text_message_template_name:
+        try:
+            body = render_to_string(text_message_template_name, context)
+        except (TemplateDoesNotExist, TemplateSyntaxError) as e:
+            raise EmailSendingFailed(f"Error rendering text message template: {e}") from e
 
-    email = EmailMultiAlternatives(subject, message,from_email, recipient_list)
+    email = EmailMultiAlternatives(subject, body, from_email, [to])
 
-    try:
-        if html_message_template_name:
+    if html_message_template_name and not (text_message_template_name or body):
+        raise EmailSendingFailed(
+            "If you provide an HTML template, "
+            "you also need to provide the text message as an alternative."
+        )
+    elif html_message_template_name:
+        try:
             html_message = render_to_string(html_message_template_name, context)
             email.attach_alternative(html_message, "text/html")
-    except (TemplateDoesNotExist, TemplateSyntaxError) as e:
-        raise EmailSendingFailed(f"Error rendering HTML message template: {e}") from e
+        except (TemplateDoesNotExist, TemplateSyntaxError) as e:
+            raise EmailSendingFailed(f"Error rendering HTML message template: {e}") from e
 
     try:
         email.send()

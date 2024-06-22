@@ -71,7 +71,7 @@ export class UserService {
 
   registerUser(user: User) : Observable<any>
   {
-    return this.http.post(this.auth_url + 'signup/' , user); //we dont need to use , {withCredentials: true} because of interceptor
+    return this.http.post(this.auth_url + 'users/' , user); //we dont need to use , {withCredentials: true} because of interceptor
   }
 
   getUserData() : Observable<any>

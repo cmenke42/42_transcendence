@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.db import models
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
@@ -5,9 +7,9 @@ from user_profile.models import UserProfile
 from .custom_user_manager import CustomUserManager
 from ..utils.send_email_with_templates import send_email_with_templates
 
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
-        verbose_name="email",
         max_length=254,
         unique=True,
         error_messages={
@@ -20,11 +22,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         default=False,
         help_text="Status of the user account",
     )
-    is_intra_user = models.BooleanField(verbose_name="is intra user",
-                                   default=False,
-                                   help_text="Was user registered via 42 Intra?"
+    is_intra_user = models.BooleanField(
+        default=False,
+        help_text="Was user registered via 42 Intra?"
     )
-    
     date_of_creation = models.DateTimeField(
         verbose_name="account creation",
         auto_now_add=True,
@@ -68,20 +69,25 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def email_user(
-            self, subject, message=None,
-            from_email=None,
-            html_message_template_name=None,
-            text_message_template_name=None,
-            context=None,
+            self,
+            subject: str,
+            body: str = "",
+            from_email: Optional[str] = None,
+            html_message_template_name: Optional[str] = None,
+            text_message_template_name: Optional[str] = None,
+            context: Optional[dict] = None,
         ):
         """
         Convenience method for sending an email to this user.
         Context for templates can be passed as dictionary.
         """
         send_email_with_templates(
-            subject, message,
-            from_email, [self.email],
-            html_message_template_name, text_message_template_name,
+            subject,
+            body,
+            from_email,
+            self.email,
+            html_message_template_name,
+            text_message_template_name,
             context,
         )
 
