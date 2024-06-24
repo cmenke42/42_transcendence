@@ -5,9 +5,9 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 import { Subscription } from 'rxjs';
 import { User } from '../../interface/user';
 import { UserProfile } from '../../interface/user-profile';
-import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../service/auth.service';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -17,11 +17,12 @@ import { AuthService } from '../../service/auth.service';
   imports: [
     CommonModule,
     RouterLink,
+    FormsModule,
     RouterLinkActive,
     RouterOutlet,
-    NgbDropdownModule,
-    FormsModule
+    NgbDropdownModule
   ],
+
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })

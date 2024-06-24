@@ -8,6 +8,7 @@ import { loginGuard } from './service/login.guard';
 import { SettingComponent } from './pages/setting/setting.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ChatComponent } from './pages/chat/chat.component';
+import { LocalMatchComponentComponent } from './local-match-component/local-match-component.component';
 
 
 export const routes: Routes = [
@@ -19,6 +20,7 @@ export const routes: Routes = [
     { path: 'design', component: DesignComponent},
     { path: '404', component: NotFoundComponent},
     { path: 'chat', component: ChatComponent},
+    { path: 'match', component: LocalMatchComponentComponent},
     // otherwise redirect to home
     { path: '**', redirectTo: '/404'},
 
