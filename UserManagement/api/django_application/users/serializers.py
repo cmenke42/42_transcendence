@@ -48,8 +48,9 @@ class UserSerializer(DynamicHyperlinkedModelSerializer):
         """
         Enforce password validation when the user is not a superuser
         """
-        if not self.context['request'].user.is_superuser:
-            django_validate_password(value)
+        # commented because intra api process needs this to be commented
+        #if not self.context['request'].user.is_superuser:
+        django_validate_password(value)
         return value
     
     def validate_email(self, value):

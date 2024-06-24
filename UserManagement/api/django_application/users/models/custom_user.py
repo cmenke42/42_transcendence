@@ -90,6 +90,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             text_message_template_name,
             context,
         )
+        
+
 
     # def has_perm(self, perm, obj=None):
     #     "Does the user have a specific permission?"

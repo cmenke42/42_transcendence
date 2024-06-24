@@ -102,6 +102,7 @@ class ActivateAccountAPIView(GenericAPIView):
 
         user = serializer.validated_data['user']
         user.is_active = True
+        user.is_email_verified = True
         user.save()
         logger.info("Activated user account: %s", user.id)
         return Response({'status': 'User account activated successfully'})

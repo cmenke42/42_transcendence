@@ -7,10 +7,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
     
 
     nickname = serializers.CharField(allow_blank=True)
-
+    id = serializers.IntegerField(source='user.id', read_only=True)
+    
     class Meta:
         model = UserProfile
-        fields = ['nickname', 'avatar', 'online_status', 'intra_avatar']
+        fields = ['id', 'nickname', 'avatar', 'online_status', 'intra_avatar']
 
     def validate_nickname(self, value):
         if not re.match(r'^[a-zA-Z0-9-]+$', value) and not "" in value:

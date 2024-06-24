@@ -54,15 +54,6 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 	queryset = UserProfile.objects.all()
 	serializer_class = UserProfileSerializer
   
-	# def get_permissions(self):
-	# 	print (' GET PERMISSIONS ')
-	# 	if self.request.method == 'GET':
-	# 		self.permission_classes = (IsAuthenticated)
-	# 	if self.request.method == 'PATCH':
-	# 		self.permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
-	# 	#print (' GET PERMISSIONS ', self.permission_classes)
-	# 	return super(UserProfileViewSet, self).get_permissions()
-
 
 	def retrieve(self, request, pk=None):
 		try:
