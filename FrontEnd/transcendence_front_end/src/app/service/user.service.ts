@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, EMPTY, Observable, Subject, catchError, filter, finalize, switchMap, take, tap, throwError, timer } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable, inject, signal } from '@angular/core';
+import { BehaviorSubject, EMPTY, Observable, Subject, catchError, filter, finalize, map, switchMap, take, tap, throwError, timer } from 'rxjs';
 import { User } from '../interface/user';
 // import { JWTService } from './jwt.service';
 import { AuthService } from './auth.service';
@@ -13,33 +13,13 @@ export class UserService {
 
 
   private http = inject(HttpClient);
-  // private JWT = inject(JWTService);
   private auth = inject(AuthService);
+  private id :any;
  
   constructor() {}
 
   auth_url = 'http://localhost:8000/api/v1/';
   
-  // login(user: User): Observable<any>
-  // {
-  //   return this.http.post(this.auth_url + 'login/', user).pipe(
-  //     tap((response: any)  => {
-  //       // this.saveUserDetails(tokens.user);
-  //       console.log('User details saved: ', response.user);
-  //       if (!response.fa_pending)
-  //        this.JWT.saveStoredToken(response);
-  //     })
-  //   )
-  // }
-
-  // verifyOTP(user: User): Observable<any>
-  // {
-  //   return this.http.post(this.auth_url + 'verify-otp/', {email: user.email,otp: user.otp}).pipe
-  //   (tap((response: any) => {
-  //     this.JWT.saveStoredToken(response);
-  //   }  
-  //   ));
-  // }
 
   getLoggedInUser(): User | null 
   {
@@ -65,18 +45,19 @@ export class UserService {
 
   getSpecificUser(id: number) : Observable<any>
   {
-    return this.http.get(this.auth_url + 'user/' + id + '/');
+    return this.http.get(this.auth_url + 'users/' + id + '/');
   }
 
 
   registerUser(user: User) : Observable<any>
   {
-    return this.http.post(this.auth_url + 'users/' , user); //we dont need to use , {withCredentials: true} because of interceptor
+    return this.http.post(this.auth_url + 'users/' , user, /* {headers} */); //we dont need to use , {withCredentials: true} because of interceptor
   }
+
 
   getUserData() : Observable<any>
   {
-    return this.http.get(this.auth_url + 'user/');
+    return this.http.get(this.auth_url + 'users/');
   }
 
   removeUser(id: number) : Observable<any> //not implemented in backend
@@ -86,11 +67,26 @@ export class UserService {
 
   updateUser(user: User) : Observable<any>
   {
-    return this.http.put(this.auth_url + 'user/' + user.id + '/', user);
+    return this.http.put(this.auth_url + 'users/' + user.id + '/', user);
   }
 
+  
   showProfile(id: number) : Observable<any>
   {
-    return this.http.get(this.auth_url + 'user/' + id + '/profile/');
+    return this.http.get(this.auth_url + 'profiles/' + id + '/');
+  }
+
+  getterProfile(): Observable<any> {
+      this.id = jwtDecode(localStorage.getItem('access_token') || "");
+      return this.showProfile(this.id.user_id).pipe(
+        map((data: any) => {
+          return data; // This value will be emitted to the subscribers
+        })
+      );
+  }
+    
+  showListProfiles() : Observable<any>
+  {
+    return this.http.get(this.auth_url + 'profiles/');
   }
 }

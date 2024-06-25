@@ -8,7 +8,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from users.models import CustomUser
 from .serializers import  OTPVerifySerializer
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.views.decorators.csrf import csrf_exempt
 from user_login.otp_service import OTPService
 
 

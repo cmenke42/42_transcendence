@@ -34,27 +34,8 @@ export class LoginComponent {
     auth = inject(AuthService);
   
     constructor() {}
-    // loginUser()
-    // {
-    //   this.userService.login(this.user).subscribe({
-    //     next: (data: any) => {
-    //       if (data.fa_pending)
-    //         this.show2fa = true;
-    //       else
-    //       {
-    //         this.JWT.storeJWTToken(data);
-    //         const decodedToken = this.JWT.decodeToken(data.access);
-    //         this.JWT.saveUserDetails(decodedToken);
-    //         this.router.navigate(['/home']);
-    //       }
-    //     },
-    //     error: err => {
-    //       console.log("Error...", err);
-    //       alert(err.error.message);
-    //     }
-    //   })
-    // }
 
+    
     loginUser()
     {
       this.auth.login(this.user).subscribe({
@@ -66,7 +47,7 @@ export class LoginComponent {
         },
         error: err => {
           console.log('Error...', err);
-          alert(err.error.message);
+          alert(err.message);
         }
       })
     }
@@ -80,7 +61,7 @@ export class LoginComponent {
         },
         error: (err) => {
           console.log('Error...', err);
-          alert('OTP verification failed. Please try again. ' + err.error.message);
+          alert('OTP verification failed. Please try again. ' + err.message);
         }
       })
     }

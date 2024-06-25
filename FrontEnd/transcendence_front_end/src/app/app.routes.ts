@@ -8,6 +8,8 @@ import { loginGuard } from './service/login.guard';
 import { SettingComponent } from './pages/setting/setting.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ChatComponent } from './pages/chat/chat.component';
+import { PrivateChatComponent } from './pages/private-chat/private-chat.component';
+import { UserComponent } from './pages/user/user.component';
 import { LocalMatchComponentComponent } from './local-match-component/local-match-component.component';
 
 
@@ -15,13 +17,16 @@ export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'},
     { path: 'login', component: LoginComponent, canActivate: [loginGuard]},
     { path: 'signup', component: SignupComponent},
-    { path : 'home', component: HomeComponent, canActivate: [userGuard]},
-    { path: 'setting', component: SettingComponent},
+
     { path: 'design', component: DesignComponent},
     { path: '404', component: NotFoundComponent},
-    { path: 'chat', component: ChatComponent},
+    { path: 'chat/:username', component: ChatComponent, canActivate: [userGuard]},
+    { path: 'private_chat', component: PrivateChatComponent, canActivate: [userGuard]},
+    { path: 'setting', component: SettingComponent, canActivate: [userGuard]},
+    { path : 'home', component: HomeComponent, canActivate: [userGuard],
+    },
+    {path: 'user/:user_id', component: UserComponent, canActivate: [userGuard]},
     { path: 'match', component: LocalMatchComponentComponent},
     // otherwise redirect to home
     { path: '**', redirectTo: '/404'},
-
 ];

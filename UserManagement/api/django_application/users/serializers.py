@@ -20,9 +20,7 @@ class UserSerializer(DynamicHyperlinkedModelSerializer):
                   'is_superuser', 'date_of_creation', 'last_login',
                   'is_email_verified',
         ]
-        read_only_fields = ['url', 'id', 'date_of_creation', 'last_login',
-                            'is_email_verified',
-        ]
+        read_only_fields = ['url', 'id', 'date_of_creation', 'last_login']
         extra_kwargs = {
             'password': {'write_only': True},
             'url': {'view_name': 'user-detail'},

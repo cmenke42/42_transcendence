@@ -1,8 +1,12 @@
 import { Component, OnInit, inject, OnDestroy } from '@angular/core';
-import { ChatService } from '../../service/chat.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
+import { UserService } from '../../service/user.service';
+import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import { jwtDecode } from 'jwt-decode';
+import { SocketsService } from '../../service/sockets.service';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-setting',
@@ -10,64 +14,60 @@ import { BrowserModule } from '@angular/platform-browser';
   imports: [
     FormsModule,
     CommonModule,
+    NgbCollapseModule
   ],
   templateUrl: './setting.component.html',
   styleUrl: './setting.component.css'
 })
-export class SettingComponent implements OnInit, OnDestroy {
-  messages: string[] = [];
-  message: string = '';
+export class SettingComponent implements OnInit {
 
-  constructor(private chatService: ChatService) { }
+  isCollapsed = true;
+  isCollapseMap: { [userId : string] : boolean} = {} // map creation
+  user_list: any;
+  user_id : number = 0;
+  sender : string = '';
+
+  userService = inject(UserService);
+  socketService = inject(SocketsService);
+  router = inject(Router);
+
   ngOnInit(): void {
-    this.chatService;
+  this.showUserProfile();
+  //  console.log('setting test jwt : ', this.userService.getterProfile().subscribe());
+  // //  user_id = localStorage.getItem('access_token');
+  this.userService.getterProfile().subscribe(nickname => {
+    this.sender = nickname.nickname;
+    // console.log("Nickname:", nickname.nickname);
+  });
   }
 
-  ngOnDestroy(): void {
-    this.disconnectSocket();
-  }
 
-  disconnectSocket() {
-    this.chatService;
-  }
-
-  sendMessage()
+  showUserProfile()
   {
-    if (this.message.trim())
+    this.userService.showListProfiles().subscribe(
     {
-      this.chatService.sendMessage(this.message);
-      this.message = '';
+      next: (data: any) =>
+      {
+        console.log("list of the user", data);
+        this.user_list = data;
+      },
+      error: (err) => 
+      {
+        console.log("Error...", err);
+      }
     }
+    )
   }
+
+  toggleCollapse(userId: string)
+  {
+    this.isCollapseMap[userId] = !this.isCollapseMap[userId];
+  }
+
+  inbox(receiver: string)
+  {
+    this.socketService.privateConnect(this.sender, receiver);
+    this.router.navigate(['/private_chat'], {state: {sender : this.sender, receiver}});
+  }
+
 }
-
-/* 
-  ngOnInit(): void {
-    this.initializeSocketConnection();
-    this.receiveSocketResponse();
-  }
-
-  ngOnDestroy(): void {
-    this.disconnectSocket();
-  }
-
-  initializeSocketConnection(): void {
-    this.chatService.connect('room_name_or_identifier');
-  }
-
-  sendMessage(): void {
-    this.chatService.connectSocket(this.message);
-    this.message = ''; // Clear input field after sending message
-  }
-
-  receiveSocketResponse(): void {
-    this.chatService.receiveStatus().subscribe((receivedMessage: any) => {
-      this.messages.push(receivedMessage);
-    });
-  }
-
-  disconnectSocket(): void {
-    this.chatService.disconnectSocket();
-  }
-
-*/

@@ -18,8 +18,8 @@
                   Change Theme
                 </button>
                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button ngbDropdownItem (click)="changeTheme('dark')">Dark</button>
                   <button ngbDropdownItem (click)="changeTheme('light')">Light</button>
-                  <button ngbDropdownItem (click)="changeTheme('dark')">Dark</button>
                 </div>
               </div>
         </div>
@@ -83,8 +83,8 @@
                   </div>
                 </div>
               </div>
+              <a [routerLink]="['/chat', user_profile?.nickname]">check the chat</a>
               
         }
       
-   
 </div>

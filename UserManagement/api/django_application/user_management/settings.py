@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken', #authtoken for authentication
 
     'rest_framework_simplejwt.token_blacklist',
+    'chat'
 
     #TODO: remove
     # 'django_extensions',
@@ -67,7 +68,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -198,12 +199,14 @@ argon2.DEFAULT_PARALLELISM        = 2          # Degree of parallelism
 argon2.DEFAULT_TIME_COST          = 2          # Iterations count
 
 # ------------------------ login settings -------------------------:
+# CSRF_COOKIE_HTTPONLY = False #should I set it or not?
 CORS_ORIGIN_ALLOW_ALL = False
-CSRF_TRUSTED_ORIGINS = ['http://localhost:4200']
+# CSRF_TRUSTED_ORIGINS = ['http://localhost:4200']
 CORS_ALLOWED_ORIGINS = ['http://localhost:4200']
 CORS_ALLOW_CREDENTIALS = True
-# CSRF_COOKIE_HTTPONLY = False #should I set it or not?
-CSRF_COOKIE_SECURE = not DEBUG
+# CSRF_COOKIE_SECURE = not DEBUG
+
+# CSRF_COOKIE_NAME = 'csrftoken'
 
 # ------------------------ JWT settings -------------------------:
 SIMPLE_JWT = {
@@ -211,7 +214,7 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': False,
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=2),
     'BLACKLIST_AFTER_ROTATION': True,
-    
+
 }
 
 # ------------------------- Common default settings -----------------------------:
@@ -265,7 +268,7 @@ CORS_ALLOW_HEADERS = [
     'dnt',
     'origin',
     'user-agent',
-    'x-csrftoken',
+    # 'x-csrftoken',
     'x-requested-with',
 ]
 

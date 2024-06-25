@@ -10,13 +10,14 @@ from django.core.asgi import get_asgi_application
 
 
 websocket_urlpatterns = [
-    # re_path(r'ws/chat/$', consumers.ChatConsumer.as_asgi()),
     re_path(r'ws/chat/(?P<room_name>\w+)/$', consumers.ChatConsumer.as_asgi()),
+    # re_path(r'^ws/private_chat/(?P<username>[\w-]+)/$', consumers.PrivateChatConsumer.as_asgi()),
+    re_path(r'^ws/private_chat/(?P<sender>[\w-]+)/(?P<receiver>[\w-]+)/$', consumers.PrivateChatConsumer.as_asgi()),
+    # re_path(r'^ws/general_chat/(?P<username>[\w-]+)/$', consumers.GeneralChatConsumer.as_asgi()),
 ]
 
 application = ProtocolTypeRouter({
     'http': get_asgi_application(),
-    'websocket': URLRouter(websocket_urlpatterns),
     'websocket' : AllowedHostsOriginValidator(
         AuthMiddlewareStack(
             URLRouter(
@@ -25,37 +26,3 @@ application = ProtocolTypeRouter({
         )
     )
 })
-
-
-# application = ProtocolTypeRouter({
-#      'http': get_asgi_application(),
-#     'websocket': AllowedHostsOriginValidator(
-#         AuthMiddlewareStack(
-#             URLRouter([
-#                 re_path(r'^ws/chat/$', consumers.ChatConsumer.as_asgi())
-#             ])
-#         )
-#     )
-# })
-
-
-# application = URLRouter([
-#     path("ws/chat/<str:room_name>/", consumers.ChatConsumer.as_asgi()),
-# ])
-
-# async def test_websocket():
-#     communicator = WebsocketCommunicator(application, "/ws/chat/my_room/")
-#     connected, subprotocol = await communicator.connect()
-#     assert connected
-    
-#     # Send a message to the consumer
-#     await communicator.send_to(text_data="Hello, world!")
-
-#     # Receive a message from the consumer
-#     message = await communicator.receive_from()
-#     assert message == "Hello, world!"
-
-#     # Close the WebSocket connection
-#     await communicator.disconnect()
-
-# asyncio.run(test_websocket())

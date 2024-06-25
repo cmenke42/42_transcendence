@@ -1,0 +1,62 @@
+<div class="container mt-3">
+	<div class="row">
+	  <!-- Users list -->
+	  <div class="col-md-4">
+		<div class="users-list border rounded p-3">
+		  <h5 class="text-center">Users</h5>
+		  <ul class="list-group">
+			<li 
+  				class="list-group-item list-group-item-action" 
+  				*ngFor="let user of users" 
+  				[ngClass]="{'active': user === selected_user}" 
+  				(click)="selectUser(user)">
+  	<div class="d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <img src="../../../assets/avatar-chat.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
+      <span>{{ user.nickname }}</span>
+    		</div>
+    		<span 
+      		*ngIf="unreadMessages[user.nickname] > 0" 
+      		class="badge badge-green">
+      		{{ unreadMessages[user.nickname] }}
+    		</span>
+  			</div>
+			</li>
+
+		  </ul>
+		</div>
+	  </div>
+  
+	  <!-- Chat window -->
+	  <div class="col-md-8">
+		<div class="chat-container border rounded p-3 d-flex flex-column" style="height: 75vh;">
+		  <div class="chat-header d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+			<h5 *ngIf="receiver">
+			  <a [routerLink]="['/user', user_id]">
+				<img src="../../../assets/avatar-chat.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
+				{{ receiver }}
+			  </a>
+			</h5>
+		  </div>
+		  <div class="chat-window flex-grow-1 overflow-auto mb-3">
+			<ul class="list-unstyled">
+			  <li class="mb-3" *ngFor="let message of messages | async">
+				<div class="message" [ngClass]="{'message-right': message.sender === current_user, 'message-left': message.sender !== current_user}">
+				  <div class="message-bubble p-2 rounded">
+					<div class="message-content">{{ message.message }}</div>
+					<span class="timestamp">{{ message.timestamp | date:'shortTime' }}</span>
+				  </div>
+				</div>
+			  </li>
+			</ul>
+		  </div>
+		  <form class="d-flex" *ngIf="receiver">
+			<input type="text" class="form-control mr-2" [(ngModel)]="message" name="message" placeholder="Type a message...">
+			<button type="button" class="btn btn-primary" (click)="sendMessage()">Send</button>
+		  </form>
+		</div>
+	  </div>
+	</div>
+  </div>
+
+  

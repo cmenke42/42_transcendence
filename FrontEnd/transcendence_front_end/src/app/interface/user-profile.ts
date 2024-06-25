@@ -1,5 +1,5 @@
 export interface UserProfile {
-	user: number;
+	user_id: number;
 	nickname: string;
 	avatar: string;
 	online_status: boolean;

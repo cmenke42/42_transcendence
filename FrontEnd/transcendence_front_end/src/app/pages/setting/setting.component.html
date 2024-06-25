@@ -1,8 +1,44 @@
-<p>setting works!</p>
-<div>
-  <ul>
-    <li *ngFor="let m of messages">{{ m }}</li>
-  </ul>
-  <input [(ngModel)]="message" (keydown.enter)="sendMessage()" type="text">
-  <button (click)="sendMessage()">Send</button>
+<div class="container mt-3">
+    <div class="card">
+      <div class="card-header text-center bg-primary text-white">
+        <h2>User List</h2>
+      </div>
+      <div class="card-body">
+        @for(user of user_list; track user.user_id)
+        {
+            @if (user)
+            {
+                <div class="user-item mb-3 p-2 border rounded">
+					<div class="d-flex align-items-center justify-content-between">
+						<div>
+							<img src="../../../assets/avatar-chat.png" alt="User Picture" class="rounded-circle" width="50" height="50"> 
+							<span class="nickname">{{ user.nickname }}</span>
+						</div>
+						<button
+							type="button"
+							class="btn btn-outline-primary"
+							(click)="toggleCollapse(user.user_id)"
+							[attr.aria-expanded]="!isCollapseMap[user.user_id]"
+							aria-controls="collapseExample">
+								detail
+						</button>
+					</div>
+					<div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapseMap[user.user_id]" class="mt-2 text-center">
+						<div class="card">
+							<div class="card-body">Here we can explain the Match history and its profile</div>
+							<div class="card-body">
+							
+								<button class="btn btn-outline-primary" (click)="inbox(user.nickname)" > send message </button>
+							</div>
+						</div>
+					</div>
+				</div>
+            }
+            @else 
+            {
+                <p>No User....</p>
+            }
+        }
+      </div>
+    </div>
 </div>

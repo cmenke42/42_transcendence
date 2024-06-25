@@ -12,19 +12,18 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    FormsModule,
-    RouterLinkActive,
-    RouterOutlet,
-    NgbDropdownModule
-  ],
-
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+    selector: 'app-home',
+    standalone: true,
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.css',
+    imports: [
+        CommonModule,
+        RouterLink,
+        RouterLinkActive,
+        RouterOutlet,
+        NgbDropdownModule,
+        FormsModule,
+    ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
@@ -40,21 +39,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   
   ngOnInit() 
   {
+    this.changeTheme('dark');
     this.loggedInUser = this.userService.getLoggedInUser();
     console.log("Home component is loaded...", this.loggedInUser);
-
     if (this.loggedInUser?.is_superuser)
       this.getUser();
-    if (this.loggedInUser?.user_id)
+    else if (this.loggedInUser?.id && !this.loggedInUser?.is_superuser)
     {
       this.getProfile();
-      this.getSpecificUser(this.loggedInUser.user_id); // do we need this?
+      // this.getSpecificUser(this.loggedInUser.id); // do we need this?
     }
-
-    // this.tokenRefreshSubScription = 
-    // this.JWT.tokenRefrshed.subscribe(() =>{
-    //   this.refreshData();
-    // })
   }
   
   constructor() { }
@@ -62,35 +56,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   //   if (this.tokenRefreshSubScription)
   //     this.tokenRefreshSubScription.unsubscribe();
   }
-  
-
-
-  // Userdata: User | null = null;
-  // userId: number  = 2;
-
-  // toastService = inject(ToastService)
-
-
- 
- 
-
-  // refreshData()
-  // {
-  //   if (this.loggedInUser?.is_superuser)
-  //     this.getUser();
-  //   if (this.loggedInUser?.user_id)
-  //   {
-  //     this.getSpecificUser(this.loggedInUser.user_id);
-  //     this.getProfile();
-  //   }
-  // }
 
   getUser()
   {
     this.userService.getUserData().subscribe({
       next: (data: User[]) => {
         this.data = data;  
-        // console.log("Data is...", data);
+        console.log("Data is from getUser function...", data);
       },
       error: err => {
         console.log("Error...", err);
@@ -98,18 +70,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     })
   }
 
-  getSpecificUser(id: number)
-  {
-    this.userService.getSpecificUser(id).subscribe({
-      next: (data) => {
-        console.log("Data for specific user is...", data);
-        this.loggedInUser = data;
-      },
-      error: err => {
-        console.log("Error...", err);
-      }
-    })
-  }
+  // getSpecificUser(id: number)
+  // {
+  //   this.userService.getSpecificUser(id).subscribe({
+  //     next: (data) => {
+  //       console.log("Data for specific user is...", data);
+  //       this.loggedInUser = data;
+  //     },
+  //     error: err => {
+  //       console.log("Error...", err);
+  //     }
+  //   })
+  // }
 
   removeUser(user_id: number)
   {
@@ -132,13 +104,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getProfile()
   {
-    if (this.loggedInUser?.user_id)
+    console.log("testing", this.auth.isLoggedIn);
+    if (this.loggedInUser?.id)
     {
-      this.userService.showProfile(this.loggedInUser?.user_id).subscribe({
+      this.userService.showProfile(this.loggedInUser?.id).subscribe({
         next: (data) => {
           console.log("Data for profile is...", data);
           this.user_profile = data;
-          if (this.user_profile?.nickname === ('nickname-' + this.user_profile?.user))
+          if (this.user_profile?.nickname === ('nickname-' + this.user_profile?.user_id))
           {
             // alert('Please update your profile e.g nickname');
             this.warning = 'Please update your profile e.g nickname'; 

@@ -1,0 +1,151 @@
+/* .message-right {
+  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.message-left {
+  text-align: left;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.message-container {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 0 5px;
+}
+
+.message-bubble {
+  display: inline-block;
+  max-width: 70%;
+  word-wrap: break-word;
+  padding-bottom: 20px !important;
+}
+
+.message-content {
+  margin-right: 40px;
+}
+
+.chat-window .timestamp {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+}
+
+.bg-primary .timestamp {
+  color: rgba(255, 255, 255, 0.7);
+}
+ */
+
+ .users-list {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.users-list .list-group-item {
+  cursor: pointer;
+}
+
+.users-list .list-group-item:hover,
+.users-list .list-group-item.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.chat-container {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  border-bottom: 1px solid #ddd;
+}
+
+.chat-window {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.message {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.message-left {
+  justify-content: flex-start;
+}
+
+.message-right {
+  justify-content: flex-end;
+}
+
+.message-bubble {
+  max-width: 70%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.message-left .message-bubble {
+  background-color: #f1f1f1;
+  color: black;
+}
+
+.message-right .message-bubble {
+  background-color: #007bff;
+  color: white;
+}
+
+.message-content {
+  word-wrap: break-word;
+  
+}
+
+.timestamp {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.5);
+  align-self: flex-end;
+}
+
+.message-right .timestamp {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.form-control {
+  border-radius: 20px;
+}
+
+.btn-primary {
+  border-radius: 20px;
+}
+
+.message-popup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.badge-green {
+  background-color: green;
+  color: white;
+}

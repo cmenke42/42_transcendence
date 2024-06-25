@@ -1,10 +1,44 @@
-<div>
-	<h2>WebSocket Example</h2>
-	Display received messages
-	<div *ngFor="let message of messages">
-	  {{ message.text }}
-	</div>
 
-	<input [(ngModel)]="message" placeholder="Type a message" /> 
-	<button (click)="sendMessage()">Send</button>
+<!-- 
+  <div class="container mt-3">
+	<div class="card">
+	  <div class="card-header text-center bg-primary text-white">
+		<h2>Inbox</h2>
+	  </div>
+	  <div class="card-body chat-box">
+		@for(message of messages; track message)
+		{
+
+			@if(message.username && !message.message)
+			{
+				<div class="system-message">
+				<p> {{message.username}} has joined the chat </p>
+				</div>
+			}
+			@else 
+			{
+				<div class="chat-message">
+					<p> {{message.username}} : {{ message.message }} </p>
+					</div>
+			}
+		}
+	  </div>
+	  <div class="card-footer">
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" placeholder="Type a message" [(ngModel)]="message">
+		  <button class="btn btn-outline-primary" type="button" (click)="sendMessage()">Send</button>
+		</div>
+	  </div>
+	</div>
+  </div> -->
+  
+
+  <div>
+	<h1>Private Chat</h1>
+	<input type="text" [(ngModel)]="receiver" placeholder="Type receiver nickname">
+	<input type="text" [(ngModel)]="private_message" placeholder="Type a message...">
+	<button (click)="sendPrivateMessage()">Send</button>
+	<ul>
+	  <li *ngFor="let message of private_messages">{{ message.sender }}: {{ message.message }}</li>
+	</ul>
   </div>
