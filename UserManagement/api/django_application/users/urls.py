@@ -4,6 +4,7 @@ from .views.password_reset import ResetPasswordAPIView, ForgotPasswordAPIView
 from .views.change_password import ChangePasswordAPIView
 from .views.change_email import ChangeEmailAPIView, ObtainChangeEmailTokenAPIView
 from .views.friendship_view import FriendViewSet, FriendAcceptView, FriendDeclineView, FriendShowAllView, ShowAllFriendsView
+from .views.blocklist import BlockListAddView, BlockListRemoveView, BlockListView
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
@@ -42,5 +43,14 @@ urlpatterns = [
 	
 # SERVICE METHOD: GET http://localhost:8000/api/v1/users/friends/showall/			shows all relationship in table
 	path('friends/showall/', FriendShowAllView.as_view(), name='show-all'),
+ 
+#PATCH http://localhost:8000/api/v1/users/blocklist/add/?blocked_id=2 				adds friend with id_1 to blocklist
+	path('blocklist/add/', BlockListAddView.as_view(), name='blocklist-add'),
+#PATCH http://localhost:8000/api/v1/users/blocklist/remove/?blocked_id=2 			removes friend with id_1 from blocklist
+	path('blocklist/remove/', BlockListRemoveView.as_view(), name='blocklist-remove'),
+# GET http://localhost:8000/api/v1/users/blocklist/									shows all blocked friends
+	path('blocklist/all/', BlockListView.as_view(), name='blocklist'),
+	
+     
 		
 ]

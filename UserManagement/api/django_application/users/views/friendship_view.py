@@ -7,10 +7,13 @@ from rest_framework.views import APIView
 from rest_framework.decorators import  permission_classes
 from rest_framework.permissions import AllowAny
 from user_management.permissions import IsSuperUser
-
-# ====================================================================================================================
+from user_profile.models import UserProfile
+from user_profile.serializers import UserProfileSerializer
 from rest_framework.decorators import action
 from rest_framework import viewsets
+
+
+# ====================================================================================================================
 
 class FriendViewSet(viewsets.ViewSet):
 	@action(detail=False, methods=['get'])
@@ -24,7 +27,15 @@ class FriendViewSet(viewsets.ViewSet):
 			friendship = Friend.objects.get(user_id=user_id, friend_id=friend_id)
 		except ObjectDoesNotExist:
 			return Response(data={'error': 'not a friend'}, status=200)
-		status = 'pending' if friendship.status == 0 else 'accepted'
+
+		if friendship.status == 0:
+			status = 'pending'
+		elif friendship.status == 1:
+			status = 'accepted'
+		elif friendship.status == 2:
+			status = 'blocked'
+		else:
+			return Response(data={'error': 'invalid status code'}, status=500)
 		return Response(data={'status': status}, status=200)
 
 	@action(detail=False, methods=['delete'])
@@ -65,10 +76,16 @@ class FriendViewSet(viewsets.ViewSet):
 	def check_friend_request(user_id: int, friend_id: int):
 		friendship = Friend.objects.filter(user_id=user_id, friend_id=friend_id)
 		if friendship.exists():
-			if friendship[0].status == 0:
+			if friendship[0].status == Friend.PENDING:
 				return False, 'friend status: pending'
-			return False, 'friend status: accepted'
+			elif friendship[0].status == Friend.ACCEPTED:
+				return False, 'friend status: accepted'
+			elif friendship[0].status == Friend.BLOCKED:
+				return False, 'friend status: blocked'
 		else:
+			backward_friendship = Friend.objects.filter(user_id=friend_id, friend_id=user_id)
+			if backward_friendship.exists() and backward_friendship[0].status == Friend.BLOCKED:
+				return False, 'you have been blocked by this user'
 			Friend.objects.create(user_id=user_id, friend_id=friend_id)
 			response = send_notification(user_id, friend_id, 'You have a friendship request', 'friend_request', f'{user_id}')
 			if not 199 < response['status_code'] < 299:
@@ -116,35 +133,40 @@ def send_notification(user_id, friend_id, subject, type, data):
 
 	
 
-from user_profile.models import UserProfile
-from user_profile.serializers import UserProfileSerializer
+
 # Shows list of friends for a user
 class ShowAllFriendsView(APIView):
-    @staticmethod
-    def get(request):
-        user_id = request.user.id
-        try:
-            friends = Friend.objects.filter(user_id=user_id)
-        except Exception as e:
-            return Response(data={'error': str(e)}, status=500)
+	@staticmethod
+	def get(request):
+		user_id = request.user.id
+		try:
+			friends = Friend.objects.filter(user_id=user_id)
+		except Exception as e:
+			return Response(data={'error': str(e)}, status=500)
 
-        friend_list = []
-        for friend in friends:
-            try:
-                user_profile = UserProfile.objects.get(user_id=friend.friend_id)
-                user_profile_data = UserProfileSerializer(user_profile).data
-                friend_data = {
+		friend_list = []
+		for friend in friends:
+			try:
+				user_profile = UserProfile.objects.get(user_id=friend.friend_id)
+				user_profile_data = UserProfileSerializer(user_profile).data
+				if friend.status == Friend.ACCEPTED:
+					status = 'accepted'
+				elif friend.status == Friend.PENDING:
+					status = 'pending'
+				elif friend.status == Friend.BLOCKED:
+					status = 'blocked'
+				friend_data = {
 
-                    "UserProfile": user_profile_data,
-                    "Status": {
-                        "status": 'accepted' if friend.status == Friend.ACCEPTED else 'pending'
-                    }
-                }
-                friend_list.append(friend_data)
-            except UserProfile.DoesNotExist:
-                continue  # or handle the case where the user profile does not exist
+					"UserProfile": user_profile_data,
+					"Status": {
+						"status": status
+					}
+				}
+				friend_list.append(friend_data)
+			except UserProfile.DoesNotExist:
+				continue  # or handle the case where the user profile does not exist
 
-        return Response(data=friend_list, status=200)
+		return Response(data=friend_list, status=200)
 
 # ------------------------------------------- accept & decline views -----------------------------------------------
 
@@ -163,17 +185,17 @@ class FriendAcceptView(APIView):
 		try:
 			backward_friendship = Friend.objects.get(user_id=friend_id, friend_id=user_id)
 		except Friend.DoesNotExist :
-				print ('==================== I DON T FOUND BACKWARD FRIENDSHIP')
 				return Response(data = {'error': 'no friend request'}, status=400)
 		if backward_friendship.status == Friend.ACCEPTED:
 			return Response(data = {'error': 'we are already friends'}, status=400)
+		elif backward_friendship.status == Friend.BLOCKED:
+			return Response(data = {'error': 'friend is blocked'}, status=400)
 		else:
 			backward_friendship.status = Friend.ACCEPTED
 			backward_friendship.save()
 			try:
 				forward_friendship = Friend.objects.get(user_id=user_id, friend_id=friend_id)
 			except Friend.DoesNotExist:
-				print ('--------------fowrard  FRIENDSHIP NOT EXIST')
 				forward_friendship = Friend.objects.create(user_id=user_id, friend_id=friend_id, status=Friend.ACCEPTED)
 			
 			forward_friendship.status = Friend.ACCEPTED
@@ -205,6 +227,8 @@ class FriendDeclineView(APIView):
 			return Response(data = {'error': 'no friend request'}, status=400)
 		if backward_friendship.status == Friend.ACCEPTED:
 			return Response(data = {'error': 'we are already friends'}, status=400)
+		elif backward_friendship.status == Friend.BLOCKED:
+			return Response(data = {'error': 'friend is blocked'}, status=400)
 		else:
 			backward_friendship.delete()
 		send_notification(user_id, friend_id, f'Friendship request has been declined ', 'decline_friendship_request', f'{user_id}')
@@ -225,11 +249,12 @@ class FriendShowAllView(APIView):
 		except Exception as e:
 			return Response(data = {'error': str(e)}, status=500) 
 		i = 0
+  
 		friend_list = {
 					'friends':
 						[
 							{
-								f"#{i+1}: user:' '{friend.user.id}', 'friend:' '{friend.friend.id}', 'status': {'accepted' if friend.status == Friend.ACCEPTED else 'pending'}",                 
+								f"#{i+1}: user:' '{friend.user.id}', 'friend:' '{friend.friend.id}', 'status': {'accepted' if friend.status == Friend.ACCEPTED else ('pending' if friend.status == Friend.PENDING else 'blocked' )}",                 
 							} for  friend in friends
 						]
 					}

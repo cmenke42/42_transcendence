@@ -19,7 +19,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     is_active = models.BooleanField(
         verbose_name="active",
-        default=False,
+        default=True,
         help_text="Status of the user account",
     )
     is_intra_user = models.BooleanField(
@@ -33,7 +33,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
 
     # Email verification for new users
-    is_email_verified = models.BooleanField(default=False)
+    is_email_verified = models.BooleanField(default=True)
 
     # 2FA fields
     is_2fa_enabled = models.BooleanField(default=False)

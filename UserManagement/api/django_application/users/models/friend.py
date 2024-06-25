@@ -6,6 +6,7 @@ class Friend(models.Model):
     
     PENDING = 0
     ACCEPTED = 1
+    BLOCKED = 2
     
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user')
     friend = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='friend')
