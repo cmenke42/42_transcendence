@@ -5,6 +5,10 @@ import { User } from '../interface/user';
 // import { JWTService } from './jwt.service';
 import { AuthService } from './auth.service';
 import { jwtDecode } from 'jwt-decode';
+import { IActivateAccount } from '../pages/activate-account/activate-account.interface';
+import { IResetPassword } from '../pages/reset-password/reset-password.interface';
+import { IChangeEmail } from '../pages/change-email/change-email.interface';
+import { IChangePassword } from '../pages/change-password/change-password.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +58,53 @@ export class UserService {
     return this.http.post(this.auth_url + 'users/' , user, /* {headers} */); //we dont need to use , {withCredentials: true} because of interceptor
   }
 
+  activateAccount(payload: IActivateAccount) : Observable<any>
+  {
+    return this.http.post(
+      this.auth_url + 'users/activate/',
+      payload
+    );
+  }
+
+  requestPasswordResetLink(payload: {email: string}) : Observable<any>
+  {
+    return this.http.post(
+      this.auth_url + 'users/' + 'forgot-password/',
+      payload
+    );
+  }
+
+  resetPassword(payload: IResetPassword) : Observable<any>
+  {
+    return this.http.post(
+      this.auth_url + 'users/' + 'reset-password/',
+      payload
+    );
+  }
+
+  changePassword(payload: IChangePassword) : Observable<any>
+  {
+    return this.http.post(
+      this.auth_url + 'users/' + 'change-password/',
+      payload
+    );
+  }
+
+  requestChangeEmailLink(payload: {email: string}) : Observable<any>
+  {
+    return this.http.post(
+      this.auth_url + 'users/' + 'change-email/get-token/',
+      payload
+    );
+  }
+
+  changeEmail(payload: IChangeEmail): Observable<any>
+  {
+    return this.http.post(
+      this.auth_url + 'users/' + 'change-email/',
+      payload
+    );
+  }
 
   getUserData() : Observable<any>
   {

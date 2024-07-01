@@ -31,6 +31,7 @@ class UserAccountViewSet(ModelViewSet):
         Custom permissions for the viewset depending on the action
         """
         # Sign up of new users
+        # TODO: remove OPTIONS method from the permission??
         if self.action == 'create' or self.request.method == 'OPTIONS':
             self.permission_classes = [AllowAny]
         # Viewing the account details of the user

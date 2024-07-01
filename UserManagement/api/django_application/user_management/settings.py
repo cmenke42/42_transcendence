@@ -212,7 +212,7 @@ CORS_ALLOW_CREDENTIALS = True
 SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=15),
     'ROTATE_REFRESH_TOKENS': False,
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=200),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=2),
     'BLACKLIST_AFTER_ROTATION': True,
 
 }
@@ -235,7 +235,7 @@ OTP_FROM_EMAIL = "from@example.com"
 
 # ----------------- ACCOUNT ACTIVATION SETTINGS -----------------:
 ACCOUNT_ACTIVATION_TIMEOUT_SECONDS = 60 * 60 * 24 # 24 hours
-FRONTEND_URL = "http://localhost:8000"
+FRONTEND_URL = "http://localhost:4200"
 
 # ----------------- PASSWORD RECOVERY SETTINGS -----------------:
 PASSWORD_RESET_TIMEOUT = 60 * 60 # 1 hour

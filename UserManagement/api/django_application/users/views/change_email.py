@@ -2,14 +2,13 @@ import logging
 from typing import TYPE_CHECKING, Type
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.tokens import default_token_generator
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, AND
 from rest_framework.response import Response
-from user_management.permissions import IsSuperUser, IsUserSelf
+from user_management.permissions import IsUserSelf, NotIntraUser
 
-from ..serializers import BaseEmailSerializer, PasswordResetSerializer, ChangeEmailSerializer
+from ..serializers import BaseEmailSerializer, ChangeEmailSerializer
 from ..utils.account_mails import send_change_email_email
 
 if TYPE_CHECKING:
@@ -21,7 +20,9 @@ class ObtainChangeEmailTokenAPIView(GenericAPIView):
     """
     View for sending the email change token to the user.
     """
-    permission_classes = [IsUserSelf]
+    permission_classes = [
+        IsUserSelf&NotIntraUser,
+    ]
     serializer_class = BaseEmailSerializer
 
     def post(self, request):
@@ -47,7 +48,7 @@ class ObtainChangeEmailTokenAPIView(GenericAPIView):
             pass
 
         return Response(
-            {"status": "If the email is not taken, a verification token has been sent to your new email"
+            {"status": "If the email is not taken, a verification link has been sent to your new email."
             },
         )
 

@@ -41,13 +41,19 @@ class ForgotPasswordAPIView(GenericAPIView):
             if not user.is_active:
                 logger.warning("Password reset request for inactive user")
                 user.email_user(
-                    subject="Pong - Account Inactive",
+                    subject="Pong - Password reset account inactive",
                     text_message_template_name='users/email/forgot_password_inactive.txt',
+                )
+            elif user.is_intra_user:
+                logger.warning("Password reset request for intra user")
+                user.email_user(
+                    subject="Pong - Password reset intra user",
+                    text_message_template_name='users/email/forgot_password_intra.txt',
                 )
             else:
                 send_password_reset_email(user)
         return Response(
-            {"status": "If the email exists, a password reset link has been sent"},
+            {"status": "If the email exists, a password reset link has been sent to your email."},
         )
 
 class ResetPasswordAPIView(GenericAPIView):
@@ -71,4 +77,4 @@ class ResetPasswordAPIView(GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({'status': 'Password has been reset'})
+        return Response({'status': 'Password has been reset successfully'})

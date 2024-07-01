@@ -1,0 +1,15 @@
+<div class="container">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">Account Activation</h2>
+        <p class="card-text" [ngClass]="{
+          'text-success': success,
+          'text-danger': !success,
+          }"
+        >
+          {{ message }}
+        </p>
+        <div class="text-center"> <a [routerLink]="['/login']" class="btn btn-primary">Log In</a> </div>
+      </div>
+    </div>
+  </div>

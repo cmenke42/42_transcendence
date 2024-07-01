@@ -165,7 +165,6 @@ class ChangePasswordSerializer(BaseNewPasswordSerializer):
     Serializer for changing the user's password
     """
     old_password = serializers.CharField(write_only=True)
-    new_password = serializers.CharField(write_only=True)
 
     def validate_old_password(self, value):
         user = self.context['request'].user
@@ -186,11 +185,11 @@ class ChangeEmailSerializer(serializers.Serializer):
     """
     Serializer for changing the user's email
     """
-    user_id = serializers.CharField(
+    user_id_b64 = serializers.CharField(
         write_only=True,
         help_text="The user's id encoded in base64",
     )
-    email = serializers.CharField(
+    email_b64 = serializers.CharField(
         write_only=True,
         help_text="The new email encoded in base64",
     )
@@ -214,12 +213,12 @@ class ChangeEmailSerializer(serializers.Serializer):
         Validate that new_email is the same in the token
         """
         data = super().validate(data)
-        # Decode the user_id and get the user
+        # Decode the user_id_b64 and get the user
         # Decode the email and get the new_email
         try:
-            user_id = urlsafe_base64_decode(data['user_id']).decode()
+            user_id = urlsafe_base64_decode(data['user_id_b64']).decode()
             user = self.User.objects.get(id=user_id)
-            new_email = urlsafe_base64_decode(data['email']).decode()
+            new_email = urlsafe_base64_decode(data['email_b64']).decode()
         except (ValueError, TypeError, OverflowError, self.User.DoesNotExist) as e:
             raise serializers.ValidationError("Invalid token link") from e
 
@@ -232,7 +231,7 @@ class ChangeEmailSerializer(serializers.Serializer):
             raise serializers.ValidationError("Invalid token link")
 
         # add the encoded email to the validated data
-        data['email'] = new_email
+        data['new_email'] = new_email
         # Add the user to the validated data so we can use it in the view
         data['user'] = user
         return data
@@ -241,8 +240,8 @@ class ChangeEmailSerializer(serializers.Serializer):
         """
         Update the user's email
         """
-        user = self.context['request'].user
-        new_email = self.validated_data['email']
+        user = self.validated_data['user']
+        new_email = self.validated_data['new_email']
         user.email = new_email
         user.save(update_fields=['email'])
     

@@ -11,6 +11,12 @@ import { ChatComponent } from './pages/chat/chat.component';
 import { PrivateChatComponent } from './pages/private-chat/private-chat.component';
 import { UserComponent } from './pages/user/user.component';
 import { LocalMatchComponentComponent } from './local-match-component/local-match-component.component';
+import { ActivateAccountComponent } from './pages/activate-account/activate-account.component';
+import { ResetPasswordLinkComponent } from './pages/reset-password-link/reset-password-link.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { ChangeEmailLinkComponent } from './pages/change-email-link/change-email-link.component';
+import { ChangeEmailComponent } from './pages/change-email/change-email.component';
+import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { NavbarComponent } from './pages/navbar/navbar.component';
 
 
@@ -19,6 +25,13 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent, canActivate: [loginGuard]},
     { path: 'signup', component: SignupComponent, canActivate: [loginGuard]},
 
+    { path: 'activate-account/:user_id_b64/:token', component: ActivateAccountComponent},
+    { path: 'reset-password', component: ResetPasswordLinkComponent},
+    { path: 'reset-password/:user_id_b64/:token', component: ResetPasswordComponent},
+    { path: 'change-email/:user_id_b64/:email_b64/:token', component: ChangeEmailComponent}, 
+
+    { path: 'change-email', component: ChangeEmailLinkComponent, canActivate: [userGuard]},
+    { path: 'change-password', component: ChangePasswordComponent, canActivate: [userGuard]},
     {
         path: 'home',
         component: NavbarComponent,

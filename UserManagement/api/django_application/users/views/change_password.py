@@ -1,6 +1,7 @@
 from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import AND
 from rest_framework.response import Response
-from user_management.permissions import IsUserSelf
+from user_management.permissions import IsUserSelf, NotIntraUser
 
 from ..serializers import ChangePasswordSerializer
 
@@ -10,7 +11,9 @@ class ChangePasswordAPIView(GenericAPIView):
     """
     View for resetting the user password.
     """
-    permission_classes = [IsUserSelf]
+    permission_classes = [
+        IsUserSelf&NotIntraUser,
+    ]
     serializer_class = ChangePasswordSerializer
 
     def post(self, request):

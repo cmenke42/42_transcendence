@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { User } from '../interface/user';
@@ -10,13 +10,6 @@ import { BehaviorSubject, Observable, catchError, finalize, tap, throwError, of,
 })
 export class AuthService {
 
-  constructor() {
-    this.initializeAuthState();
-  }
-
-  http = inject(HttpClient);
-  router = inject(Router);
-
   private apiUrl = 'http://localhost:8000/api/v1/';
   private jwtHelper = new JwtHelperService();
   private accessToken: string | null = null;
@@ -26,11 +19,14 @@ export class AuthService {
   isRefreshing = false;
   refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  private initializeAuthState(): void {
-    console.log('Initializing auth state');
+  // TODO: extract the logix into a separate auth component that is loaded every time.
+  // so we can call afunction of this class in the ngoninit of that auth compoenent
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {
     this.accessToken = localStorage.getItem('access_token');
     this.refreshToken = localStorage.getItem('refresh_token');
-
     if (this.accessToken && !this.jwtHelper.isTokenExpired(this.accessToken)) {
       console.log('Access token is valid, setting up refresh timer');
       this.isAuthenticatedSubject.next(true);
@@ -46,9 +42,6 @@ export class AuthService {
           this.logout();
         }
       });
-    } else {
-      console.log('No valid tokens found, redirecting to login');
-      this.logout();
     }
   }
 
@@ -182,6 +175,7 @@ export class AuthService {
   }
 
   private startRefreshTokenTimer() {
+    console.log('Starting refresh token timer...');
     const token = this.getAccessToken();
     if (token) {
       const expiration = this.jwtHelper.decodeToken(token).exp;
@@ -199,5 +193,3 @@ export class AuthService {
     }
   }
 }
-
-

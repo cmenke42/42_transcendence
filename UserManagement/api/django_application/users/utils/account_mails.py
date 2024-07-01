@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
-from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from ..utils.send_email_with_templates import send_email_with_templates
@@ -20,10 +19,10 @@ def send_account_activation_email(user: 'CustomUser'):
     encoded_user_id = urlsafe_base64_encode(force_bytes(user.id))
     token = account_activation_token_generator.make_token(user)
     # TODO: adjust link so user goes to angular page
-    link = "{FRONTEND_URL}{api_path}{encoded_user_id}/{token}/"
+    link = "{FRONTEND_URL}{route}{encoded_user_id}/{token}"
     link = link.format(
         FRONTEND_URL=settings.FRONTEND_URL,
-        api_path=reverse('user-activate'),
+        route='/activate-account/',
         encoded_user_id=encoded_user_id,
         token=token
     )
@@ -44,10 +43,10 @@ def send_password_reset_email(user: 'CustomUser'):
     encoded_user_id = urlsafe_base64_encode(force_bytes(user.id))
     token = default_token_generator.make_token(user)
     # TODO: adjust link so user goes to angular page
-    link = "{FRONTEND_URL}{api_path}{encoded_user_id}/{token}/"
+    link = "{FRONTEND_URL}{route}{encoded_user_id}/{token}"
     link = link.format(
         FRONTEND_URL=settings.FRONTEND_URL,
-        api_path=reverse('user-reset-password'),
+        route="/reset-password/",
         encoded_user_id=encoded_user_id,
         token=token
     )
@@ -68,10 +67,10 @@ def send_change_email_email(user: 'CustomUser', new_email):
     encoded_user_id = urlsafe_base64_encode(force_bytes(user.id))
     token = change_email_token_generator.make_token(user, new_email=new_email)
     encoded_new_email = urlsafe_base64_encode(force_bytes(new_email))
-    link = "{FRONTEND_URL}{api_path}{encoded_user_id}/{encoded_new_email}/{token}/"
+    link = "{FRONTEND_URL}{route}{encoded_user_id}/{encoded_new_email}/{token}"
     link = link.format(
         FRONTEND_URL=settings.FRONTEND_URL,
-        api_path=reverse('user-change-email'),
+        route="/change-email/",
         encoded_user_id=encoded_user_id,
         encoded_new_email=encoded_new_email,
         token=token
