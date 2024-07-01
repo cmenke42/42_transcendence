@@ -43,9 +43,24 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
       this.current_user = data.nickname;
       this.fetchUnreadMessageCounts();
     });
-    this.userService.showListProfiles().subscribe(users => {
-      this.users = users;
+    this.userService.userListRelationships().subscribe({
+      next: (users: any[]) => {
+      this.users = users.filter(user => 
+          user.nickname !== 'nickname-1' && user.friendship_status !== 'blocked'
+        );
+        console.log("filtered user list", this.users);
+      },
+      error: (err) => {
+        console.log("Error...", err);
+      }
     })
+
+    /* 
+    users => {
+      console.log("list of the users", users);
+      this.users = users;
+    }
+    */
 
     this.fetchUnreadMessageCountsInterval =  setInterval(() => this.fetchUnreadMessageCounts(), 3000);
     // setInterval(() => this.fetchUnreadMessageCounts(), 3000)

@@ -10,10 +10,13 @@
   				*ngFor="let user of users" 
   				[ngClass]="{'active': user === selected_user}" 
   				(click)="selectUser(user)">
-  	<div class="d-flex align-items-center justify-content-between">
-    <div class="d-flex align-items-center">
-      <img src="../../../assets/avatar-chat.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
-      <span>{{ user.nickname }}</span>
+	@if (user)
+	{
+		
+  		<div class="d-flex align-items-center justify-content-between">
+    	<div class="d-flex align-items-center">
+      	<img src="../../../assets/avatar-chat.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
+      	<span>{{ user.nickname }}</span>
     		</div>
     		<span 
       		*ngIf="unreadMessages[user.nickname] > 0" 
@@ -21,6 +24,13 @@
       		{{ unreadMessages[user.nickname] }}
     		</span>
   			</div>
+
+	
+	}
+	@else 
+	{
+		<p> No User Sorry... </p>
+	}
 			</li>
 
 		  </ul>

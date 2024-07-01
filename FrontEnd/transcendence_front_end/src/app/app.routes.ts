@@ -11,22 +11,40 @@ import { ChatComponent } from './pages/chat/chat.component';
 import { PrivateChatComponent } from './pages/private-chat/private-chat.component';
 import { UserComponent } from './pages/user/user.component';
 import { LocalMatchComponentComponent } from './local-match-component/local-match-component.component';
+import { NavbarComponent } from './pages/navbar/navbar.component';
 
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'},
     { path: 'login', component: LoginComponent, canActivate: [loginGuard]},
-    { path: 'signup', component: SignupComponent},
+    { path: 'signup', component: SignupComponent, canActivate: [loginGuard]},
 
-    { path: 'design', component: DesignComponent},
-    { path: '404', component: NotFoundComponent},
-    { path: 'chat/:username', component: ChatComponent, canActivate: [userGuard]},
-    { path: 'private_chat', component: PrivateChatComponent, canActivate: [userGuard]},
-    { path: 'setting', component: SettingComponent, canActivate: [userGuard]},
-    { path : 'home', component: HomeComponent, canActivate: [userGuard],
+    {
+        path: 'home',
+        component: NavbarComponent,
+        canActivate: [userGuard],
+        children: [
+            { path: '', component: HomeComponent }, // Home as default
+            { path: 'setting', component: SettingComponent },
+            { path: 'private_chat', component: PrivateChatComponent },
+            { path: 'match', component: LocalMatchComponentComponent },
+            { path: 'user/:user_id', component: UserComponent },
+        ]
     },
-    {path: 'user/:user_id', component: UserComponent, canActivate: [userGuard]},
-    { path: 'match', component: LocalMatchComponentComponent},
+    
+    { path: 'chat/:username', component: ChatComponent },
+    { path: 'design', component: DesignComponent },
     // otherwise redirect to home
+    { path: '404', component: NotFoundComponent},
     { path: '**', redirectTo: '/404'},
 ];
+
+// { path: 'navbar', component: NavbarComponent, canActivate: [userGuard]},
+// { path: 'design', component: DesignComponent},
+// { path: 'chat/:username', component: ChatComponent, canActivate: [userGuard]},
+// { path: 'private_chat', component: PrivateChatComponent, canActivate: [userGuard]},
+// { path: 'setting', component: SettingComponent, canActivate: [userGuard]},
+// { path : 'home', component: HomeComponent, canActivate: [userGuard]},
+// {path: 'user/:user_id', component: UserComponent, canActivate: [userGuard]},
+// { path: 'match', component: LocalMatchComponentComponent},
+  // Navbar as the shell component

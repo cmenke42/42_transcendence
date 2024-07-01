@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
-import { BehaviorSubject, EMPTY, Observable, Subject, catchError, filter, finalize, map, switchMap, take, tap, throwError, timer } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, Subject, catchError, filter, finalize, map, of, switchMap, take, tap, throwError, timer } from 'rxjs';
 import { User } from '../interface/user';
 // import { JWTService } from './jwt.service';
 import { AuthService } from './auth.service';
@@ -14,7 +14,7 @@ export class UserService {
 
   private http = inject(HttpClient);
   private auth = inject(AuthService);
-  private id :any;
+  private jwt :any;
  
   constructor() {}
 
@@ -77,16 +77,72 @@ export class UserService {
   }
 
   getterProfile(): Observable<any> {
-      this.id = jwtDecode(localStorage.getItem('access_token') || "");
-      return this.showProfile(this.id.user_id).pipe(
+      this.jwt = jwtDecode(localStorage.getItem('access_token') || "");
+      return this.showProfile(this.jwt.user_id).pipe(
         map((data: any) => {
           return data; // This value will be emitted to the subscribers
         })
       );
+  }
+
+  getterjwt() : Observable<any> {
+    return of(this.jwt);
+  }
+  
+  changeFA(status: boolean, id: number): Observable<any>
+  {
+    return this.http.patch(this.auth_url + `users/${id}/`, { is_2fa_enabled: status });
   }
     
   showListProfiles() : Observable<any>
   {
     return this.http.get(this.auth_url + 'profiles/');
   }
+
+  //User realationships functions
+
+  BlockUser(id: number) : Observable<any>
+  {
+    return this.http.patch(this.auth_url + `users/blocklist/add/?blocked_id=${id}`, {});
+  }
+
+  unBlockUser(id: number) : Observable<any>
+  {
+    return this.http.patch(this.auth_url + `users/blocklist/remove/?blocked_id=${id}`, {});
+  }
+
+  listBlockedUsers() : Observable<any>
+  {
+    return this.http.get(this.auth_url + 'users/blocklist/');
+  }
+
+  addFriend(id: number) : Observable<any>
+  {
+    return this.http.post(this.auth_url + `friends/request/?friend_id=${id}`, {friend_id : id});
+  }
+
+  declineFriend(id: number) : Observable<any>
+  {
+    return this.http.post(this.auth_url + `users/friends/decline/`, {friend_id : id});
+  }
+
+  acceptFriend(id: number) : Observable<any>
+  {
+    return this.http.post(this.auth_url + `users/friends/accept/`, {friend_id : id});
+  }
+
+  //http://localhost:8000/api/v1/friends/remove/?friend_id=2
+  removeFriend(id: number) : Observable<any>
+  {
+    return this.http.delete(this.auth_url + `friends/remove/?friend_id=${id}`, {});
+  }
+
+
+  // user list with relationship status
+  userListRelationships() : Observable<any>
+  {
+    return this.http.get(this.auth_url + 'profile/list/');
+  }
+
+
 }

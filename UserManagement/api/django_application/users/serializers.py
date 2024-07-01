@@ -18,7 +18,7 @@ class UserSerializer(DynamicHyperlinkedModelSerializer):
         model = get_user_model()
         fields = ['url', 'id', 'email', 'is_active', 'password',
                   'is_superuser', 'date_of_creation', 'last_login',
-                  'is_email_verified',
+                  'is_email_verified', 'is_2fa_enabled'
         ]
         read_only_fields = ['url', 'id', 'date_of_creation', 'last_login']
         extra_kwargs = {
@@ -245,3 +245,5 @@ class ChangeEmailSerializer(serializers.Serializer):
         new_email = self.validated_data['email']
         user.email = new_email
         user.save(update_fields=['email'])
+    
+

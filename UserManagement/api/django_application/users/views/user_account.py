@@ -47,9 +47,9 @@ class UserAccountViewSet(ModelViewSet):
             if self.action == 'create':
                 kwargs['fields'] = ['email', 'password']
             elif self.action == 'retrieve':
-                kwargs['fields'] = ['email', 'is_active']
+                kwargs['fields'] = ['id','email', 'is_active', 'is_2fa_enabled']
             elif self.action in ['update', 'partial_update']:
-                kwargs['fields'] = ['is_active']
+                kwargs['fields'] = ['is_active', 'is_2fa_enabled']
         return super().get_serializer(*args, **kwargs)
 
     @transaction.atomic

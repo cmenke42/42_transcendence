@@ -53,7 +53,7 @@ export class SocketsService {
 
   sendMessage(message: any)
   {
-    if (this.socket) //&& this.socket.readyState === WebSocket.OPEN
+    if (this.socket && this.socket.readyState === WebSocket.OPEN)
     {
       console.log('stringfy JSON : ' , JSON.stringify(message));
       this.socket.send(JSON.stringify(message));

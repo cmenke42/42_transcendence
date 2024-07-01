@@ -31,26 +31,28 @@ urlpatterns = [
 	path('reset-password/', ResetPasswordAPIView.as_view(), name='user-reset-password'),
 	path('change-password/', ChangePasswordAPIView.as_view(), name='user-change-password'),
 	path('change-email/get-token/', ObtainChangeEmailTokenAPIView.as_view(), name='user-change-email-get-token'),
-	path('change-email/', ChangeEmailAPIView.as_view(), name='user-change-email'),    
+	path('change-email/', ChangeEmailAPIView.as_view(), name='user-change-email'),
+	
 
+# POST	http://localhost:8000/api/v1/friends/request/?friend_id=3	sends friend request to user with id=3
 
 #GET http://localhost:8000/api/v1/users/friends/myfriends/							shows all friends of user
-	path('friends/myfriends/',  ShowAllFriendsView.as_view(), name='my-friends'),   
+	path('friends/myfriends/',  ShowAllFriendsView.as_view(), name='my-friends'),
 #POST http://localhost:8000/api/v1/users/friends/accept/ BODY:{friend_id' = '1'}	accept friend request from id_1:
 	path('friends/accept/', FriendAcceptView.as_view(), name='friends-accept'),        
 #POST http://localhost:8000/api/v1/users/friends/decline/ BODY:{friend_id' = '1'}	decline friend request from id_1:
 	path('friends/decline/', FriendDeclineView.as_view(), name='friends-decline'),  
 	
-# SERVICE METHOD: GET http://localhost:8000/api/v1/users/friends/showall/			shows all relationship in table
-	path('friends/showall/', FriendShowAllView.as_view(), name='show-all'),
- 
 #PATCH http://localhost:8000/api/v1/users/blocklist/add/?blocked_id=2 				adds friend with id_1 to blocklist
 	path('blocklist/add/', BlockListAddView.as_view(), name='blocklist-add'),
 #PATCH http://localhost:8000/api/v1/users/blocklist/remove/?blocked_id=2 			removes friend with id_1 from blocklist
 	path('blocklist/remove/', BlockListRemoveView.as_view(), name='blocklist-remove'),
 # GET http://localhost:8000/api/v1/users/blocklist/									shows all blocked friends
 	path('blocklist/all/', BlockListView.as_view(), name='blocklist'),
-	
-     
-		
+ 
+ 
+#Not for Production so don't user this
+# SERVICE METHOD: GET http://localhost:8000/api/v1/users/friends/showall/			shows all relationship in table
+	path('friends/showall/', FriendShowAllView.as_view(), name='show-all'),
+
 ]

@@ -1,44 +1,78 @@
 <div class="container mt-3">
-    <div class="card">
-      <div class="card-header text-center bg-primary text-white">
-        <h2>User List</h2>
-      </div>
-      <div class="card-body">
-        @for(user of user_list; track user.user_id)
-        {
-            @if (user)
-            {
-                <div class="user-item mb-3 p-2 border rounded">
-					<div class="d-flex align-items-center justify-content-between">
-						<div>
-							<img src="../../../assets/avatar-chat.png" alt="User Picture" class="rounded-circle" width="50" height="50"> 
-							<span class="nickname">{{ user.nickname }}</span>
-						</div>
-						<button
-							type="button"
-							class="btn btn-outline-primary"
-							(click)="toggleCollapse(user.user_id)"
-							[attr.aria-expanded]="!isCollapseMap[user.user_id]"
-							aria-controls="collapseExample">
-								detail
-						</button>
-					</div>
-					<div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapseMap[user.user_id]" class="mt-2 text-center">
-						<div class="card">
-							<div class="card-body">Here we can explain the Match history and its profile</div>
-							<div class="card-body">
-							
-								<button class="btn btn-outline-primary" (click)="inbox(user.nickname)" > send message </button>
+	<div class="card">
+	  <div class="card-header text-center custom-bg text-white">
+		<h2>User List</h2>
+	  </div>
+	  <div class="card-body">
+		@for(user of user_list; track user.user_id) {
+		  @if (user) {
+			@if(user.nickname != 'nickname-1') {
+			  <div class="user-item mb-3 p-2 border rounded">
+				<div class="d-flex align-items-center justify-content-between">
+				  <div>
+					<img src="../../../assets/avatar-chat.png" alt="User Picture" class="rounded-circle" width="50" height="50"> 
+					<span class="nickname">{{ user.nickname }}</span>
+				  </div>
+
+
+				  <div class="btn-group" role="group">
+					@switch (user.friendship_status) 
+					{
+						@case('blocked_by_me') 
+						{
+							<button class="btn btn-outline-danger rounded-pill" (click)="unBlockUser(user.user_id)">Unblock</button>
+						}
+						@case('blocked_by_them') {}
+						@case ('friends')
+						{
+							<button class="btn btn-outline-success rounded-pill me-2" (click)="removeFriend(user.user_id)" >Delete Friend</button>
+						}
+						@case ('sent_request')
+						{
+							<button class="btn btn-outline-warning rounded-pill me-2">Pending</button>
+						}
+						@case ('received_request')
+						{
+							<button class="btn btn-outline-success rounded-pill me-2" (click)="acceptRequest(user.user_id)">Accept</button>
+							<button class="btn btn-outline-danger rounded-pill me-2" (click)="rejectRequest(user.user_id)">Reject</button>
+						}
+						@default {
+							<button class="btn btn-outline-success rounded-pill me-2" (click)="friendRequest(user.user_id)">Friend Request</button>
+							<button class="btn btn-outline-danger rounded-pill me-2" (click)="blockUser(user.user_id)">Block</button>
+						}
+					}
+				  </div>
+				</div>
+			  </div>
+			}
+		  } @else {
+			<p>No User....</p>
+		  }
+		}
+	  </div>
+	</div>
+  </div>
+  
+
+
+<!-- 
+<div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapseMap[user.user_id]" class="mt-2 text-center">
+							<div class="card">
+								<div class="card-body">Here we can explain the Match history and its profile</div>
+								<div class="card-body">
+								
+									<button class="btn btn-outline-primary" (click)="inbox(user.nickname)" > send message </button>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-            }
-            @else 
-            {
-                <p>No User....</p>
-            }
-        }
-      </div>
-    </div>
-</div>
+-->
+
+	<!-- <button
+									type="button"
+									class="btn btn-outline-primary rounded-pill me-2"
+									(click)="toggleCollapse(user.user_id)"
+									[attr.aria-expanded]="!isCollapseMap[user.user_id]"
+									aria-controls="collapseExample">
+									Detail
+								</button> -->

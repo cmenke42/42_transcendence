@@ -63,22 +63,54 @@ class BlockListAddView(APIView):
 
 
 # PATCH http://localhost:8000/api/v1/users/blocklist/remove/?blocked_id=2 removes friend with id_2 from blocklist
+# class BlockListRemoveView(APIView):
+# 	@staticmethod
+# 	def patch(request):
+# 		user_id = request.user.id
+# 		blocked_id = request.GET.get('blocked_id')
+# 		valid, error = validate_friend_id(blocked_id)
+# 		if not valid:
+# 			return Response(data = {'error': error}, status=400)
+# 		try:
+# 			relationship = Friend.objects.get(user_id=user_id, friend_id=blocked_id)
+# 		except Friend.DoesNotExist:
+# 			return Response(data = {'error': 'friend has not been blocked'}, status=400)
+# 		if relationship.status != Friend.BLOCKED:
+# 			return Response(data = {'error': 'friend has not been blocked'}, status=400)
+# 		relationship.delete()
+# 		backward_relationship = Friend.objects.get(user_id=blocked_id, friend_id=user_id)
+# 		if backward_relationship is not None:
+# 			backward_relationship.delete()
+# 		return Response(data = {'message': 'friend has been removed from a blocklist'}, status=200)
+
 class BlockListRemoveView(APIView):
-	@staticmethod
-	def patch(request):
-		user_id = request.user.id
-		blocked_id = request.GET.get('blocked_id')
-		valid, error = validate_friend_id(blocked_id)
-		if not valid:
-			return Response(data = {'error': error}, status=400)
-		try:
-			relationship = Friend.objects.get(user_id=user_id, friend_id=blocked_id)
-		except Friend.DoesNotExist:
-			return Response(data = {'error': 'friend has not been blocked'}, status=400)
-		if relationship.status != Friend.BLOCKED:
-			return Response(data = {'error': 'friend has not been blocked'}, status=400)
-		relationship.delete()
-		backward_relationship = Friend.objects.get(user_id=blocked_id, friend_id=user_id)
-		if backward_relationship is not None:
-			backward_relationship.delete()
-		return Response(data = {'message': 'friend has been removed from a blocklist'}, status=200)
+    @staticmethod
+    def patch(request):
+        user_id = request.user.id
+        blocked_id = request.GET.get('blocked_id')
+        valid, error = validate_friend_id(blocked_id)
+        if not valid:
+            return Response(data={'error': error}, status=400)
+        
+        try:
+            relationship = Friend.objects.get(user_id=user_id, friend_id=blocked_id)
+            if relationship.status != Friend.BLOCKED:
+                return Response(data={'error': 'friend has not been blocked'}, status=400)
+            
+            relationship.delete()
+            
+            # Try to delete backward relationship if it exists
+            try:
+                backward_relationship = Friend.objects.get(user_id=blocked_id, friend_id=user_id)
+                backward_relationship.delete()
+            except Friend.DoesNotExist:
+                # It's okay if backward relationship doesn't exist
+                pass
+            
+            return Response(data={'message': 'friend has been removed from the blocklist'}, status=200)
+        
+        except Friend.DoesNotExist:
+            return Response(data={'error': 'friend has not been blocked'}, status=400)
+        except Exception as e:
+            # Log the exception here
+            return Response(data={'error': 'An unexpected error occurred'}, status=500)

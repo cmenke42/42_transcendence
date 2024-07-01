@@ -10,6 +10,8 @@ import os
 import stat
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import PermissionDenied
+from django.db.models import Q
+from users.views.friendship_view import FriendViewSet
 # ----------------------------------------------------- usage ---------------------------------------------------------
 	# 1. See User Profile:
  
@@ -32,6 +34,13 @@ from django.core.exceptions import PermissionDenied
 	# 																body: {nickname : "new_nickname", avatar : "new_avatar"}
 	#
 	# -------------------------------------------------------------------------------------------------------------------
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.db.models import Q
+from .models import UserProfile
+from users.models import Friend
+from .serializers import UserProfileSerializer
 
 
 def check_permissions(func):
@@ -122,4 +131,40 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 			return Response(serializer.data, status=200)	
 		return Response({"error": "BAD REQUEST", "details": serializer.errors}, status=400)
 
+
+
+class UserListView(APIView):
+    def get(self, request):
+        user_id = request.user.id
+        all_users = UserProfile.objects.exclude(user_id=user_id)
+        
+        # Fetch friend relationships
+        friend_relationships = Friend.objects.filter(
+            Q(user_id=user_id) | Q(friend_id=user_id)
+        ).select_related('user', 'friend')
+        
+        # Create a dictionary of friend relationships
+        friendship_status = {}
+        for relationship in friend_relationships:
+            other_user_id = relationship.friend_id if relationship.user_id == user_id else relationship.user_id
+            if relationship.status == Friend.BLOCKED:
+                status = 'blocked_by_me' if relationship.user_id == user_id else 'blocked_by_them'
+            elif relationship.status == Friend.ACCEPTED:
+                status = 'friends'
+            else:
+                status = 'sent_request' if relationship.user_id == user_id else 'received_request'
+            friendship_status[other_user_id] = status
+            # status = 'blocked' if relationship.status == Friend.BLOCKED else (
+            #     'accepted' if relationship.status == Friend.ACCEPTED else 'pending'
+            # )
+            # friendship_status[other_user_id] = status
+        
+        # Add friendship status to user profiles
+        user_list = []
+        for profile in all_users:
+            user_data = UserProfileSerializer(profile).data
+            user_data['friendship_status'] = friendship_status.get(profile.user_id, 'not_friend')
+            user_list.append(user_data)
+        
+        return Response(user_list, status=200)
 

@@ -39,7 +39,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   
   ngOnInit() 
   {
-    this.changeTheme('dark');
     this.loggedInUser = this.userService.getLoggedInUser();
     console.log("Home component is loaded...", this.loggedInUser);
     if (this.loggedInUser?.is_superuser)
@@ -124,15 +123,5 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  logout() 
-  {
-    this.auth.logout();
-    this.router.navigate(['/login']);
-  }
 
-  changeTheme(theme:string)
-  {
-    const body=document.body as HTMLElement
-    body.setAttribute('data-bs-theme',theme)
-  }
 }

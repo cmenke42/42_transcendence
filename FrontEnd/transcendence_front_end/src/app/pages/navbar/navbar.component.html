@@ -1,0 +1,81 @@
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" [ngClass]="{'scrolled': isScrolled}">
+	<div class="container-fluid">
+	  <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
+		<span class="navbar-toggler-icon"></span>
+	  </button>
+	  <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
+		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+		  <li class="nav-item">
+			<a class="nav-link" [routerLink]="['/home']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" [routerLink]="['/home/setting']" routerLinkActive="active">Settings</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" [routerLink]="['/home/private_chat']" routerLinkActive="active">Private Chat</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" [routerLink]="['/home/match']" routerLinkActive="active">Match</a>
+		  </li>
+		</ul>
+		
+		<ul class="navbar-nav ms-auto">
+		  <!-- Notification Dropdown -->
+		  <li class="nav-item" ngbDropdown>
+			<a class="nav-link" id="notificationDropdown" role="button" ngbDropdownToggle>
+			  <i class="fas fa-bell"><img src="../../../assets/bell-icon.png" class="rounded-circle mr-2" style="width: 35px; height: 35px;"></i>
+			  <span class="badge bg-danger" *ngIf="user_relationship.length > 0">{{ user_relationship.length }}</span>
+			</a>
+			<div ngbDropdownMenu aria-labelledby="notificationDropdown" class="dropdown-menu dropdown-menu-end">
+			  <h6 class="dropdown-header">Notifications</h6>
+			  <div *ngIf="user_relationship.length === 0" class="dropdown-item">No new notifications</div>
+			  <ng-container *ngFor="let request of user_relationship">
+				<div class="dropdown-item">
+				  <span>{{ request.nickname }} sent you a friend request</span>
+				  <div class="mt-2">
+					<button class="btn btn-sm btn-outline-success me-2" (click)="acceptRequest(request.user_id)">Accept</button>
+					<button class="btn btn-sm btn-outline-danger me-2" (click)="rejectRequest(request.user_id)">Reject</button>
+				  </div>
+				</div>
+			  </ng-container>
+			</div> 
+		  </li>
+		  <!-- User Dropdown -->
+		  <li class="nav-item" ngbDropdown>
+			<a class="nav-link" id="userDropdown" role="button" ngbDropdownToggle>
+			  <img src="../../../assets/minion.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
+			  {{ user_profile?.nickname }}
+			</a>
+			<div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-end">
+			  <div class="dropdown-submenu">
+				<button ngbDropdownItem class="dropdown-toggle">Theme</button>
+				<div class="dropdown-menu submenu">
+				  <button ngbDropdownItem (click)="changeTheme('dark')">Dark</button>
+				  <button ngbDropdownItem (click)="changeTheme('light')">Light</button>
+				</div>
+			  </div>
+			  <div class="dropdown-divider"></div>
+				@if (userData?.is_2fa_enabled === false)
+				{
+				  <button ngbDropdownItem (click)="FA(true, userData?.id)">Enable 2FA</button>
+				}
+				@else
+				{
+					<button ngbDropdownItem (click)="FA(false, userData?.id)">Disable 2FA</button>
+				}
+			
+			  <div class="dropdown-divider"></div>
+			  <button ngbDropdownItem (click)="logout()">Logout</button>
+			</div>
+		  </li>
+		</ul>
+	  </div>
+	</div>
+  </nav>
+  
+  <div class="content-wrapper">
+	<router-outlet></router-outlet>
+  </div>
+  
+
+<!-- <li class="nav-item" ngbDropdown> <img src="../../../assets/bell-icon.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;"> </li> -->

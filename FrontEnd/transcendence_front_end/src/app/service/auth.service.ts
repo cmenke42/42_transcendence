@@ -201,37 +201,3 @@ export class AuthService {
 }
 
 
-/* 
-after this 
-
- if (!refreshToken)
-      return throwError(() => new Error('No refresh token found'));
-
- this code
- this.isrefreshing = true; // Set refreshing flag before request
-  return this.http.post<any>(this.apiUrl + 'login/refresh/', {refresh: refreshToken})
-    .pipe(tap(response => {
-
-      this.accessToken = response.access;
-      console.log('New access token:', this.accessToken);
-      if (this.accessToken)
-        localStorage.setItem('access_token', this.accessToken);
-      clearTimeout(this.refreshTimeout);
-      this.startRefreshTokenTimer();
-
-    }),
-    catchError((error) => {
-      console.error('Error while refreshing token:', error);
-      if (error.status === 401 && error.error.code === 'refresh_token_not_valid')
-      {
-        console.error('Refresh token expired, logging out...');
-        this.logout();
-      }
-      else
-        console.error('Error for if:', error);
-      this.isrefreshing = false; // Clear refreshing flag after request
-      return throwError(() => error);
-  }),
-  finalize(() => this.isrefreshing = false) // Clear refreshing flag after request
-  )
-*/

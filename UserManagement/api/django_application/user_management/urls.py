@@ -30,6 +30,7 @@ urlpatterns = [
             path('oauth_login/', FortyTwoIntraLogin, name='oauth_login'),
             # 42 Intra login callback
             path('call_back/',FortyTwoIntraLoginCallback, name='oauth_callback'),
+            path('profile/', include('user_profile.urls')),
             ]
         )
     ),
