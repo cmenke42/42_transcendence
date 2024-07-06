@@ -25,7 +25,7 @@ class player extends GameEntity
 	private _scene: Scene;
 	private _playerCount: number;
 	public _score: Score;
-	private _keyboardState: KeyboardState = {
+	public _keyboardState: KeyboardState = {
 		Up: false,
 		Down: false,
 		ESC: false,
@@ -44,6 +44,7 @@ class player extends GameEntity
 		this._collider = new Box3().setFromObject(this._mesh);
 		window.addEventListener('keydown', this.handleKeyDown);
 		window.addEventListener('keyup', this.handleKeyUp);
+
 	}
 
 	public override load = async () =>
@@ -92,9 +93,9 @@ class player extends GameEntity
 				case 'd':
 					this._keyboardState.Space = true;
 					break;
-				case 'Escape':
+			/* 	case 'Escape':
 					this._keyboardState.ESC = true;
-					break;
+					break; */
 			}
 		}
 		if (this._playerCount === 2)
@@ -110,13 +111,24 @@ class player extends GameEntity
 				case 'ArrowRight':
 					this._keyboardState.Space = true;
 					break;
-				case 'Escape':
+				/* case 'Escape':
 					this._keyboardState.ESC = true;
-					break;
+					break; */
 			}
 		}
+
+	/* 	if (event.key === 'Escape')
+		{
+			// this.togglePauseResume();
+			event.preventDefault();
+			GameScene.getInstance().togglePauseResume();
+		} */
 	}
 
+	/* private togglePauseResume = () => {
+		GameScene.getInstance().togglePauseResume();
+	}
+ */
 	private handleKeyUp = (event: KeyboardEvent) =>
 	{
 		if (this._playerCount === 1)
@@ -132,9 +144,9 @@ class player extends GameEntity
 					case 'd':
 						this._keyboardState.Space = false;
 						break;
-					case 'Escape':
+					/* case 'Escape':
 						this._keyboardState.ESC = false;
-						break;
+						break; */
 				}
 			}
 			if (this._playerCount === 2)
@@ -150,9 +162,9 @@ class player extends GameEntity
 					case 'ArrowRight':
 						this._keyboardState.Space = false;
 						break;
-					case 'Escape':
+					/* case 'Escape':
 						this._keyboardState.ESC = false;
-						break;
+						break; */
 				}
 			}
 	}
@@ -181,7 +193,14 @@ class player extends GameEntity
 		this._mesh.position.add(computedMove);
 		if (this._collider instanceof THREE.Box3)
 			this._collider.setFromObject(this._mesh);
+
+		/* //new code
+		this._mesh.position.copy(this._position);
+		if (this._collider instanceof Box3)
+			this._collider.setFromObject(this._mesh); */
 	}
+
+
 }
 
 export default player;

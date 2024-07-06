@@ -17,6 +17,9 @@ class Ball extends GameEntity
 	private _scene: Scene;
 	private _bounce: number;
 	private _resources: ResourceManager;
+	public _lastUpdateTime: number;
+
+	private _lastPosition: Vector3;
 
 	constructor(position: Vector3, speed: number, scene: Scene)
 	{
@@ -27,6 +30,9 @@ class Ball extends GameEntity
 		this._resources = ResourceManager.getInstance();
 		const collider = new Box3().setFromObject(this._mesh).getBoundingSphere(new Sphere(this._mesh.position.clone()));
 		this._collider = collider;
+
+		this._lastUpdateTime = performance.now();
+		this._lastPosition = position.clone();
 	}
 
 	public override load = async () =>
@@ -44,8 +50,33 @@ class Ball extends GameEntity
 
 	public override update = async (delta: number) =>
 	{
+	
+		if (GameScene.getInstance().paused)
+		{
+			this._lastUpdateTime = performance.now();
+			return;
+		}
+		const currentTime = performance.now();
+        const actualDelta = (currentTime - this._lastUpdateTime) / 1000; // Convert to seconds
+        this._lastUpdateTime = currentTime;
+
+		/* if (this._mesh.position.distanceTo(this._lastPosition) > 1)
+			this._mesh.position.copy(this._lastPosition); */
+		// Calculate the new position
+		const newPosition = this._mesh.position.clone().add(
+			this._speed.clone().multiplyScalar(actualDelta)
+		);
+
 		const testingSphere = this._collider?.clone() as Sphere;
-		testingSphere.center.add(this._mesh.position.add(new Vector3(this._speed.x * delta, this._speed.y * delta, 0)));
+		testingSphere.center.copy(newPosition);
+
+		var colliders = GameScene.getInstance().getGameEntities().filter(
+			(e) => e !== this && e.collider && e.collider.intersectsSphere(testingSphere)
+		);
+
+		// const testingSphere = this._collider?.clone() as Sphere;
+		// testingSphere.center.add(this._mesh.position.add(new Vector3(this._speed.x * actualDelta, this._speed.y * actualDelta, 0)));
+		// testingSphere.center.add(this._mesh.position.add(new Vector3(this._speed.x * delta, this._speed.y * delta, 0)));
 		var colliders = GameScene.getInstance().getGameEntities().filter((e) => e !== this && e.collider && e.collider.intersectsSphere(testingSphere));
 		if (colliders.length > 0)
 		{
@@ -56,10 +87,18 @@ class Ball extends GameEntity
 			if (colliders[0] instanceof Wall)
 				this._speed.y *= -1;
 		}
+		else
+		{
+			 // Only update the position if there's no collision
+			 this._mesh.position.copy(newPosition);
+		}
 		this._mesh.position.x += this._speed.x * delta;
 		this._mesh.position.y += this._speed.y * delta;
+		// this._lastPosition.copy(this._mesh.position);
 		if (this._collider instanceof Box3)
 			this._collider.setFromObject(this._mesh);
+		// Update the last position
+		this._lastPosition.copy(this._mesh.position);
 	}
 
 	public reset = () =>

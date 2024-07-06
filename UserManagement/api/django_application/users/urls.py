@@ -6,6 +6,7 @@ from .views.change_email import ChangeEmailAPIView, ObtainChangeEmailTokenAPIVie
 from .views.friendship_view import FriendViewSet, FriendAcceptView, FriendDeclineView, FriendShowAllView, ShowAllFriendsView
 from .views.blocklist import BlockListAddView, BlockListRemoveView, BlockListView
 from django.urls import path, include
+from .views.game_invitation import GameInvitation, RespondGameInvitation
 from rest_framework.routers import DefaultRouter
 
 def register_with_router(router):
@@ -54,5 +55,12 @@ urlpatterns = [
 #Not for Production so don't user this
 # SERVICE METHOD: GET http://localhost:8000/api/v1/users/friends/showall/			shows all relationship in table
 	path('friends/showall/', FriendShowAllView.as_view(), name='show-all'),
+
+# GET Testing phase
+#for game invitation & accept
+# POST http://localhost:8000/api/v1/users/invite/?friend_id=2						invite friend with id_2
+	path('invite/', GameInvitation.as_view(), name='invite'),
+# POST http://localhost:8000/api/v1/users/respond/?invitation_id=2&action=accept	accept invitation with id_2
+	path('respond/', RespondGameInvitation.as_view(), name='respond'),
 
 ]

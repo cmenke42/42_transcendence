@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, Subject, Subscriber } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscriber } from 'rxjs';
 
 
 
@@ -14,6 +14,7 @@ export class SocketsService {
   private private_socket: WebSocket | null = null;
   private message_subject = new Subject<any>();
   private http = inject(HttpClient);
+  private onlineUsers = new BehaviorSubject<string[]>([]);
   // private username: string = 'user1';
   connect(roomName: string, user: string) 
   {
@@ -93,7 +94,7 @@ export class SocketsService {
   // private user
   privateConnect(sender: string, receiver: string)
   {
-    if (this.private_socket) //why?
+    if (this.private_socket) 
       this.private_socket.close();
     this.private_socket = new WebSocket(`ws://localhost:8000/ws/private_chat/${sender}/${receiver}/`);
     this.private_socket.onopen = () =>
@@ -166,6 +167,46 @@ export class SocketsService {
         this.private_socket.close();
   }
 
+    // online status
+    connectOnlineStatus(username: string)
+    {
+      this.socket = new WebSocket(`ws://localhost:8000/ws/online_status/`);
+      this.socket.onopen = () =>
+      {
+        console.log('Websocket connected');
+        this.socket?.send(JSON.stringify({ type: 'online', username: username }));
+      };
+      this.socket.onmessage = (event) => 
+      {
+        const message = JSON.parse(event.data.toString());
+        if (message.type === 'online_users')
+        {
+          console.log('Online users....', message.online_users);
+          this.onlineUsers.next(message.online_users);
+          // this.message_subject.next(message.online_users);
+        }
+        // console.log('Message received: ', event.data);
+      };
+      this.socket.onerror = (event) =>
+      {
+        console.log('Websocket error: ', event);
+      }
+
+    }
+
+    getOnlineStatus(): Observable<string[]>
+    {
+      return this.onlineUsers.asObservable();
+    }
+
+    disconnectOnlineStatus(username: string)
+    {
+      if (this.socket && this.socket.readyState === WebSocket.OPEN)
+      {
+        this.socket.send(JSON.stringify({ type: 'offline', username: username }));
+        this.socket.close();
+      }
+    }
 
 }
 

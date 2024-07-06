@@ -5,18 +5,32 @@
 		<div class="users-list border rounded p-3">
 		  <h5 class="text-center">Users</h5>
 		  <ul class="list-group">
-			<li 
+			  <!-- 	*ngFor="let user of users"  --> 
+		@for(user of users; track user.id)
+		{
+
+			@if (user)
+			{
+				@if (user.friendship_status != "blocked_by_me" && user.friendship_status != "blocked_by_them")
+				{
+				<li 
   				class="list-group-item list-group-item-action" 
-  				*ngFor="let user of users" 
   				[ngClass]="{'active': user === selected_user}" 
   				(click)="selectUser(user)">
-	@if (user)
-	{
+	
 		
   		<div class="d-flex align-items-center justify-content-between">
     	<div class="d-flex align-items-center">
       	<img src="../../../assets/avatar-chat.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
       	<span>{{ user.nickname }}</span>
+		@if (user.friendship_status === "friends")
+		{
+			@if(isUserOnline(user.nickname))
+			{
+				<!-- <span class="ml-2 text-success">online</span> -->
+				<span class="ml-2 online-dot" title="Online"></span>
+			}
+		}
     		</div>
     		<span 
       		*ngIf="unreadMessages[user.nickname] > 0" 
@@ -24,15 +38,16 @@
       		{{ unreadMessages[user.nickname] }}
     		</span>
   			</div>
-
+		
+			</li>
+		}
 	
 	}
 	@else 
 	{
-		<p> No User Sorry... </p>
+		<li class="list-group-item list-group-item-action" ><span>No User Sorry</span> </li>
 	}
-			</li>
-
+		}
 		  </ul>
 		</div>
 	  </div>
@@ -41,13 +56,20 @@
 	  <div class="col-md-8">
 		<div class="chat-container border rounded p-3 d-flex flex-column" style="height: 75vh;">
 		  <div class="chat-header d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-			<h5 *ngIf="receiver">
+			@if (receiver_data)
+			{
+			<h5>
 			  <a [routerLink]="['/user', user_id]">
 				<img src="../../../assets/avatar-chat.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
-				{{ receiver }}
+				{{ receiver_data.nickname }}
 			  </a>
+			  <!-- <button class="btn btn-outline-primary" (click)="gameInvite(receiver_data.user_id)">Game Invitation</button> -->
+			
 			</h5>
-		  </div>
+  			<!-- <i class="fas fa-gamepad cursor-pointer" (click)="gameInvite(receiver_data.user_id)" title="Game Invitation"></i> -->
+			<button class="btn btn-outline-primary custom-pill" (click)="gameInvite(receiver_data.user_id)">Game Invitation</button>	
+		}  
+		</div>
 		  <div class="chat-window flex-grow-1 overflow-auto mb-3">
 			<ul class="list-unstyled">
 			  <li class="mb-3" *ngFor="let message of messages | async">
@@ -60,7 +82,7 @@
 			  </li>
 			</ul>
 		  </div>
-		  <form class="d-flex" *ngIf="receiver">
+		  <form class="d-flex" *ngIf="receiver_data">
 			<input type="text" class="form-control mr-2" [(ngModel)]="message" name="message" placeholder="Type a message...">
 			<button type="button" class="btn btn-primary" (click)="sendMessage()">Send</button>
 		  </form>

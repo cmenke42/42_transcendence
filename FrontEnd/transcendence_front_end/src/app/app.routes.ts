@@ -32,6 +32,7 @@ export const routes: Routes = [
 
     { path: 'change-email', component: ChangeEmailLinkComponent, canActivate: [userGuard]},
     { path: 'change-password', component: ChangePasswordComponent, canActivate: [userGuard]},
+    { path: 'match', component: LocalMatchComponentComponent },
     {
         path: 'home',
         component: NavbarComponent,
@@ -40,7 +41,6 @@ export const routes: Routes = [
             { path: '', component: HomeComponent }, // Home as default
             { path: 'setting', component: SettingComponent },
             { path: 'private_chat', component: PrivateChatComponent },
-            { path: 'match', component: LocalMatchComponentComponent },
             { path: 'user/:user_id', component: UserComponent },
         ]
     },

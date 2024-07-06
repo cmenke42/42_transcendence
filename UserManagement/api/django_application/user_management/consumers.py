@@ -163,3 +163,63 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
     def mark_message_as_read(self, sender_nickname, receiver_nickname):
         PrivateChatMessage.objects.filter(sender__nickname= sender_nickname, receiver__nickname=receiver_nickname, is_read=False).update(is_read=True)
 
+class OnlineStatusConsumer(AsyncWebsocketConsumer):
+    online_users = set()
+
+    async def connect(self):
+        await self.accept()
+        print(f"New connection established. Total connections: {len(self.online_users)}")
+    
+    async def disconnect(self, close_code):
+        if hasattr(self, 'username'):
+            if self.username in OnlineStatusConsumer.online_users:
+                OnlineStatusConsumer.online_users.remove(self.username)
+                print(f"User {self.username} disconnected. Remaining users: {OnlineStatusConsumer.online_users}")
+                await self.broadcast_online_users()
+            else:
+                print(f"User {self.username} not found in online_users set.")
+        else:
+            print("No username attribute found during disconnect.")
+        
+    
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+        if data['type'] == 'online':
+            self.username = data['username']
+            OnlineStatusConsumer.online_users.add(self.username)
+            print(f"User {self.username} connected. Total users: {OnlineStatusConsumer.online_users}")
+            await self.broadcast_online_users()
+        elif data['type'] == 'offline':
+            OnlineStatusConsumer.online_users.remove(self.username)
+            print(f"User {self.username} disconnected. Remaining users: {OnlineStatusConsumer.online_users}")
+            await self.broadcast_online_users()
+        
+    async def broadcast_online_users(self):
+        message = {
+            'type': 'online_users',
+            'online_users': list(OnlineStatusConsumer.online_users)
+        }
+        print(f"Broadcasted online users: {OnlineStatusConsumer.online_users}")
+        await self.send(text_data=json.dumps(message))
+
+# remote player
+""" class GameConsumer(AsyncWebsocketConsumer):
+    async def connect (self):
+        await self.accept()
+    
+    async def disconnect(self, code):
+        pass
+
+    async def receive(self, text_data):
+        data = json.load(text_data)
+
+        await self.channel_layer.group_send(
+            'game_group',
+            {
+                'type': 'game_message',
+                'data': data
+            }
+        )
+    async def game_message(self, event):
+        message = event['message']
+        await self.send(text_data=json.dumps(message)) """

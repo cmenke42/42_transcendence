@@ -167,4 +167,10 @@ class UserListView(APIView):
             user_list.append(user_data)
         
         return Response(user_list, status=200)
+	
+""" class UserInviteMatch(APIView):
+	def get(self, request):
+		user_id = request.user.id
+		all_users = UserProfile.objects.exclude(user_id=user_id) """
+	
 

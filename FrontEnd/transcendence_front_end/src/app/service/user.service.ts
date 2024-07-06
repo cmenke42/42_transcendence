@@ -195,5 +195,6 @@ export class UserService {
     return this.http.get(this.auth_url + 'profile/list/');
   }
 
+  
 
 }

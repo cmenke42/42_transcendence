@@ -13,6 +13,8 @@ websocket_urlpatterns = [
     re_path(r'ws/chat/(?P<room_name>\w+)/$', consumers.ChatConsumer.as_asgi()),
     # re_path(r'^ws/private_chat/(?P<username>[\w-]+)/$', consumers.PrivateChatConsumer.as_asgi()),
     re_path(r'^ws/private_chat/(?P<sender>[\w-]+)/(?P<receiver>[\w-]+)/$', consumers.PrivateChatConsumer.as_asgi()),
+    re_path(r'ws/online_status/$', consumers.OnlineStatusConsumer.as_asgi()),
+    # re_path(r'ws/game/$', consumers.GameConsumer.as_asgi()),
     # re_path(r'^ws/general_chat/(?P<username>[\w-]+)/$', consumers.GeneralChatConsumer.as_asgi()),
 ]
 

@@ -1,14 +1,14 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../service/auth.service';
-import { catchError, switchMap, throwError, of } from 'rxjs';
+import { catchError, switchMap, throwError, of, EMPTY } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth_service = inject(AuthService);
 
   const accessToken = auth_service.getAccessToken();
   let authReq = req;
-
+  //&& auth_service.validateToken(accessToken)
   if (accessToken) {
     authReq = req.clone({
       setHeaders: {
@@ -16,6 +16,18 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       }
     });
   }
+ /*  else if (accessToken && !auth_service.validateToken(accessToken))
+  {
+    console.error('Token is invalid');
+    auth_service.logout();
+    return EMPTY;
+  } */
+ /*  else
+  {
+    console.error('No access token found or token is invalid');
+    auth_service.logout();
+    return EMPTY;
+  } */
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {

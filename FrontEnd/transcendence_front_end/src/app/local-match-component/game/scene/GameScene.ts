@@ -11,6 +11,7 @@ import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLigh
 import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper';
 import { SelectMultipleControlValueAccessor } from "@angular/forms";
 import { flattenJSON } from "three/src/animation/AnimationUtils";
+import { EventEmitter } from "@angular/core";
 
 RectAreaLightUniformsLib.init();
 class GameScene{
@@ -18,6 +19,9 @@ class GameScene{
 	public static getInstance(){
 		return this.instance;
 	}
+
+	private animationFrameId: number | null = null;
+	private _isPaused = true;
 	private controls: any;
 	private _paused = true;
 	private _width: number;
@@ -44,6 +48,7 @@ class GameScene{
 	}
 	private constructor()
 	{
+		this._isPaused = true;
 		this._width = window.innerWidth;
 		this._height = window.innerHeight;
 		this._renderer = new WebGLRenderer({alpha: true, antialias: true});
@@ -62,34 +67,51 @@ class GameScene{
 		});
 		const map = new GameMap(new Vector3(0, 0, 0), this._scene);
 		this._gameEntities.push(map);
+		// const paddleOffset = window.innerWidth / 2 - 50; // Offset the paddle from the edge of the screen
 		this._player1 = new Player(new Vector3(0, 0, 0), "Player1" , 1000 , this._scene, 1);
+		// this._player1 = new Player(new Vector3(-paddleOffset, 0, 0), "Player1", 1000, this._scene, 1);
 		this._gameEntities.push(this._player1);
 		this._player2 = new Player(new Vector3(0, 0, 0), "Player2" , 1000 , this._scene, 2);
+		// this._player2 = new Player(new Vector3(paddleOffset, 0, 0), "Player2", 1000, this._scene, 2);
 		this._gameEntities.push(this._player2);
 		this._ball = new Ball(new Vector3(0, 0, 0), 1, this._scene);
 		this._gameEntities.push(this._ball);
 		this.createWalls();
+		//new
+		/* window.addEventListener('keydown', this.handleKeyDown);
+		window.addEventListener('keyup', this.handleKeyUp); */
 	}
 
 	public sleep = (ms: number) => {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	}
-
+	public score_changed = new EventEmitter<{player1: number, player2: number}>(); // event emitter for score
 	updateScore () :boolean
 	{
+		let score_changed = false;
+		// const halfWidth = this._width / 2;
 		if (this._ball.getXPosition() < -window.innerWidth / 2 - 40)
 		{
 			this._player2._score.incrementScore();
 			console.log("Player 2 Score: ", this._player2._score.getScore());
-			return true;
+			// return true;
+			score_changed = true;
 		}
 		if (this._ball.getXPosition() > window.innerWidth / 2 + 40)
 		{
 			this._player1._score.incrementScore();
 			console.log("Player 1 Score: ", this._player1._score.getScore());
-			return true;
+			// return true;
+			score_changed = true;
 		}
-		return false;
+		if (score_changed)
+		{
+			this.score_changed.emit({
+				player1: this._player1._score.getScore(),
+				player2: this._player2._score.getScore()
+			});
+		}
+		return score_changed;
 	}
 
 	private createWalls = () =>
@@ -158,9 +180,23 @@ class GameScene{
 		await this.gameEntityLoader();
 	}
 
+	private lastUpdateTime: number = 0;
+
 	private updateEntities = async() =>
 	{
-		const delta = this._clock.getDelta();
+		if (this._isPaused)
+			return;
+		const currentTime = performance.now();
+        const deltaTime = (currentTime - this.lastUpdateTime) / 1000; // Convert to seconds
+        this.lastUpdateTime = currentTime;
+
+		for (const gameEntity of this._gameEntities) {
+            gameEntity.update(deltaTime);
+            if (this.updateScore() === true) {
+                this._ball.reset();
+            }
+        }
+		/* const delta = this._clock.getDelta();
 		for (const gameEntity of this._gameEntities)
 		{
 			gameEntity.update(delta);
@@ -169,15 +205,147 @@ class GameScene{
 				this._ball.reset();
 			}
 			
+		} */
+	}
+
+	public render = () => 
+	{
+		
+		if (!this._isPaused)
+		{
+			this.controls.update();
+				// this.updateEntities();
+			// requestAnimationFrame(this.render);
+			this.updateEntities();
+			this._renderer.render(this._scene, this._camera);
+		}
+		this.animationFrameId = requestAnimationFrame(this.render);
+	}
+
+	//new functions 
+	// private lastUpdateTime: number = 0;
+	public onPauseStateChange = new EventEmitter<boolean>();
+	private _isStarted: boolean = false;
+
+	public togglePauseResume(): void 
+	{
+		if (!this._isStarted)
+		{
+			this.startGame();
+		}
+		else
+		{
+			this._isPaused = !this._isPaused;
+			console.log(this._isPaused ? "Game Paused" : "Game Resumed")
+			if (!this._isPaused)
+			{
+				this.lastUpdateTime = performance.now();
+			}
+			// if (this._isPaused) 
+			// 	this.resume();
+			// else 
+			// 	this.pause();
+		}
+		this.onPauseStateChange.emit(this._isPaused);
+	}
+
+	public startGame(): void {
+		if (!this._isStarted)
+		{
+			this._isStarted = true;
+			this._isPaused = false;
+			this.lastUpdateTime = performance.now();
+			this.render(); // Start the render loop
+			console.log("Game Started");
+			this.onPauseStateChange.emit(this._isPaused);
+		}
+    }
+
+	public pause(): void {
+	
+	if (!this._isPaused && this._isStarted)
+	{
+		this._isPaused = true;
+		this.onPauseStateChange.emit(this._isPaused);
+		console.log("Game Paused");
+	}
+
+	}
+	public resume(): void {
+
+		if (this._isPaused && this._isStarted)
+		{
+			this._isPaused = false;
+			// const currentTime = performance.now();
+			this.lastUpdateTime = performance.now();
+			for (const entitiy of this._gameEntities)
+			{
+				if (entitiy instanceof Ball)
+					(entitiy as Ball)._lastUpdateTime = performance.now();
+			}
+			this.onPauseStateChange.emit(this._isPaused);
+		}
+    }
+	
+    public stop(): void {
+		this._isPaused = true;
+		this._isStarted = false;
+		if (this.animationFrameId !== null) {
+			cancelAnimationFrame(this.animationFrameId);
+			this.animationFrameId = null;
+		}
+        this._gameEntities = [];
+        this._scene.clear();
+        this._renderer.dispose();
+        this.controls.dispose();
+		this.onPauseStateChange.emit(true);
+    }
+	
+	public getPlayer1Score()
+	{
+		return this._player1._score.getScore();
+	}
+	
+	public getPlayer2Score()
+	{
+		return this._player2._score.getScore();
+	}
+
+	public getPlayerState()
+	{
+		return {
+			player1: {
+				position : {
+					x : this._player1.position.x,
+					y : this._player1.position.y,
+				},
+				score: this._player1._score.getScore(),
+			},
+			player2 : {
+				position: {
+					x : this._player2.position.x,
+					y : this._player2.position.y,
+				},
+				score: this._player2._score.getScore(),
+			}
 		}
 	}
 
-	public render = () => {
-		this.controls.update();
-		requestAnimationFrame(this.render);
-		this.updateEntities();
-		this._renderer.render(this._scene, this._camera);
-	}
+	/* 	private handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === 'w') this._player1._keyboardState.Up = true;
+			if (event.key === 's') this._player1._keyboardState.Down = true;
+			if (event.key === 'ArrowUp') this._player2._keyboardState.Up = true;
+			if (event.key === 'ArrowDown') this._player2._keyboardState.Down = true;
+		}
+		
+		private handleKeyUp = (event: KeyboardEvent) => {
+			if (event.key === 'w') this._player1._keyboardState.Up = false;
+			if (event.key === 's') this._player1._keyboardState.Down = false;
+			if (event.key === 'ArrowUp') this._player2._keyboardState.Up = false;
+			if (event.key === 'ArrowDown') this._player2._keyboardState.Down = false;
+		} */
+	
+
 }
 
 export default GameScene;

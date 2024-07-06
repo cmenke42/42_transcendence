@@ -7,6 +7,7 @@ from rest_framework import serializers
 from user_management.serializers import DynamicHyperlinkedModelSerializer
 
 from .models.custom_user_manager import CustomUserManager
+from .models.game_invitation import GameInvitation
 from .utils.tokens import change_email_token_generator
 
 
@@ -244,5 +245,15 @@ class ChangeEmailSerializer(serializers.Serializer):
         new_email = self.validated_data['new_email']
         user.email = new_email
         user.save(update_fields=['email'])
-    
 
+class GameInvitationSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the GameInvitation model
+    """
+    sender_username = serializers.CharField(source='sender.username', read_only=True)
+    recipient_username = serializers.CharField(source='recipient.username', read_only=True)
+
+    class Meta:
+        model = GameInvitation
+        fields = ['id', 'sender', 'sender_username', 'recipient', 'recipient_username', 'status', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'sender', 'created_at', 'updated_at']

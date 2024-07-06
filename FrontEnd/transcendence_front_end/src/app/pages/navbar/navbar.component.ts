@@ -62,7 +62,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.relationProfile();
     this.notification_interval = setInterval(() => {
       this.relationProfile();
-    }, 3000);
+    }, 5000);
   }
 
   ngOnDestroy(): void {
@@ -73,7 +73,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   {
     this.userService.userListRelationships().subscribe({
       next: (data: []) => {
-        console.log("user relationship data", data)
+        // console.log("user relationship data", data)
         // this.user_relationship = data;
         this.user_relationship = data.filter((user: any) => user.friendship_status === 'received_request')
       },
@@ -82,6 +82,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       }
     })
   }
+
   //getSpecificUser
   getProfile()
   {
