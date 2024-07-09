@@ -4,4 +4,5 @@ export interface User {
     password : string,
     is_superuser : boolean,
     otp : string,
+    is_intra_user : boolean,
 }

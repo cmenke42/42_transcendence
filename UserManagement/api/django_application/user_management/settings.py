@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     # API framework
     'rest_framework',
     # UserManagement
-    'people',
+    #'people',
     'users',
     'user_profile',
     'user_login',
@@ -204,6 +204,9 @@ CORS_ORIGIN_ALLOW_ALL = False
 # CSRF_TRUSTED_ORIGINS = ['http://localhost:4200']
 CORS_ALLOWED_ORIGINS = ['http://localhost:4200']
 CORS_ALLOW_CREDENTIALS = True
+
+#CORS_ALLOW_ALL_ORIGINS = True  # Только для разработки!
+#CORS_ALLOW_CREDENTIALS = True
 # CSRF_COOKIE_SECURE = not DEBUG
 
 # CSRF_COOKIE_NAME = 'csrftoken'
@@ -212,7 +215,7 @@ CORS_ALLOW_CREDENTIALS = True
 SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=15),
     'ROTATE_REFRESH_TOKENS': False,
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=2),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=100),
     'BLACKLIST_AFTER_ROTATION': True,
 
 }
@@ -221,11 +224,13 @@ SIMPLE_JWT = {
 USER_DEFAULT_HOMEPAGE = 'http://localhost:8000/api/v1/user/'
 
 
-# ----------------- OAUTH2.0  42 INTRA SETTINGS -----------------:
+# ----------------- OAUTH 2.0 - 42 INTRA SETTINGS -----------------:
 API_42_AUTH_URL					= 'https://api.intra.42.fr/oauth/authorize'  # 42 Intra auth URL
 API_42_ACCESS_TOKEN_ENDPOINT	= 'https://api.intra.42.fr/oauth/token'		 # 42 Intra access token endpoint
 API_42_REDIRECT_URI				= 'http://localhost:8000/api/v1/call_back/'	 # 42 Intra redirect URI
 API_42_INTRA_ENTRYPOINT_URL		= 'https://api.intra.42.fr/v2/'				 # 42 Intra entrypoint URL
+API_42_FRONTEND_CALLBACK_URL	= 'http://localhost:4200/auth-success'		 # 42 Intra frontend callback URL
+EXCAHNGE_CODE_TIMEOUT           =  30								         # one-time code lifetime in seconds
 
 # ----------------- 2FA SETTINGS -----------------:
 OTP_EXPIRY_MINUTES = 2

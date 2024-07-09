@@ -38,6 +38,7 @@ export class UserService {
         email : decodeedToken.email,
         is_superuser : decodeedToken.is_superuser,
         otp : decodeedToken.otp,
+        is_intra_user : decodeedToken.is_intra_user,
       } as User;
     }
     catch (error)
@@ -148,6 +149,11 @@ export class UserService {
   showListProfiles() : Observable<any>
   {
     return this.http.get(this.auth_url + 'profiles/');
+  }
+
+
+  updateProfile(id: number, formData: FormData): Observable<any> {
+    return this.http.patch(this.auth_url + 'profiles/' + id + '/', formData);
   }
 
   //User realationships functions

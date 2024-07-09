@@ -33,7 +33,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
 
     # Email verification for new users
-    is_email_verified = models.BooleanField(default=False)
+    is_email_verified = models.BooleanField(default=False)  
 
     # 2FA fields
     is_2fa_enabled = models.BooleanField(default=False)

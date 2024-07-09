@@ -12,6 +12,10 @@ from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from users.views.friendship_view import FriendViewSet
+import random
+
+
+
 # ----------------------------------------------------- usage ---------------------------------------------------------
 	# 1. See User Profile:
  
@@ -19,7 +23,7 @@ from users.views.friendship_view import FriendViewSet
 	# z.b. see whole profile of user with id 1:		GET	http://localhost:8000/api/v1/update_userprofile/1/
 	# z.b. see nickname of user with id 1:			GET	http://localhost:8000/api/v1/update_userprofile/1/?field=nickname
 	# z.b. see online_status of user with id 1:		GET	http://localhost:8000/api/v1/update_userprofile/1/?field=online_status
-	# z.b. see avatar of user with id 1:			GET	http://localhost:8000/api/v1/update_userprofile/1/?field=avatar
+	# z.b. see avatar of user with id 1:			GET	http://localhost:8000/api/v1/profiles/1/?field=avatar
  
  
 	# 2. Update User Profile:
@@ -48,7 +52,7 @@ def check_permissions(func):
 		obj = self.get_object()
 		if not request.user.is_authenticated:
 			raise PermissionDenied("Authentication credentials were not provided.")
-		elif request.user.is_staff or obj.user == request.user:
+		elif request.user.is_superuser or obj.user == request.user:
 			return func(self, request, *args, **kwargs)
 		else:
 			raise PermissionDenied("You do not have permission to access this object.")
@@ -88,14 +92,13 @@ class UserProfileViewSet(viewsets.ModelViewSet):
  
 	@check_permissions
 	def partial_update(self, request, pk=None):
-
 		try:
 			user_profile = UserProfile.objects.get(pk=pk)
 		except UserProfile.DoesNotExist:
 			return Response({"error": "UserProfile not found"}, status=404)	
 		new_nickname = request.data.get('nickname', None)
 		new_avatar = request.data.get('avatar', None)
-	
+
 		if new_nickname is not None and user_profile.user.is_intra_user:
 			return Response({"error": "Intra user cannot change nickname."}, status=400)
 		elif new_nickname is not None:	
@@ -104,9 +107,9 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 			return Response({"error": "Intra user cannot change avatar."}, status=400)
 		elif request.data.get('avatar', None) is not None:
 			new_avatar = request.data.get('avatar', None)		
-			  
-		if  request.data.get('online_status', None) is not None:
-			return Response({"error": "You cannot update the online status."}, status=400)	
+		# TO DELETE	  
+		# if  request.data.get('online_status', None) is not None:
+		# 	return Response({"error": "You cannot update the online status."}, status=400)	
 
 		serializer = UserProfileSerializer(user_profile, data=request.data, partial=True)
 		if serializer.is_valid():
@@ -114,6 +117,10 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 				user_profile.nickname = new_nickname
 			if new_avatar is not None:
 				new_avatar_name = f'user_{user_profile.user.id}/ava_of_user_{user_profile.user.id}'
+    
+				random_number = random.randint(100, 999)
+				new_avatar_name = f'{new_avatar_name}_{random_number}'
+    
 				extension = os.path.splitext(new_avatar.name)[1]
 				full_avatar_name = f'{new_avatar_name}{extension}'
 				avatar_path = os.path.join(MEDIA_ROOT, full_avatar_name)
@@ -122,12 +129,12 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 				if user_profile.avatar and os.path.isfile(user_profile.avatar.path):
 					os.remove(user_profile.avatar.path)		
 				user_profile.avatar.save(full_avatar_name, new_avatar)
-
 				if not os.path.isfile(user_profile.avatar.path):
 					return Response('new avatar failed to save', status=500)					
 				os.chmod(os.path.join(MEDIA_ROOT, full_avatar_name), stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
 			user_profile.save()
 			#serializer = UserProfileSerializer(user_profile)
+			print('serializer.data', serializer.data)
 			return Response(serializer.data, status=200)	
 		return Response({"error": "BAD REQUEST", "details": serializer.errors}, status=400)
 

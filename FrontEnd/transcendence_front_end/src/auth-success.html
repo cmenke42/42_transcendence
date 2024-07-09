@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Auth Success</h1>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const refresh = urlParams.get('refresh');
+    const access = urlParams.get('access');
+    console.log('Refresh token:', refresh);
+    console.log('Access token:', access);
+    // Здесь вы можете добавить код для сохранения токенов и перенаправления
+</script>
+</body>
+</html>

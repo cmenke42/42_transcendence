@@ -47,7 +47,7 @@ class UserProfile(models.Model):
 
     avatar = models.ImageField(null = True, blank = True, verbose_name="avatar",
                                upload_to="",
-                               max_length=200, default='default.png',
+                               max_length=200, default= 'default.png',
     )#TODO: add validation mechanism to check extension and no malicious content
     
     intra_avatar = models.URLField(verbose_name="intra_avatar",null = True, blank=True)
@@ -67,7 +67,7 @@ class UserProfile(models.Model):
         max_length=2,
         default="OF",
     )
-
+    
     def clean_nickname(self):
         nickname = str(self.nickname)
         pattern = re.compile(r'^nickname.-\d+$')

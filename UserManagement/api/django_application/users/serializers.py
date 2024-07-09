@@ -19,7 +19,7 @@ class UserSerializer(DynamicHyperlinkedModelSerializer):
         model = get_user_model()
         fields = ['url', 'id', 'email', 'is_active', 'password',
                   'is_superuser', 'date_of_creation', 'last_login',
-                  'is_email_verified', 'is_2fa_enabled'
+                  'is_email_verified', 'is_2fa_enabled', 'is_intra_user'
         ]
         read_only_fields = ['url', 'id', 'date_of_creation', 'last_login']
         extra_kwargs = {

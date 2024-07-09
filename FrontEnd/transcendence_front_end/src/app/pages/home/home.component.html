@@ -1,4 +1,4 @@
-
+<!-- SUPER USER -->
 <div class="container">
     <h1 class="text-center">Welcome to Transcendence</h1>
     @if(loggedInUser?.is_superuser)
@@ -38,26 +38,41 @@
             </div>
         </div>
         
-    }
-    
-   
-        @else 
-        {
+    }@else {
+    <!-- NORMAL USER -->
+    <div class="container d-flex justify-content-center align-items-center" style="height: 75vh;">
+      <div class="col-md-6 col-lg-4 p-4 border">
+        <h2 class="text-center">Hello, {{ user_profile?.nickname }} </h2>
+              <!-- INTRA USER -->
+              @if(loggedInUser?.is_intra_user) {
+                <img [src]="user_profile?.intra_avatar" alt="User Avatar" class="img-fluid mb-3">
+              } @else { 
+                <!-- NOT INTRA USER -->
+                <form (ngSubmit)="saveProfileChanges()">
+                    <div class="mb-3">
+                      <label for="nickname" class="form-label">New nickname:</label>
 
-            <h1 class="text-center">Hello world {{ loggedInUser?.email }}</h1>
-            <div class="container d-flex justify-content-center align-items-center" style="height: 75vh;">
-                <div class="col-md-6 p-4 border">
-              
-         
-                  <div class="container mt-5">
-                    <p>{{warning}}</p>
-                    <p> {{user_profile?.nickname}} something</p>
-                    <button class="btn btn-primary" routerLink="/design"> update profile </button>
-                  </div>
-                </div>
+                      <input type="text" id="nickname" name="nickname" [(ngModel)]="newNickname" class="form-control">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="avatar" class="form-label">Avatar:</label>
+                        <input type="file" id="avatar" (change)="onFileSelected($event)" class="form-control">
+                      </div>
+                    
+                    @if(user_profile?.avatar) {
+                         <img [src]="user_profile?.avatar" alt="User Avatar" class="img-fluid mb-3"> 
+                          
+                      } @else {
+                        <p>No avatar uploaded</p>
+                      }                    
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                  </form>
+                }
               </div>
-              <a [routerLink]="['/chat', user_profile?.nickname]">check the chat</a>
+            </div>
+          
               
-        }
+    } 
       
 </div>

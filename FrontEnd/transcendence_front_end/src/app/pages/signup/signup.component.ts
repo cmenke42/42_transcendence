@@ -24,7 +24,8 @@ export class SignupComponent {
 		email : '',
 		password: '',
 		is_superuser: false,
-		otp: ''
+		otp: '',
+		is_intra_user: false
 	};
 	userService = inject(UserService);
 	constructor()

@@ -4,10 +4,10 @@ from django.urls import include, path
 from django.views.generic.base import RedirectView
 from rest_framework.routers import DefaultRouter
 
-from people.views.oauth2 import FortyTwoIntraLogin, FortyTwoIntraLoginCallback
 from users.urls import register_with_router as register_user_with_router
 from user_profile.urls import register_with_router as register_profile_with_router
-
+from user_management.oauth2 import FortyTwoIntraLogin, FortyTwoIntraLoginCallback
+from user_management.oauth2  import ExchangeCodeView
 
 router = DefaultRouter()
 register_user_with_router(router)
@@ -23,13 +23,12 @@ urlpatterns = [
             path('signup/', RedirectView.as_view(url='/api/v1/users/'), name='signup'),
             path('user/', RedirectView.as_view(url='/api/v1/users/'), name='user'),
             path('', include('chat.urls')),
-
             path('users/', include('users.urls')),
             path('', include('user_login.urls')),
-            # 42 Intra login
+
             path('oauth_login/', FortyTwoIntraLogin, name='oauth_login'),
-            # 42 Intra login callback
-            path('call_back/',FortyTwoIntraLoginCallback, name='oauth_callback'),
+            path('call_back/',FortyTwoIntraLoginCallback, name='oauth_callback'),         
+            path('exchange-code/', ExchangeCodeView.as_view(), name='exchange_code'),
             path('profile/', include('user_profile.urls')),
             ]
         )

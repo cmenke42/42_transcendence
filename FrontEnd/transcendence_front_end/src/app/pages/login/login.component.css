@@ -83,3 +83,15 @@ body {
   text-decoration: none;
   cursor: pointer;
 }
+
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  height: 20px;
+  margin-right: 8px; 
+}

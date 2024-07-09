@@ -55,8 +55,8 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ./media
-
+      device: ./api/django_application/media
+      #device: ./media
 # secrets:
 #   db-password:
 #     file: secrets/db_password.txt

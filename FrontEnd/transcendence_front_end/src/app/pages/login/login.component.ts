@@ -17,7 +17,7 @@ import { AuthService } from '../../service/auth.service';
     RouterLinkActive
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
     user : User = 
@@ -27,14 +27,14 @@ export class LoginComponent {
       password: "",
       is_superuser: false,
       otp: "",
+      is_intra_user: false,
     };
     show2fa : boolean = false;
     userService = inject(UserService);
     router = inject(Router);
     auth = inject(AuthService);
-  
-    constructor() {}
 
+    constructor () {}
     
     loginUser()
     {
@@ -64,6 +64,11 @@ export class LoginComponent {
           alert('OTP verification failed. Please try again. ' + err.message);
         }
       })
+    }  
+
+    // 42 Intra Authentification
+    loginOAuth() {
+      window.location.href = 'http://localhost:8000/api/v1/oauth_login/';
     }
 
     // verifyOTP()

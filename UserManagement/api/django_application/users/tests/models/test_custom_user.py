@@ -37,14 +37,14 @@ class CustomUserTestModelPropertys(TestCase):
         with self.subTest("Test help text"):
             self.assertEqual(field.help_text, "Status of the user account")
 
-    def test_is_intra_user_properties(self):
-        field = self.user._meta.get_field('is_intra_user')
-        with self.subTest("Test verbose name"):
-            self.assertEqual(field.verbose_name, "is intra user")
-        with self.subTest("Test default"):
-            self.assertFalse(field.default)
-        with self.subTest("Test help text"):
-            self.assertEqual(field.help_text, "Was user registered via 42 Intra?")
+     def test_is_intra_user_properties(self):
+         field = self.user._meta.get_field('is_intra_user')
+         with self.subTest("Test verbose name"):
+             self.assertEqual(field.verbose_name, "is intra user")
+         with self.subTest("Test default"):
+             self.assertFalse(field.default)
+         with self.subTest("Test help text"):
+             self.assertEqual(field.help_text, "Was user registered via 42 Intra?")
     
     def test_date_of_creation_propertys(self):
         field = self.user._meta.get_field('date_of_creation')
