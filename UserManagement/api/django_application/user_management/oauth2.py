@@ -157,11 +157,11 @@ def FortyTwoIntraLoginCallback(request):
 		access_token = refresh.access_token  
 	except CustomUser.DoesNotExist:
 		return JsonResponse({'error': 'User not found'}, status=404) 
-	
 	one_time_code = str(uuid.uuid4())
-	#print('**one_time_code', one_time_code)
-	cache.set(one_time_code, {'refresh': str(refresh), 'access': str(access_token)}, timeout=EXCAHNGE_CODE_TIMEOUT)
-	print(f'LOL:{API_42_FRONTEND_CALLBACK_URL}?code={one_time_code}')
+	if ((user.is_intra_user == True) & (user.is_active == False)):
+		one_time_code ='deactivated'
+	else:
+		cache.set(one_time_code, {'refresh': str(refresh), 'access': str(access_token)}, timeout=EXCAHNGE_CODE_TIMEOUT)
 	return redirect(f'{API_42_FRONTEND_CALLBACK_URL}?code={one_time_code}')
 
 

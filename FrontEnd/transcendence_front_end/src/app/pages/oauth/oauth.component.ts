@@ -31,6 +31,12 @@ export class OAuthCallbackComponent implements OnInit {
   exchangeCode(code: string) {
     const validationUrl = 'http://localhost:8000/api/v1/exchange-code/';
     const payload = { code };
+    if (code == 'deactivated')
+    {
+      alert('Your account is deactivated. Please contact the administrator.');
+      this.router.navigate(['/login']);
+      return;
+    }
      this.http.post(validationUrl, payload).subscribe(
       (response: any) => {
         localStorage.setItem('refresh_token', response.refresh);

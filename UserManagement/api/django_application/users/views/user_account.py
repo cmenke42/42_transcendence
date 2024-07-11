@@ -2,6 +2,9 @@ import logging
 
 from django.contrib.auth import get_user_model
 from django.db import transaction
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
+from rest_framework import status, permissions
 from rest_framework import serializers
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny
@@ -107,3 +110,5 @@ class ActivateAccountAPIView(GenericAPIView):
         user.save()
         logger.info("Activated user account: %s", user.id)
         return Response({'status': 'User account activated successfully'})
+    
+    

@@ -5,4 +5,5 @@ export interface User {
     is_superuser : boolean,
     otp : string,
     is_intra_user : boolean,
+    is_active: boolean;
 }

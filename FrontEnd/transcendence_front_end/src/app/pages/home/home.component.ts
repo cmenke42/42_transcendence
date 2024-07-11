@@ -86,24 +86,28 @@ export class HomeComponent implements OnInit, OnDestroy {
   //   })
   // }
 
-  removeUser(user_id: number)
+  toggleUserActivation(user_id: number, action: string)
   {
-    
-    if (confirm('Are you sure you want to remove this user?'))
-    this.userService.removeUser(user_id).subscribe({
-      next: data => {
-        this.getUser();
-      },
-      error: err => {
-        console.log("Error...", err);
-      }
-    })
+    if(action != 'activate' && action != 'deactivate')
+    {
+      console.log("Invalid action...");
+      return;
+    }
+    else if(action == 'deactivate' && this.loggedInUser?.id == user_id && this.loggedInUser?.is_superuser)
+      alert('Admin cannot deactivate himself');
+    else if(confirm('Are you sure you want to ' + action + ' this user?'))
+      this.userService.toggleUserActivation(user_id, action).subscribe({
+        next: data => {
+          this.getUser();
+          if (action == 'deactivate' && !(this.loggedInUser?.is_superuser))
+            this.auth.logout();
+        },
+        error: err => {
+          console.log("Error...", err);
+        }
+      })
   }
 
-  updateUser(id: number)
-  {
-    console.log("Update user with id...", id);
-  }
 
   getProfile()
   {

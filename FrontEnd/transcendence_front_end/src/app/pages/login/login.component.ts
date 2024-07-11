@@ -28,6 +28,7 @@ export class LoginComponent {
       is_superuser: false,
       otp: "",
       is_intra_user: false,
+      is_active: false
     };
     show2fa : boolean = false;
     userService = inject(UserService);
@@ -47,7 +48,10 @@ export class LoginComponent {
         },
         error: err => {
           console.log('Error...', err);
-          alert(err.message);
+          if(err.status == 401)
+            alert('Invalid credentials. Please try again.');
+          else
+            alert(err.message);
         }
       })
     }
@@ -68,7 +72,7 @@ export class LoginComponent {
 
     // 42 Intra Authentification
     loginOAuth() {
-      window.location.href = 'http://localhost:8000/api/v1/oauth_login/';
+        window.location.href = 'http://localhost:8000/api/v1/oauth_login/';
     }
 
     // verifyOTP()

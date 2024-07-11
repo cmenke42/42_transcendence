@@ -112,14 +112,14 @@ export class UserService {
     return this.http.get(this.auth_url + 'users/');
   }
 
-  removeUser(id: number) : Observable<any> //not implemented in backend
+  toggleUserActivation(id: number, action: 'activate' | 'deactivate') : Observable<any> //not implemented in backend
   {
-    return this.http.delete(this.auth_url + 'user/delete/' + id + '/');
+    return this.http.patch(this.auth_url + 'users/' + id + '/', { is_active: action == 'activate' }); 
   }
 
   updateUser(user: User) : Observable<any>
   {
-    return this.http.put(this.auth_url + 'users/' + user.id + '/', user);
+    return this.http.put(this.auth_url + 'user/' + user.id + '/', user);
   }
 
   
