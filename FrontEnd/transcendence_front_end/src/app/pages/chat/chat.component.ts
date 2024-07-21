@@ -21,7 +21,9 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   
   username: string = '';
-
+  tournament_id: number = 0;
+  isOpen: boolean = false;
+  
   userService = inject(UserService);
   websocketService = inject(SocketsService);
   router = inject(ActivatedRoute);
@@ -29,30 +31,58 @@ export class ChatComponent implements OnInit, OnDestroy {
   message: string = '';
   roomName: string = 'example_room'; //Replace with your room name logic
   private subscription: Subscription | null = null;
-  // private private_subscription: Subscription | null = null;
-
-  // // p_username: string = 'private_user';
-  // // recipient: string = 'receiver';
-  // private_messages: any[] = [];
-  // private_message: string = '';
-  // sender: string = this.username;
-  // receiver: string = 'nickname-2';
 
 
   ngOnInit(): void 
   {
     this.router.params.subscribe(params => {
-      this.username = params['username'];
-      console.log('user name : ', this.username);
+      this.getUser();
+      this.tournament_id = params['tournament_id'];
     })
-    if (this.username)
-      this.websocketService.connect(this.roomName, this.username);
 
-    this.subscription = this.websocketService.getMessage().subscribe((message) => {
-      this.messages.push(message);
-      console.log('is it the message', message);
+    // if (this.username)
+    // {
+    //   console.log('Hello')
+    //   this.websocketService.connect(this.tournament_id.toString(), this.username);
+    // }
+
+    // this.subscription = this.websocketService.getMessage().subscribe((message) => {
+    //   this.messages.push(message);
+    //   console.log('is it the message', message);
+    // });
+
+  }
+
+
+  chat() {
+    this.isOpen = !this.isOpen;
+    if (this.isOpen) {
+      if (this.username) {
+        console.log('Hello');
+        this.websocketService.connect(this.tournament_id.toString(), this.username);
+      }
+
+      this.subscription = this.websocketService.getMessage().subscribe((message) => {
+        this.messages.push(message);
+        console.log('Received message:', message);
+      });
+    } else {
+      this.websocketService.close();
+      this.subscription?.unsubscribe();
+    }
+  }
+
+  getUser()
+  {
+    this.userService.getterProfile().subscribe({
+      next: (data: any) => {
+        console.log('data for the profile user in chat...', data);
+        this.username = data.nickname;
+      },
+      error: (error: any) => {
+        console.log('error for the profile user in chat...', error);
+      }
     });
-
   }
 
 

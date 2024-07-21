@@ -203,23 +203,78 @@ class OnlineStatusConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps(message))
 
 # remote player
-""" class GameConsumer(AsyncWebsocketConsumer):
+class GameConsumer(AsyncWebsocketConsumer):
     async def connect (self):
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.room_group_name = f'game_{self.room_name}'
+
+        #join room group
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+        
         await self.accept()
+        # await self.accept()
     
     async def disconnect(self, code):
-        pass
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
+        # pass
 
     async def receive(self, text_data):
-        data = json.load(text_data)
+        data = json.loads(text_data)
+        message_type = data['type']
 
-        await self.channel_layer.group_send(
-            'game_group',
-            {
-                'type': 'game_message',
-                'data': data
-            }
-        )
-    async def game_message(self, event):
-        message = event['message']
-        await self.send(text_data=json.dumps(message)) """
+        if message_type == 'game_start':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'game_start',
+                    'timestamp': data.get('timestamp')
+                }
+            )
+    
+        elif message_type == 'game_state_update':
+            #send the game state to the other player
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'game_state_update',
+                    'game_state': data['game_state']
+                }
+            )
+        elif message_type == 'game_status_update':
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'game_status_update',
+                    'game_status': data['gameStatus'],
+                    'timestamp': data.get('timestamp')
+                }
+            )
+
+    async def game_start(self, event):
+        await self.send(text_data=json.dumps({
+            'type': 'game_start',
+            'timestamp': event.get('timestamp')
+        }))
+
+    async def game_status_update(self, event):
+        await self.send(text_data=json.dumps({
+            'type': 'game_status_update',
+            'gameStatus': event['game_status'],
+            'timestamp': event.get('timestamp')
+        }))
+
+    # Receive game state update from the other player
+    async def game_state_update(self, event):
+        game_state = event['game_state']
+
+        # Send the game state to the player
+        await self.send(text_data=json.dumps({
+            'type': 'game_state_update',
+            'game_state': game_state
+        }))

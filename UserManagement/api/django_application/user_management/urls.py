@@ -30,6 +30,8 @@ urlpatterns = [
             path('call_back/',FortyTwoIntraLoginCallback, name='oauth_callback'),         
             path('exchange-code/', ExchangeCodeView.as_view(), name='exchange_code'),
             path('profile/', include('user_profile.urls')),
+            path('match/', include('match.urls')),
+            path('tournament/', include('tournament.urls')),
             ]
         )
     ),

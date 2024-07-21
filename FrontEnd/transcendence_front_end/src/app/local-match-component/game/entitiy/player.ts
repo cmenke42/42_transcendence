@@ -187,7 +187,7 @@ class player extends GameEntity
 		const testingBox = this._collider?.clone();
 		if (testingBox)
 			testingBox.translate(computedMove);
-		const colliders = GameScene.getInstance().getGameEntities().filter((e) => e !== this && e.collider && e.collider.intersectsBox(testingBox as Box3));
+		const colliders = GameScene.getInstance()!.getGameEntities().filter((e) => e !== this && e.collider && e.collider.intersectsBox(testingBox as Box3));
 		if (colliders.length > 0 && colliders[0] instanceof Wall)
 					return;
 		this._mesh.position.add(computedMove);
@@ -199,6 +199,17 @@ class player extends GameEntity
 		if (this._collider instanceof Box3)
 			this._collider.setFromObject(this._mesh); */
 	}
+
+	//added method to get the postion of the paddle
+	public getPaddlePosition = () =>
+	{
+		return this._mesh.position;
+	}
+
+	public updatePosition(position: { x: number, y: number }) {
+		this._mesh.position.set(position.x, position.y, this._mesh.position.z);
+	  }
+	
 
 
 }

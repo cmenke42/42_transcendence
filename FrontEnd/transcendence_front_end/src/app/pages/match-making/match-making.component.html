@@ -1,0 +1,81 @@
+<div class="container">
+  <h1>Tournament Bracket</h1>
+  @if (tournamentWinner) {
+    <h2>Tournament Completed! Winner: {{ tournamentWinner }} 🏆</h2>
+  }
+  <div class="tournament-bracket">
+    <div class="tournament-bracket__round" *ngFor="let stage of brackets; let stageIndex = index">
+      <h3 class="tournament-bracket__round-title">Round {{ stageIndex + 1 }}</h3>
+      <ul class="tournament-bracket__list">
+        <li class="tournament-bracket__item" *ngFor="let match of stage">
+          <div class="tournament-bracket__match" tabindex="0">
+            <div class="tournament-bracket__team" [class.tournament-bracket__team--winner]="match.winner === match.player1">
+              <span class="tournament-bracket__country">{{ match.player1 }}</span>
+              <span class="tournament-bracket__winner-indicator" *ngIf="match.winner === match.player1">🏆</span>
+            </div>
+            <div class="tournament-bracket__team" [class.tournament-bracket__team--winner]="match.winner === match.player2">
+              <span class="tournament-bracket__country">{{ match.player2 || 'TBD' }}</span>
+              <span class="tournament-bracket__winner-indicator" *ngIf="match.winner === match.player2">🏆</span>
+            </div>
+            @if (match.player2 && !match.is_played) {
+              <div class="score-input">
+                <input name="player1Score" type="number" placeholder="P1 Score" [(ngModel)]="match.player1Score" min="0">
+                <input name="player2Score" type="number" placeholder="P2 Score" [(ngModel)]="match.player2Score" min="0">
+                <button class="btn btn-sm btn-outline-primary" (click)="submitScore(match.id, match.player1Score, match.player2Score)">Submit</button>
+              </div>
+            }
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+<!-- <div class="chat-section">
+  <h2>Tournament Chat</h2>
+  <div class="chat-box">
+    <ng-container *ngFor="let message of messages">
+      <div *ngIf="message.username && !message.message" class="system-message join-message">
+        <p>{{message.username}} has joined the chat</p>
+      </div>
+      <div *ngIf="message.message && message.type !== 'system'" class="chat-message user-message">
+        <p><strong>{{message.username}}:</strong> {{message.message}}</p>
+      </div>
+      <div *ngIf="message.type === 'system'" class="system-message">
+        <p><strong>{{message.message}}</strong></p>
+        <ul>
+          <li *ngFor="let match of message.matches">
+            Match {{match.id}}: {{match.player1}} vs {{match.player2}}
+          </li>
+        </ul>
+      </div>
+    </ng-container>
+  </div>
+  <div class="chat-input">
+    <input type="text" class="form-control" placeholder="Type a message" [(ngModel)]="message">
+    <button class="btn btn-primary" type="button" (click)="sendMessage()">Send</button>
+  </div>
+</div> -->
+
+<div class="chat-section">
+  <h2>Tournament Chat</h2>
+  <div class="chat-box">
+    <ng-container *ngFor="let message of messages">
+      <div *ngIf="message.username && !message.message" class="system-message join-message">
+        <p>{{message.username}} has joined the chat</p>
+      </div>
+      <div *ngIf="message.message && message.type !== 'system'" class="chat-message user-message">
+        <p><strong>{{message.username}}:</strong> {{message.message}}</p>
+      </div>
+      <div *ngIf="message.type === 'system'" class="system-message">
+        <p><strong>{{message.message}}</strong></p>
+        <pre>{{message.message}}</pre>
+      </div>
+    </ng-container>
+  </div>
+  <div class="chat-input">
+    <input type="text" class="form-control" placeholder="Type a message" [(ngModel)]="message">
+    <button class="btn btn-primary" type="button" (click)="sendMessage()">Send</button>
+  </div>
+</div>
+

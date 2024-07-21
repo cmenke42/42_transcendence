@@ -1,0 +1,127 @@
+/* Container for the entire content */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Tournament Bracket Styles */
+.tournament-bracket {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  overflow-x: auto;
+  padding: 20px 0;
+  margin-bottom: 30px;
+}
+
+.tournament-bracket__round {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  min-width: 200px;
+  margin-right: 20px;
+}
+
+.tournament-bracket__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tournament-bracket__item {
+  margin: 10px 0;
+  position: relative;
+}
+
+.tournament-bracket__match {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Chat Section Styles */
+.chat-section {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 20px;
+  margin-top: 30px;
+}
+
+.chat-box {
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 15px;
+  
+}
+
+.chat-input {
+  display: flex;
+}
+
+.chat-input input {
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+/* Updated and new styles for chat messages */
+.chat-message, .system-message {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 18px;
+  max-width: 80%;
+  clear: both;
+  display: block; /* Ensure each message is a block element */
+}
+
+.system-message {
+  text-align: center;
+  font-style: italic;
+}
+
+.join-message {
+  background-color: white;
+  color: #6c757d; /* Gray text color */
+  padding: 5px 10px;
+  border-radius: 15px;
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.user-message {
+  background-color: #007bff; /* Blue background for user messages */
+  color: white;
+  display: block; /* Ensure each message is a block element */
+  margin-bottom: 10px;
+}
+
+/* Optional: Style for the current user's messages */
+.user-message.current-user {
+  background-color: #28a745; /* Green background for current user's messages */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .tournament-bracket {
+    flex-direction: column;
+  }
+
+  .tournament-bracket__round {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .chat-input {
+    flex-direction: column;
+  }
+
+  .chat-input input {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}

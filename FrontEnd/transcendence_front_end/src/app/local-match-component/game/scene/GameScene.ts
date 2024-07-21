@@ -15,8 +15,11 @@ import { EventEmitter } from "@angular/core";
 
 RectAreaLightUniformsLib.init();
 class GameScene{
-	private static instance = new GameScene();
+	// private static instance = new GameScene();
+	private static instance: GameScene | null = null;
 	public static getInstance(){
+		if (!GameScene.instance) //added this new if condition
+			GameScene.instance = new GameScene();
 		return this.instance;
 	}
 
@@ -224,6 +227,16 @@ class GameScene{
 
 	//new functions 
 	// private lastUpdateTime: number = 0;
+
+	public static resetInstance(): void
+	{
+		if (GameScene.instance)
+		{
+			GameScene.instance.stop();
+			GameScene.instance = null;
+		}
+	}
+
 	public onPauseStateChange = new EventEmitter<boolean>();
 	private _isStarted: boolean = false;
 
@@ -261,27 +274,27 @@ class GameScene{
 		}
     }
 
-	public pause(): void {
-	
-	if (!this._isPaused && this._isStarted)
+	public pause(): void 
 	{
-		this._isPaused = true;
-		this.onPauseStateChange.emit(this._isPaused);
-		console.log("Game Paused");
+		if (!this._isPaused && this._isStarted)
+		{
+			this._isPaused = true;
+			this.onPauseStateChange.emit(this._isPaused);
+			console.log("Game Paused");
+		}
 	}
 
-	}
 	public resume(): void {
 
 		if (this._isPaused && this._isStarted)
 		{
 			this._isPaused = false;
-			// const currentTime = performance.now();
-			this.lastUpdateTime = performance.now();
+			const resumeTime = performance.now();
+			this.lastUpdateTime = resumeTime;
 			for (const entitiy of this._gameEntities)
 			{
 				if (entitiy instanceof Ball)
-					(entitiy as Ball)._lastUpdateTime = performance.now();
+					(entitiy as Ball)._lastUpdateTime = resumeTime;
 			}
 			this.onPauseStateChange.emit(this._isPaused);
 		}
@@ -300,6 +313,19 @@ class GameScene{
         this.controls.dispose();
 		this.onPauseStateChange.emit(true);
     }
+
+	public reset(): void  //new function added to reset the game
+	{
+		this.stop();
+		this._isPaused = true;
+		this._isStarted = false;
+		this._gameEntities = [];
+		this._player1 = new Player(new Vector3(0, 0, 0), "Player1" , 1000 , this._scene, 1);
+		this._player2 = new Player(new Vector3(0, 0, 0), "Player2" , 1000 , this._scene, 2);
+		this._ball = new Ball(new Vector3(0, 0, 0), 1, this._scene);
+		this._gameEntities.push(this._player1, this._player2, this._ball);
+		this.createWalls();
+	}
 	
 	public getPlayer1Score()
 	{
@@ -310,42 +336,60 @@ class GameScene{
 	{
 		return this._player2._score.getScore();
 	}
-
-	public getPlayerState()
+// code for remote player if we are doing that
+	/* public getPlayerState()
 	{
 		return {
 			player1: {
 				position : {
-					x : this._player1.position.x,
-					y : this._player1.position.y,
+					x : this._player1.getPaddlePosition().x,
+					y : this._player1.getPaddlePosition().y,
 				},
 				score: this._player1._score.getScore(),
+				// rotation: this._player1.
 			},
 			player2 : {
 				position: {
-					x : this._player2.position.x,
-					y : this._player2.position.y,
+					x : this._player2.getPaddlePosition().x,
+					y : this._player2.getPaddlePosition().y,
 				},
 				score: this._player2._score.getScore(),
-			}
+			},
+			ball: {
+				position: this._ball.ballPosition,
+			},
+			gameStatus: this._isPaused ? 'paused' : 'running',
 		}
 	}
 
-	/* 	private handleKeyDown = (event: KeyboardEvent) => {
-			if (event.key === 'w') this._player1._keyboardState.Up = true;
-			if (event.key === 's') this._player1._keyboardState.Down = true;
-			if (event.key === 'ArrowUp') this._player2._keyboardState.Up = true;
-			if (event.key === 'ArrowDown') this._player2._keyboardState.Down = true;
-		}
-		
-		private handleKeyUp = (event: KeyboardEvent) => {
-			if (event.key === 'w') this._player1._keyboardState.Up = false;
-			if (event.key === 's') this._player1._keyboardState.Down = false;
-			if (event.key === 'ArrowUp') this._player2._keyboardState.Up = false;
-			if (event.key === 'ArrowDown') this._player2._keyboardState.Down = false;
-		} */
-	
 
+
+	
+	public updatePlayer1Position(position: { x: number, y: number }) 
+	{
+		this._player1.updatePosition(position);
+	}
+	
+	public updatePlayer2Position(position: { x: number, y: number }) 
+	{
+		this._player2.updatePosition(position);
+	}
+	
+	  
+	public updateBallPosition(position: { x: number, y: number }) 
+	{
+		this._ball.updatePosition(position);
+	}
+		
+	public updatePlayer1Score(score: number) 
+	{
+		this._player1._score.setScore(score);
+	}
+	  
+	public updatePlayer2Score(score: number) {
+		this._player2._score.setScore(score);
+		}
+ */
 }
 
 export default GameScene;

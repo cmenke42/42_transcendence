@@ -1,0 +1,119 @@
+body {
+  background-color: #121212;
+}
+
+.custom-container {
+  padding-top: 15vh;
+}
+
+.custom-nav {
+  display: flex;
+  border-bottom: none;
+  margin-bottom: 1rem;
+}
+
+.custom-nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  color: #e0e0e0;
+  background-color: rgba(30, 30, 30, 0.8);
+  border: 1px solid #333;
+  border-radius: 15px 15px 0 0;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.custom-nav-link:hover {
+  background-color: rgba(40, 40, 40, 0.9);
+}
+
+.custom-nav-link.active {
+  color: #fff;
+  background-color: rgba(0, 123, 255, 0.8);
+  border-color: #0056b3;
+}
+
+.custom-nav-link i {
+  margin-right: 8px;
+  font-size: 1.2em;
+}
+
+.custom-card {
+  border-radius: 0 0 15px 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+  border-top: none;
+  background-color: rgba(30, 30, 30, 0.8);
+  color: #e0e0e0;
+}
+
+.custom-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.btn-outline-primary {
+  border-radius: 20px;
+  padding: 0.5rem 1.5rem;
+  transition: all 0.3s ease;
+  color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-outline-danger {
+  border-radius: 20px;
+  padding: 0.5rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.list-group-item {
+  border-radius: 15px;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+  background-color: rgba(40, 40, 40, 0.8);
+  color: #e0e0e0;
+  border-color: #333;
+}
+
+.list-group-item:hover {
+  transform: translateX(5px);
+  background-color: rgba(50, 50, 50, 0.9);
+}
+
+.custom-blue-item {
+  background-color: #007bff;
+  color: white;
+  opacity: 0.8;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-container p {
+  margin: 0;
+}
+
+.custom-button {
+  color: white;
+}
+
+.custom-button:hover,
+.custom-button:focus {
+  color: white;
+}
+

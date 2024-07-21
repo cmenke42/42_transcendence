@@ -5,49 +5,47 @@
 		<div class="users-list border rounded p-3">
 		  <h5 class="text-center">Users</h5>
 		  <ul class="list-group">
-			  <!-- 	*ngFor="let user of users"  --> 
-		@for(user of users; track user.id)
-		{
-
-			@if (user)
-			{
-				@if (user.friendship_status != "blocked_by_me" && user.friendship_status != "blocked_by_them")
-				{
-				<li 
-  				class="list-group-item list-group-item-action" 
-  				[ngClass]="{'active': user === selected_user}" 
-  				(click)="selectUser(user)">
-	
-		
-  		<div class="d-flex align-items-center justify-content-between">
-    	<div class="d-flex align-items-center">
-      	<img src="../../../assets/avatar-chat.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
-      	<span>{{ user.nickname }}</span>
-		@if (user.friendship_status === "friends")
-		{
-			@if(isUserOnline(user.nickname))
-			{
-				<!-- <span class="ml-2 text-success">online</span> -->
-				<span class="ml-2 online-dot" title="Online"></span>
+			@for(user of users; track user.id) {
+			  @if (user) {
+				@if (user.friendship_status != "blocked_by_me" && user.friendship_status != "blocked_by_them") {
+				  <li 
+					class="list-group-item list-group-item-action" 
+					[ngClass]="{'active': user === selected_user}" 
+					(click)="selectUser(user)">
+					<div class="d-flex align-items-center justify-content-between">
+					  <div class="d-flex align-items-center">
+						<img src="../../../assets/avatar-chat.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
+						<span>{{ user.nickname }}</span>
+						@if (user.friendship_status === "friends") {
+						  @if(isUserOnline(user.nickname)) {
+							<span class="ml-2 online-dot" title="Online"></span>
+						  }
+						}
+					  </div>
+					  <span 
+						*ngIf="unreadMessages[user.nickname] > 0" 
+						class="badge badge-green">
+						{{ unreadMessages[user.nickname] }}
+					  </span>
+					</div>
+				  </li>
+				}
+			  }
+			  @else {
+				<li class="list-group-item list-group-item-action"><span>No User Sorry</span></li>
+			  }
 			}
-		}
-    		</div>
-    		<span 
-      		*ngIf="unreadMessages[user.nickname] > 0" 
-      		class="badge badge-green">
-      		{{ unreadMessages[user.nickname] }}
-    		</span>
-  			</div>
-		
-			</li>
-		}
-	
-	}
-	@else 
-	{
-		<li class="list-group-item list-group-item-action" ><span>No User Sorry</span> </li>
-	}
-		}
+			<hr>
+			<h5 class="text-center">System</h5>
+			<li 
+			class="list-group-item list-group-item-action">
+			<div class="d-flex align-items-center justify-content-between">
+			  <div class="d-flex align-items-center">
+				<img src="../../../assets/avatar-chat.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
+				<span>System</span>
+			  </div>
+			</div>
+		  </li>
 		  </ul>
 		</div>
 	  </div>
@@ -56,20 +54,39 @@
 	  <div class="col-md-8">
 		<div class="chat-container border rounded p-3 d-flex flex-column" style="height: 75vh;">
 		  <div class="chat-header d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-			@if (receiver_data)
-			{
-			<h5>
-			  <a [routerLink]="['/user', user_id]">
-				<img src="../../../assets/avatar-chat.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
-				{{ receiver_data.nickname }}
-			  </a>
-			  <!-- <button class="btn btn-outline-primary" (click)="gameInvite(receiver_data.user_id)">Game Invitation</button> -->
-			
-			</h5>
-  			<!-- <i class="fas fa-gamepad cursor-pointer" (click)="gameInvite(receiver_data.user_id)" title="Game Invitation"></i> -->
-			<button class="btn btn-outline-primary custom-pill" (click)="gameInvite(receiver_data.user_id)">Game Invitation</button>	
-		}  
-		</div>
+			@if (receiver_data) {
+			  <h5>
+				<a [routerLink]="['/user', user_id]">
+				  <img src="../../../assets/avatar-chat.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
+				  {{ receiver_data.nickname }}
+				</a>
+			  </h5>
+			  <div class="game-invitation-controls">
+				@if (invitation === 'no invitation') {
+				  <button class="btn btn-outline-primary custom-pill" (click)="gameInvite(receiver_data.user_id)">
+					<i class="fas fa-gamepad mr-2"></i>Game Invitation
+				  </button>	
+				}
+				@else if (invitation === 'sent') {
+				  <button class="btn btn-outline-secondary custom-pill" disabled>
+					<i class="fas fa-hourglass-half mr-2"></i>Invitation Sent
+				  </button>
+				}
+				@else if (invitation === 'received') {
+				  <div class="btn-group" role="group">
+					<button class="btn btn-outline-success custom-pill mr-2" (click)="responseGameInvite(receiver_data.user_id, 'accept')">
+					  <!-- <i class="fas fa-check mr-2"></i>Accept -->
+					  <small class="d-block">Join Game</small>
+					</button>
+					<button class="btn btn-outline-danger custom-pill" (click)="responseGameInvite(receiver_data.user_id, 'decline')">
+					  <!-- <i class="fas fa-times mr-2"></i>Reject -->
+					  <small class="d-block">Decline Game</small>
+					</button>
+				  </div>
+				}
+			  </div>
+			}  
+		  </div>
 		  <div class="chat-window flex-grow-1 overflow-auto mb-3">
 			<ul class="list-unstyled">
 			  <li class="mb-3" *ngFor="let message of messages | async">
@@ -90,5 +107,4 @@
 	  </div>
 	</div>
   </div>
-
   

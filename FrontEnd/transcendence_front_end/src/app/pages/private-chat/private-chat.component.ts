@@ -38,19 +38,35 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
   selected_user: any = null; // the user that is currently selected
   unreadMessages: { [key: string]: number } = {};
   private fetchUnreadMessageCountsInterval: any;
+  invitation: string | null = null;
 
 
   ngOnInit(): void {
 
-    this.userService.getterProfile().subscribe(data => {
-      this.current_user = data.nickname;
-      this.fetchUnreadMessageCounts();
-      this.socketService.connectOnlineStatus(this.current_user);
-    });
+    this.getProfile();
+
     this.socketService.getOnlineStatus().subscribe(users => {
       console.log("Received online users in component:", users);
       this.onlineUser = users;
     });
+
+    this.userRelation();
+
+    this.fetchUnreadMessageCountsInterval =  setInterval(() => this.fetchUnreadMessageCounts(), 3000);
+    setInterval(() => this.fetchUnreadMessageCounts(), 3000)
+  }
+
+  ngOnDestroy()
+  {
+    this.subscription?.unsubscribe();
+    this.socketService.privateClose();
+    clearInterval(this.fetchUnreadMessageCountsInterval);
+    this.socketService.disconnectOnlineStatus(this.current_user);
+  }
+
+
+  userRelation()
+  {
     this.userService.userListRelationships().subscribe({
       next: (users: any[]) => {
       this.users = users.filter(user => 
@@ -62,16 +78,17 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
         console.log("Error...", err);
       }
     })
+  }
 
-    /* 
-    users => {
-      console.log("list of the users", users);
-      this.users = users;
-    }
-    */
-
-    this.fetchUnreadMessageCountsInterval =  setInterval(() => this.fetchUnreadMessageCounts(), 3000);
-    setInterval(() => this.fetchUnreadMessageCounts(), 3000)
+  getProfile()
+  {
+    this.userService.getterProfile().subscribe(data => {
+      this.current_user = data.nickname;
+      console.log("what is data here? ", data);
+      console.log("current user in private chat : ", this.current_user);
+      this.fetchUnreadMessageCounts();
+      this.socketService.connectOnlineStatus(this.current_user);
+    });
   }
 
   fetchUnreadMessageCounts() {
@@ -114,6 +131,17 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
       console.log('Error fetching messages: ', err);
     }
   })
+
+    this.subscription = this.userService.checkGameInvitation(this.user_id).subscribe({
+      next: (response: any) => {
+        this.invitation = response.status;
+        // console.log("response check game invite: ", this.invitation);  
+      },
+      error: (err : any) => {
+        console.log("Error checking game invite", err);
+        alert(this.user_id);
+      }
+    });
   }
 
   markMessagesAsRead()
@@ -164,13 +192,7 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
     this.message = '';
   }
 
-  ngOnDestroy()
-  {
-    this.subscription?.unsubscribe();
-    this.socketService.privateClose();
-    clearInterval(this.fetchUnreadMessageCountsInterval);
-    this.socketService.disconnectOnlineStatus(this.current_user);
-  }
+ 
 
   isUserOnline(user: string) : boolean
   {
@@ -180,9 +202,50 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
 
   gameInvite(receiver: number)
   {
-    alert("Game invite sent to " + receiver);
+    this.userService.sendGameInvitation(receiver).subscribe(
+      {
+       next: () => {
+        alert("Game invite sent successfully");
+        this.ngOnInit();
+      },
+      error: (err : any) => {
+        console.log("Error sending game invite", err);
+        alert("Error sending game invite");
+      }
+    });
   }
 
+  checkGameInvite(id: number)
+  {
+    this.userService.checkGameInvitation(id).subscribe(
+      {
+       next: (response: any) => {
+        if (response.invitation)
+          alert("You have a game invitation from " + response.invitation.sender);
+        else
+          alert("No game invitation");
+      },
+      error: (err : any) => {
+        console.log("Error checking game invite", err);
+        alert("Error checking game invite");
+      }
+    });
+  }
+
+  responseGameInvite(id: number, status: string)
+  {
+    this.userService.InvitationResponse(id, status).subscribe(
+      {
+       next: () => {
+        alert("Game invite response sent successfully");
+      },
+      error: (err : any) => {
+        console.log("Error sending game invite response", err);
+        alert("Error sending game invite response");
+      }
+    });
+  }
+  
 }
 
 

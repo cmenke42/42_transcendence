@@ -55,7 +55,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken', #authtoken for authentication
 
     'rest_framework_simplejwt.token_blacklist',
-    'chat'
+    'chat',
+    'match',
+    'tournament',
 
     #TODO: remove
     # 'django_extensions',

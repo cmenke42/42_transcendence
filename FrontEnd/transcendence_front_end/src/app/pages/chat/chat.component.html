@@ -1,36 +1,33 @@
-
-
-  <div class="container mt-3">
-	<div class="card">
-	  <div class="card-header text-center bg-primary text-white">
-		<h2>Inbox</h2>
-	  </div>
-	  <div class="card-body chat-box">
-		@for(message of messages; track message)
-		{
-
-			@if(message.username && !message.message)
-			{
-				<div class="system-message">
-				<p> {{message.username}} has joined the chat </p>
-				</div>
-			}
-			@else 
-			{
-				<div class="chat-message">
-					<p> {{message.username}} : {{ message.message }} </p>
-					</div>
-			}
-		}
-	  </div>
-	  <div class="card-footer">
-		<div class="input-group mb-3">
-		  <input type="text" class="form-control" placeholder="Type a message" [(ngModel)]="message">
-		  <button class="btn btn-outline-primary" type="button" (click)="sendMessage()">Send</button>
+<button class="btn btn-outline-primary chat-toggle" (click)="chat()">
+	{{ isOpen ? 'Close Chat' : 'Open Chat' }}
+  </button>
+  
+  <div class="chat-panel" [class.open]="isOpen">
+	<div class="chat-container">
+	  <div class="card">
+		<div class="card-header text-center bg-primary text-white">
+		  <h2>Inbox</h2>
+		</div>
+		<div class="card-body chat-box">
+		  <ng-container *ngFor="let message of messages">
+			<div *ngIf="message.username && !message.message" class="system-message">
+			  <p>{{message.username}} has joined the chat</p>
+			</div>
+			<div *ngIf="message.message" class="chat-message">
+			  <p>{{message.username}}: {{message.message}}</p>
+			</div>
+		  </ng-container>
+		</div>
+		<div class="card-footer">
+		  <div class="input-group mb-3">
+			<input type="text" class="form-control" placeholder="Type a message" [(ngModel)]="message">
+			<button class="btn btn-outline-primary" type="button" (click)="sendMessage()">Send</button>
+		  </div>
 		</div>
 	  </div>
 	</div>
   </div>
+  
   
 <!-- 
   <div>

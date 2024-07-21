@@ -1,5 +1,6 @@
 from django.db import models
 from users.models.custom_user import CustomUser
+from user_profile.models import UserProfile
 
 class GameInvitation(models.Model):
     PENDING = 'PENDING'
@@ -14,8 +15,8 @@ class GameInvitation(models.Model):
         (ACCEPTED, 'Accepted'),
     ]
 
-    sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='sent_game_invitations')
-    recipient = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='received_game_invitations')
+    sender = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='sent_game_invitations')
+    recipient = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='received_game_invitations')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=PENDING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

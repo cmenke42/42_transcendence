@@ -45,59 +45,9 @@ export class AuthService {
         }
       });
     }
-     /*  if (this.accessToken) {
-        if (this.validateToken(this.accessToken)) {
-          if (!this.jwtHelper.isTokenExpired(this.accessToken)) {
-            console.log('Access token is valid, setting up refresh timer');
-            this.isAuthenticatedSubject.next(true);
-            this.startRefreshTokenTimer();
-          } else {
-            console.log('Access token is expired, attempting to refresh');
-            this.refreshTokenRequest().subscribe({
-              next: () => console.log('Successfully refreshed token on init'),
-              error: () => {
-                console.error('Failed to refresh token on init, logging out');
-                this.logout();
-              }
-            });
-          }
-        } else {
-          console.error('Invalid access token found, logging out');
-          this.logout();
-        }
-      } else if (this.refreshToken) {
-        console.log('No access token, but refresh token found. Attempting to refresh');
-        this.refreshTokenRequest().subscribe({
-          next: () => console.log('Successfully obtained new access token'),
-          error: () => {
-            console.error('Failed to obtain new access token, logging out');
-            this.logout();
-          }
-        });
-      } */
+    
   }
 
-  /*  validateToken(token: any): boolean 
-  {
-    if (!token || typeof token !== 'string')
-      return false;
-    const parts = token.split('.');
-    if (parts.length !== 3)
-      return false;
-    try {
-      const decoded = this.jwtHelper.decodeToken(token);
-      return !!decoded;
-    }
-    catch (error) {
-      console.error('Token validation failed:', error);
-      return false;
-    }
-  }
-
-  private getTokenFromStorage(key: string): string | null 
-  {
-    return localStorage.getItem(key);
-  } */
 
   storeJWTToken(token: any): void {
     if (token.access) {
@@ -137,7 +87,6 @@ export class AuthService {
       // Clear tokens from local storage
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
-  
       this.accessToken = null;
       // Update authentication state
       this.isAuthenticatedSubject.next(false);

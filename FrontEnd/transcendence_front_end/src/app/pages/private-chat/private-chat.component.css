@@ -1,53 +1,5 @@
-/* .message-right {
-  text-align: right;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.message-left {
-  text-align: left;
-  display: flex;
-  justify-content: flex-start;
-}
-
-.message-container {
-  display: flex;
-  align-items: flex-end;
-  margin-bottom: 10px;
-}
-
-.avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  margin: 0 5px;
-}
-
-.message-bubble {
-  display: inline-block;
-  max-width: 70%;
-  word-wrap: break-word;
-  padding-bottom: 20px !important;
-}
-
-.message-content {
-  margin-right: 40px;
-}
-
-.chat-window .timestamp {
-  font-size: 0.75rem;
-  color: rgba(0, 0, 0, 0.6);
-  position: absolute;
-  bottom: 5px;
-  right: 10px;
-}
-
-.bg-primary .timestamp {
-  color: rgba(255, 255, 255, 0.7);
-}
- */
-
- .users-list {
+/* Existing styles */
+.users-list {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
@@ -113,7 +65,6 @@
 
 .message-content {
   word-wrap: break-word;
-  
 }
 
 .timestamp {
@@ -159,15 +110,72 @@
   margin-left: 5px;
 }
 
+/* New and updated styles for game invitation buttons */
+.game-invitation-controls {
+  display: flex;
+  align-items: center;
+}
+
+/* Update existing styles */
 .custom-pill {
   border-radius: 50px;
   padding: 0.375rem 1rem;
   font-size: 0.875rem;
   line-height: 1.5;
   transition: all 0.15s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.custom-pill:hover {
-  background-color: #007bff;
-  color: white;
+.custom-pill i {
+  margin-right: 0.5rem;
+}
+
+/* New styles for outline buttons */
+.btn-outline-success.custom-pill {
+  color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-outline-success.custom-pill:hover {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-outline-danger.custom-pill {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-outline-danger.custom-pill:hover {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+/* Style for small text */
+.custom-pill small {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* Adjust button group styles */
+.btn-group .custom-pill {
+  margin-right: 0.5rem;
+}
+
+.btn-group .custom-pill:last-child {
+  margin-right: 0;
+}
+
+/* Ensure buttons have equal width */
+.game-invitation-controls .btn-group {
+  display: flex;
+}
+
+.game-invitation-controls .btn-group .custom-pill {
+  flex: 1;
 }

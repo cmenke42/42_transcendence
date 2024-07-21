@@ -6,7 +6,7 @@ from .views.change_email import ChangeEmailAPIView, ObtainChangeEmailTokenAPIVie
 from .views.friendship_view import FriendViewSet, FriendAcceptView, FriendDeclineView, FriendShowAllView, ShowAllFriendsView
 from .views.blocklist import BlockListAddView, BlockListRemoveView, BlockListView
 from django.urls import path, include
-from .views.game_invitation import GameInvitation, RespondGameInvitation
+from .views.game_invitation import GameInvitationView, RespondGameInvitation, CheckGameInvitation
 from rest_framework.routers import DefaultRouter
 
 def register_with_router(router):
@@ -58,9 +58,16 @@ urlpatterns = [
 
 # GET Testing phase
 #for game invitation & accept
-# POST http://localhost:8000/api/v1/users/invite/?friend_id=2						invite friend with id_2
-	path('invite/', GameInvitation.as_view(), name='invite'),
-# POST http://localhost:8000/api/v1/users/respond/?invitation_id=2&action=accept	accept invitation with id_2
-	path('respond/', RespondGameInvitation.as_view(), name='respond'),
+# POST http://localhost:8000/api/v1/users/invite/				invite friend with id_2
+	path('game/invite/', GameInvitationView.as_view(), name='invite'),
+#POST Rquets to accept/reject the invitation
+	path('game/respond/', RespondGameInvitation.as_view(), name='respond'),
+#GET request to show all invitations: http://localhost:8000/api/v1/users/game/invitation/
+
+	path('game/invitation/', CheckGameInvitation.as_view(), name='invitation'),
 
 ]
+
+""" 	path('invite/', GameInvitation.as_view(), name='invite'),
+# POST http://localhost:8000/api/v1/users/respond/?invitation_id=2&action=accept	accept invitation with id_2
+	path('respond/', RespondGameInvitation.as_view(), name='respond'), """

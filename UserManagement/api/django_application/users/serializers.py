@@ -250,10 +250,10 @@ class GameInvitationSerializer(serializers.ModelSerializer):
     """
     Serializer for the GameInvitation model
     """
-    sender_username = serializers.CharField(source='sender.username', read_only=True)
-    recipient_username = serializers.CharField(source='recipient.username', read_only=True)
+    sender_nickname = serializers.CharField(source='sender.nickname', read_only=True)
+    recipient_nickname = serializers.CharField(source='recipient.nickname', read_only=True)
 
     class Meta:
         model = GameInvitation
-        fields = ['id', 'sender', 'sender_username', 'recipient', 'recipient_username', 'status', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'sender', 'created_at', 'updated_at']
+        fields = [ 'sender_id', 'sender_nickname', 'recipient_id', 'recipient_nickname', 'status', 'created_at', 'updated_at']
+        read_only_fields = ['sender_id', 'created_at', 'updated_at']

@@ -51,7 +51,7 @@ class Ball extends GameEntity
 	public override update = async (delta: number) =>
 	{
 	
-		if (GameScene.getInstance().paused)
+		if (GameScene.getInstance()!.paused)
 		{
 			this._lastUpdateTime = performance.now();
 			return;
@@ -70,14 +70,14 @@ class Ball extends GameEntity
 		const testingSphere = this._collider?.clone() as Sphere;
 		testingSphere.center.copy(newPosition);
 
-		var colliders = GameScene.getInstance().getGameEntities().filter(
+		var colliders = GameScene.getInstance()!.getGameEntities().filter(
 			(e) => e !== this && e.collider && e.collider.intersectsSphere(testingSphere)
 		);
 
 		// const testingSphere = this._collider?.clone() as Sphere;
 		// testingSphere.center.add(this._mesh.position.add(new Vector3(this._speed.x * actualDelta, this._speed.y * actualDelta, 0)));
 		// testingSphere.center.add(this._mesh.position.add(new Vector3(this._speed.x * delta, this._speed.y * delta, 0)));
-		var colliders = GameScene.getInstance().getGameEntities().filter((e) => e !== this && e.collider && e.collider.intersectsSphere(testingSphere));
+		var colliders = GameScene.getInstance()!.getGameEntities().filter((e) => e !== this && e.collider && e.collider.intersectsSphere(testingSphere));
 		if (colliders.length > 0)
 		{
 			if (colliders[0] instanceof Ball)
@@ -93,7 +93,9 @@ class Ball extends GameEntity
 			 this._mesh.position.copy(newPosition);
 		}
 		this._mesh.position.x += this._speed.x * delta;
+		// console.log("postion x: ", this._mesh.position.x);
 		this._mesh.position.y += this._speed.y * delta;
+		// console.log("postion y: ", this._mesh.position.y);
 		// this._lastPosition.copy(this._mesh.position);
 		if (this._collider instanceof Box3)
 			this._collider.setFromObject(this._mesh);
@@ -109,6 +111,19 @@ class Ball extends GameEntity
 	getXPosition = () =>
 	{
 		return this._mesh.position.x;
+	}
+
+	public get ballPosition(): { x: number, y: number }
+	{
+		return { 
+			x: this._mesh.position.x, 
+			y: this._mesh.position.y 
+		};
+	}
+
+	public updatePosition(position: { x: number, y: number }) 
+	{
+		this._mesh.position.set(position.x, position.y, this._mesh.position.z);
 	}
 }
 

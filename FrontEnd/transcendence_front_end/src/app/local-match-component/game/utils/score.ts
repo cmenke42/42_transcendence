@@ -26,6 +26,11 @@ class Score
 		// });
 		return ;
 	}
+
+	public setScore(score: number) 
+	{
+		this._score = score;
+	}
 }
 
 export default Score;

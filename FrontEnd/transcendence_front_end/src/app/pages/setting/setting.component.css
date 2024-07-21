@@ -1,3 +1,6 @@
+.card {
+	opacity: 0.5;
+}
 .custom-bg {
 	background-color: rgba(89, 89, 252, 0.2); /* Matching the scrolled navbar color */
 	backdrop-filter: blur(5px);
