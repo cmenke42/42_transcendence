@@ -10,8 +10,9 @@
 			  <div class="user-item mb-3 p-2 border rounded">
 				<div class="d-flex align-items-center justify-content-between">
 				  <div>
+					<a [routerLink]="['/home/user', user.user_id]">
 					<img src="../../../assets/avatar-chat.png" alt="User Picture" class="rounded-circle" width="50" height="50"> 
-					<span class="nickname">{{ user.nickname }}</span>
+					<span class="nickname">{{ user.nickname }}</span></a>
 				  </div>
 
 
@@ -53,26 +54,3 @@
 	</div>
   </div>
   
-
-
-<!-- 
-<div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapseMap[user.user_id]" class="mt-2 text-center">
-							<div class="card">
-								<div class="card-body">Here we can explain the Match history and its profile</div>
-								<div class="card-body">
-								
-									<button class="btn btn-outline-primary" (click)="inbox(user.nickname)" > send message </button>
-								</div>
-							</div>
-						</div>
-					</div>
--->
-
-	<!-- <button
-									type="button"
-									class="btn btn-outline-primary rounded-pill me-2"
-									(click)="toggleCollapse(user.user_id)"
-									[attr.aria-expanded]="!isCollapseMap[user.user_id]"
-									aria-controls="collapseExample">
-									Detail
-								</button> -->

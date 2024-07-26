@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from '../../service/user.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-match-making',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbModalModule, ChatComponent],
+  imports: [CommonModule, FormsModule, NgbModalModule, ChatComponent, RouterLink],
   templateUrl: './match-making.component.html',
   styleUrls: ['./match-making.component.css'],
 
@@ -38,6 +38,7 @@ export class MatchMakingComponent implements OnInit, OnDestroy {
   user: UserProfile | any = {};
   private subscription: Subscription | null = null;
   isOpen: boolean = false;
+  playerInfo: any = null;
 
 
   ngOnInit(): void {
@@ -56,6 +57,7 @@ export class MatchMakingComponent implements OnInit, OnDestroy {
       this.messages.push(message);
       console.log('Received message:', message);
     });
+    this.fetchPlayerInfo();
   }
 
   ngOnDestroy(): void {
@@ -63,6 +65,20 @@ export class MatchMakingComponent implements OnInit, OnDestroy {
     this.webSocket.close();
   }
   
+  fetchPlayerInfo()
+  {
+    this.userService.fetchTournamentPlayers(this.tournament_matches.tournament_id).subscribe({
+      next: (data: any) => {
+        this.playerInfo = data;
+        console.log('player info...', this.playerInfo);
+      },
+      error: (err: any) => {
+        console.log('error from fetch player info...', err);
+      }
+    });
+  
+  }
+
 sendUpcomingMatchesInfo() {
   const upcomingMatches = this.getUpcomingMatches();
   const byeMatches = this.getByeMatches();
@@ -207,9 +223,6 @@ viewMatches(id: number) {
     next: (response: any) => {
         alert('Score submitted successfully');
         this.viewMatches(this.tournament_matches.tournament_id);
-       /*  if (response.status === 'completed') // do we need this?
-            this.viewMatches(this.tournament_matches.tournament_id); */
-        // this.ngOnInit();
         this.sendBracketInfo();
     },
     error: (err: any) => {
@@ -219,95 +232,3 @@ viewMatches(id: number) {
   }
 }
 
-
-
-/* 
-  
-    sendUpcomingMatchesInfo() {
-    const upcomingMatches = this.getUpcomingMatches();
-    const byeMatches = this.getByeMatches();
-  
-    if (upcomingMatches.length > 0 || byeMatches.length > 0) {
-      const messageObj = {
-        type: 'system',
-        message: 'Match Information:',
-        upcomingMatches: upcomingMatches,
-        byeMatches: byeMatches
-      };
-      this.webSocket.sendMessage(messageObj);
-    }
-  }
-  
-  getUpcomingMatches(): any[] {
-    const upcomingMatches = [];
-    for (const stage of this.brackets) {
-      for (const match of stage) {
-        if (!match.is_played && match.player1 && match.player2) {
-          upcomingMatches.push({
-            id: match.id,
-            player1: match.player1,
-            player2: match.player2
-          });
-        }
-      }
-      // Only include the first stage with upcoming matches
-      if (upcomingMatches.length > 0) break;
-    }
-    return upcomingMatches;
-  }
-  
-  getByeMatches(): any[] {
-    const byeMatches = [];
-    for (const stage of this.brackets) {
-      for (const match of stage) {
-        if (match.is_bye) {
-          byeMatches.push({
-            id: match.id,
-            player1: match.player1,
-            player2: 'Bye',
-            winner: match.player1
-          });
-        }
-      }
-    }
-    return byeMatches;
-  }
-  */
-
-  
-  // formatMatches(data: any): any[][] {
-  //   const stages = [];
-  //   let matchesPerStage = Math.pow(2, Math.floor(Math.log2(data.length)));
-  
-  //   while (matchesPerStage >= 1) {
-  //     const currentStage = [];
-  //     for (let i = 0; i < matchesPerStage && data.length > 0; i++) {
-  //       const match = data.shift();
-  //       if (match) {
-  //         currentStage.push({
-  //           ...match,
-  //           winner: match.player1Score > match.player2Score ? match.player1 : match.player2 // Determine the winner based on scores
-  //         });
-  //       }
-  //     }
-  //     stages.push(currentStage);
-  //     matchesPerStage = Math.floor(matchesPerStage / 2);
-  //   }
-  
-  //   return stages;
-  // }
-  
-  // getUser() // Do we need this here?
-  // {
-  //   this.userService.getterProfile().subscribe({
-  //     next: (data: any) => {
-  //       console.log('data for the profile user in chat...', data);
-  //       this.user.nickname = data.nickname;
-  //     },
-  //     error: (error: any) => {
-  //       console.log('error for the profile user in chat...', error);
-  //     }
-  //   });
-  // }
-
- 

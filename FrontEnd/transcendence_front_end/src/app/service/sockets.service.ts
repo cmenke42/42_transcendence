@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, Subscriber, timestamp } from 'rxjs';
 import player from '../local-match-component/game/entitiy/player';
+import { AuthService } from './auth.service';
 
 
 
@@ -12,27 +13,31 @@ export class SocketsService {
 
   // private private_socket: WebsocketSubject<any>
   private socket: WebSocket | null = null;
-  private private_socket: WebSocket | null = null;
+  // private private_socket: WebSocket | null = null;
   private message_subject = new Subject<any>();
   private http = inject(HttpClient);
+  _authService = inject(AuthService);
   private onlineUsers = new BehaviorSubject<string[]>([]);
+
+  connectionAll(url_link: string) : WebSocket
+  {
+    const accessToken = this._authService.getAccessToken() || '';
+    const url = new URL(url_link);
+    url.searchParams.append('access_token', accessToken);
+    this.socket = new WebSocket(url.toString());
+    return this.socket;
+  }
 
   connect(roomName: string, user: string) 
   {
-    //Establish connection to the Websocket server
-    this.socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomName}/`);
+    const socket  = this.connectionAll(`ws://localhost:8000/ws/chat/${roomName}/`);
 
-    // const message = 
-    // {
-    //   'message' : '',
-    //   'username' : user,
-    // };
-    this.socket.onopen = () =>
+    socket.onopen = () =>
     {
       console.log('Websocket connected');
       this.sendMessage({message: '', username: user});
     };
-    this.socket.onmessage = (event) => 
+    socket.onmessage = (event) => 
     {
       try
       {
@@ -43,20 +48,13 @@ export class SocketsService {
       {
         console.error('Invalid message format', error);
       }
-      // if (typeof message === 'object' && this.socket && this.socket.readyState === WebSocket.OPEN) {
-      //   const messageString = JSON.stringify(message);
-      //   console.log('stringify JSON : ', messageString);
-      //   this.socket.send(messageString);
-      // } else {
-      //   console.error('Invalid message format or WebSocket not open');
-      // }
     };
-    this.socket.onclose = () =>
+    socket.onclose = () =>
     {
       console.log('Websocket disconnected');
       this.sendMessage({ username: 'System', message: `${user} has left the chat` });
     };
-    this.socket.onerror = (event) =>
+    socket.onerror = (event) =>
     {
       console.log('Websocket error: ', event);
       this.message_subject.error(event);
@@ -77,23 +75,6 @@ export class SocketsService {
   getMessage(): Observable<any>
   {
     return this.message_subject.asObservable();
-    // return new Observable(observer => {
-    //   if (this.socket)
-    //   {
-    //     this.socket.onmessage = (event) => {
-    //       const message = JSON.parse(event.data.toString());
-    //       observer.next(message);
-    //     };
-    //     this.socket.onerror = (error) => {
-    //       observer.error(error);
-    //     };
-    //     this.socket.onclose = () => {
-    //       observer.complete();
-    //     };
-    //   }
-    //   else
-    //     observer.error('WebSocket connection is not established.');
-    // })
   }
 
   close()
@@ -106,25 +87,26 @@ export class SocketsService {
   // private user
   privateConnect(sender: string, receiver: string)
   {
-    if (this.private_socket) 
-      this.private_socket.close();
-    this.private_socket = new WebSocket(`ws://localhost:8000/ws/private_chat/${sender}/${receiver}/`);
-    this.private_socket.onopen = () =>
+    // if (this.private_socket) 
+    //   this.private_socket.close();
+    // this.private_socket = new WebSocket(`ws://localhost:8000/ws/private_chat/${sender}/${receiver}/`);
+    const private_socket = this.connectionAll(`ws://localhost:8000/ws/private_chat/${sender}/${receiver}/`);
+    private_socket.onopen = () =>
     {
       console.log('Websocket connected');
       this.messageRead(sender, receiver);
     };
-    this.private_socket.onmessage = (event) => 
+    private_socket.onmessage = (event) => 
     {
       const message = JSON.parse(event.data.toString());
       console.log('Message received: ', event.data);
       this.message_subject.next(message);
     };
-    this.private_socket.onclose = () =>
+    private_socket.onclose = () =>
     {
       console.log('Websocket disconnected');
     };
-    this.private_socket.onerror = (event) =>
+    private_socket.onerror = (event) =>
     {
       console.log('Websocket error: ', event);
     };
@@ -132,8 +114,8 @@ export class SocketsService {
 
   privateSendMessage(message: string)
   {
-    if (this.private_socket && this.private_socket.readyState === WebSocket.OPEN)
-        this.private_socket.send(JSON.stringify({ message }));
+    if (this.socket && this.socket.readyState === WebSocket.OPEN)
+        this.socket.send(JSON.stringify({ message }));
     else
       console.log('Websocket is not connected');
   }
@@ -141,16 +123,16 @@ export class SocketsService {
   privateGetMessage() : Observable<any>
   {
     return new Observable(observer => {
-      if (this.private_socket)
+      if (this.socket)
       {
-        this.private_socket.onmessage = (event) => {
+        this.socket.onmessage = (event) => {
           const message = JSON.parse(event.data.toString());
           observer.next(message);
         };
-        this.private_socket.onerror = (error) => {
+        this.socket.onerror = (error) => {
           observer.error(error);
         };
-        this.private_socket.onclose = () => {
+        this.socket.onclose = () => {
           observer.complete();
         };
       }
@@ -175,20 +157,20 @@ export class SocketsService {
   
   privateClose()
   {
-    if (this.private_socket)
-        this.private_socket.close();
+    if (this.socket)
+        this.socket.close();
   }
 
     // online status
     connectOnlineStatus(username: string)
     {
-      this.socket = new WebSocket(`ws://localhost:8000/ws/online_status/`);
-      this.socket.onopen = () =>
+      const socket = this.connectionAll(`ws://localhost:8000/ws/online_status/`);
+      socket.onopen = () =>
       {
         console.log('Websocket connected');
         this.socket?.send(JSON.stringify({ type: 'online', username: username }));
       };
-      this.socket.onmessage = (event) => 
+      socket.onmessage = (event) => 
       {
         const message = JSON.parse(event.data.toString());
         if (message.type === 'online_users')
@@ -199,7 +181,7 @@ export class SocketsService {
         }
         // console.log('Message received: ', event.data);
       };
-      this.socket.onerror = (event) =>
+      socket.onerror = (event) =>
       {
         console.log('Websocket error: ', event);
       }
@@ -220,87 +202,87 @@ export class SocketsService {
       }
     }
 
-    private game_state_subject = new Subject<any>(); //move to upper level
-    // Game Socket Method
-    connectGameSocket(roomName: string)
-    {
-      this.socket = new WebSocket(`ws://localhost:8000/ws/game/${roomName}/`);
-      this.socket.onopen = () =>
-      {
-        console.log('Websocket connected');
-      };
-      this.socket.onmessage = (event) => 
-      {
-        const message = JSON.parse(event.data.toString());
-        // console.log('Message received: ', event.data);
-        this.game_state_subject.next(message);
-      };
-      this.socket.onclose = () =>
-      {
-        console.log('Websocket disconnected');
-        setTimeout(() => this.connectGameSocket(roomName), 5000);
-      }
-      this.socket.onerror = (event) =>
-      {
-        console.log('Websocket error: ', event);
-      }
-    }
+//     private game_state_subject = new Subject<any>(); //move to upper level
+//     // Game Socket Method
+//     connectGameSocket(roomName: string)
+//     {
+//       this.socket = new WebSocket(`ws://localhost:8000/ws/game/${roomName}/`);
+//       this.socket.onopen = () =>
+//       {
+//         console.log('Websocket connected');
+//       };
+//       this.socket.onmessage = (event) => 
+//       {
+//         const message = JSON.parse(event.data.toString());
+//         // console.log('Message received: ', event.data);
+//         this.game_state_subject.next(message);
+//       };
+//       this.socket.onclose = () =>
+//       {
+//         console.log('Websocket disconnected');
+//         setTimeout(() => this.connectGameSocket(roomName), 5000);
+//       }
+//       this.socket.onerror = (event) =>
+//       {
+//         console.log('Websocket error: ', event);
+//       }
+//     }
 
 
-    sendGameState(gameState: any)
-    {
-      if (this.socket && this.socket.readyState === WebSocket.OPEN)
-      {
+//     sendGameState(gameState: any)
+//     {
+//       if (this.socket && this.socket.readyState === WebSocket.OPEN)
+//       {
 
-          this.socket.send(JSON.stringify({
-            type: 'game_state_update',
-            game_state: {
-              ...gameState,
-              timestamp: performance.now(),
-            }
-          }));
-      }
-      else
-        console.log('Websocket is not connected');
-    }
+//           this.socket.send(JSON.stringify({
+//             type: 'game_state_update',
+//             game_state: {
+//               ...gameState,
+//               timestamp: performance.now(),
+//             }
+//           }));
+//       }
+//       else
+//         console.log('Websocket is not connected');
+//     }
 
-    sendGameStatusUpdate(gameStatus: string) {
-      if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-        this.socket.send(JSON.stringify({
-          type: 'game_status_update',
-          gameStatus: gameStatus,
-          timestamp: performance.now(),
-        }));
-      } else {
-        console.log('Websocket is not connected');
-      }
-    }
+//     sendGameStatusUpdate(gameStatus: string) {
+//       if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+//         this.socket.send(JSON.stringify({
+//           type: 'game_status_update',
+//           gameStatus: gameStatus,
+//           timestamp: performance.now(),
+//         }));
+//       } else {
+//         console.log('Websocket is not connected');
+//       }
+//     }
 
-    sendGameStart(roomName: string)
-    {
-      if (this.socket && this.socket.readyState === WebSocket.OPEN)
-      {
-        this.socket.send(JSON.stringify({
-          type: 'game_start',
-          room_name: roomName,
-          timestamp: performance.now(),
-        }));
-      }
-      else
-        console.log('Websocket is not connected');
+//     sendGameStart(roomName: string)
+//     {
+//       if (this.socket && this.socket.readyState === WebSocket.OPEN)
+//       {
+//         this.socket.send(JSON.stringify({
+//           type: 'game_start',
+//           room_name: roomName,
+//           timestamp: performance.now(),
+//         }));
+//       }
+//       else
+//         console.log('Websocket is not connected');
     
-    }
+//     }
 
-    getGameState(): Observable<any>
-    {
-      return this.game_state_subject.asObservable();
-    }
+//     getGameState(): Observable<any>
+//     {
+//       return this.game_state_subject.asObservable();
+//     }
 
-    closeGameSocket()
-    {
-      if (this.socket)
-          this.socket.close();
-    }
+//     closeGameSocket()
+//     {
+//       if (this.socket)
+//           this.socket.close();
+//     }
     
 
 

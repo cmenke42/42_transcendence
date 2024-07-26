@@ -64,7 +64,6 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
     this.socketService.disconnectOnlineStatus(this.current_user);
   }
 
-
   userRelation()
   {
     this.userService.userListRelationships().subscribe({
@@ -206,7 +205,8 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
       {
        next: () => {
         alert("Game invite sent successfully");
-        this.ngOnInit();
+        // this.ngOnInit();
+        this.router.navigate(['/home/private_chat']);
       },
       error: (err : any) => {
         console.log("Error sending game invite", err);
@@ -238,6 +238,8 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
       {
        next: () => {
         alert("Game invite response sent successfully");
+        // this.ngOnInit();
+        this.router.navigate(['/home/private_chat']);
       },
       error: (err : any) => {
         console.log("Error sending game invite response", err);

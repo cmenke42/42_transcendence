@@ -22,6 +22,27 @@ class TournamentList(generics.ListAPIView): #if we need it or not
     serializer_class = TournamentListSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+class TournamentPlayersDetails(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, tournament_id):
+        try:
+            tournament = Tournament.objects.get(id=tournament_id)
+            players = TournamentLobby.objects.filter(tournament_id=tournament)
+            result = []
+            for player in players:
+                result.append({
+                    'id': player.user_id.pk,
+                    'nickname': player.user_id.nickname,
+                    'avatar': str(player.user_id.avatar) if player.user_id.avatar else None
+                })
+            print(f'Players: {result}')
+            return Response(result)
+        except Tournament.DoesNotExist:
+            return Response({'error': 'Tournament not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class UserTournamentStatusView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 

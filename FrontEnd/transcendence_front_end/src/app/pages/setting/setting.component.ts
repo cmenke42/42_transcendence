@@ -12,7 +12,8 @@ import { Router, RouterLink } from '@angular/router';
   imports: [
     FormsModule,
     CommonModule,
-    NgbCollapseModule
+    NgbCollapseModule,
+    RouterLink
   ],
   templateUrl: './setting.component.html',
   styleUrl: './setting.component.css'

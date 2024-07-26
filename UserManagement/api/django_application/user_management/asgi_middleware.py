@@ -26,6 +26,7 @@ class ASGI_SimpleJWT_AuthMiddleware(BaseMiddleware):
             user_id = valid_token['user_id']
             user = await self._get_user(user_id)
             scope['user'] = user
+            print(f"Authenticated user: {user}")
         except (TokenError, User.DoesNotExist, ValueError) as e:
             print(f"Invalid token: {e}")
             scope['user'] = AnonymousUser()

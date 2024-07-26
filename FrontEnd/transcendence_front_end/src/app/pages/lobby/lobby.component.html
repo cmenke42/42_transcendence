@@ -15,13 +15,16 @@
             {
               @for( v1 of oneVsOneMatches; track v1.id)
               {
-                <li class="list-group-item list-group-item-primary custom-blue-item">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <p class="mb-0">Vs  {{v1.opponent_username}}</p>
-                    <!-- <button class="btn btn-outline-primary custom-button" (click)="GameStart(v1.id)">Start Game</button> -->
-                  <a class="btn btn-outline-primary custom-button" [routerLink]="['/home/match', 'match' ,v1.id]">Start Game</a>
-                  </div>
-                </li>
+                @if (v1.is_played === false)
+                {
+                  <li class="list-group-item list-group-item-primary custom-blue-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <p class="mb-0">Vs  {{v1.opponent_username}}</p>
+                      <!-- <button class="btn btn-outline-primary custom-button" (click)="GameStart(v1.id)">Start Game</button> -->
+                    <a class="btn btn-outline-primary" [routerLink]="['/home/match', 'match' ,v1.id]">Start Game</a>
+                    </div>
+                  </li>
+                }
               }
             }
             @else 
@@ -60,13 +63,13 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @for(tournament of tournamentList; track tournament.id)
-        {
-          <tr>
-            <td>{{ tournament.id }}</td>
-            <td>{{tournament.creator_nickname}}</td>
-            <td>{{ tournament.max_players }}</td>
-            <td>
+              @for(tournament of tournamentList; track tournament.id)
+              {
+                <tr>
+                  <td>{{ tournament.id }}</td>
+                  <td>{{tournament.creator_nickname}}</td>
+                  <td>{{ tournament.max_players }}</td>
+                  <td>
               @if (tournament.winner_id)
               {
                 {{ tournament.winner_nickname}}  🏆
@@ -96,7 +99,6 @@
               }
               @else if (tournament.tournament_status.toLowerCase() === 'on_going')  
               {
-                <!-- <button class="btn btn-outline-primary btn-sm" (click)="viewMatches(tournament.id)">View</button> -->
                 <a class="btn btn-outline-primary btn-sm" [routerLink]="['/home/matchmaking', tournament.id, nickname]">View</a>
               }
               @else if (tournament.tournament_status.toLowerCase() === 'completed')
@@ -121,8 +123,5 @@
   </ul>
   <div [ngbNavOutlet]="nav" class="mt-2"></div>
 </div>
-<!-- <div class="content-wrapper">
 
-   <router-outlet></router-outlet>
-  </div> -->
   

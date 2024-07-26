@@ -202,7 +202,6 @@ export class UserService {
     return this.http.get(this.auth_url + 'profile/list/');
   }
 
-
   // Game Invitation
   sendGameInvitation(id: number) : Observable<any>
   {
@@ -221,7 +220,6 @@ export class UserService {
     return this.http.get(`${this.auth_url}users/game/invitation/?user_id=${id}`);
   }
 
-
   // Match 1v1
   match1v1List(user_id: number) : Observable<any>
   {
@@ -229,7 +227,6 @@ export class UserService {
   }
 
   //Tournament
-
   // Create Tournament
   createTournament() : Observable<any>
   {
@@ -303,6 +300,12 @@ export class UserService {
   private advancedToNextRound(tournament_id: number) : Observable<any>
   {
     return this.http.post(`${this.auth_url}tournament/advance/${tournament_id}/`, {});
+  }
+
+  // fetch the players in the tournament
+  fetchTournamentPlayers(id: number) : Observable<any>
+  {
+    return this.http.get(`${this.auth_url}tournament/players/${id}/`);
   }
 
 }

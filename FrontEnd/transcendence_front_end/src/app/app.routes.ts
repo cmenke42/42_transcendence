@@ -52,7 +52,6 @@ export const routes: Routes = [
 
             { path: 'matchmaking/:tournament_id/:nickname', component: MatchMakingComponent},
             { path: 'chat/:tournament_id', component: ChatComponent}
-            // { path: 'match/:type/:match_id', component: LocalMatchComponentComponent },
         ]
     },
     // { path: 'chat/:username', component: ChatComponent },

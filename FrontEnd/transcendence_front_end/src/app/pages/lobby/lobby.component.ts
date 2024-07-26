@@ -49,11 +49,12 @@ export class LobbyComponent implements OnInit{
     {
       this.userService.match1v1List(user_data.user_id).subscribe({
         next: (data: any) => {
-          if (data && data.matches && Array.isArray(data.matches))
-            this.oneVsOneMatches = data.matches;
+          // if (data && data.matches && Array.isArray(data.matches))
+            this.oneVsOneMatches = data;
+          console.log('match details data...', data);
             // this.matchData(user_data, data.matches);
-          else
-            this.oneVsOneMatches = [];
+          // else
+          //   this.oneVsOneMatches = [];
         },
         error: (err: any) => {
           console.log('error from match details...', err);
@@ -87,8 +88,6 @@ export class LobbyComponent implements OnInit{
     this.userService.showTournament().subscribe({
       next: (data: any) => {
         this.tournamentList = data;
-        console.log('show tournament data...', this.tournamentList);
-        console.log('show tournament data...', data);
       },
       error: (err: any) => {
         console.log('error from show tournament...', err);

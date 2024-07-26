@@ -23,14 +23,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         # self.room_group_name = 'chat_%s' % self.room_name
         self.room_group_name = f'chat_{self.room_name}'
+
+        user = self.scope['user']
+        if user.is_authenticated:
+            #join room group
+            await self.channel_layer.group_add(
+                self.room_group_name,
+                self.channel_name
+            )
+            await self.accept()
+        else:
+            await self.close()
         
-        #join room group
-        await self.channel_layer.group_add(
-			self.room_group_name,
-			self.channel_name
-		)
-        
-        await self.accept()
+        # await self.accept()
 
     async def disconnect(self, close_code):
         try:
@@ -64,7 +69,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 print(f"Invalid JSON received: {e}")
                 return
             # text_data_json = json.loads(text_data)
-            self.username = text_data_json.get('username', 'Anonymous')
+            self.username = text_data_json.get('username', 'System')
             # username = text_data_json['username']
             message = text_data_json.get('message')
 
@@ -97,8 +102,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
 #private message
 class PrivateChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        self.user = self.scope['user']
+        if not self.user.is_authenticated:
+            await self.close()
+            return
         self.receiver_nickname = self.scope['url_route']['kwargs']['receiver']
         self.sender_nickname = self.scope['url_route']['kwargs']['sender']
+        #Ensure that nickname matches the authenticated user's nickname
+        # if self.user.nickname != self.sender_nickname:
+        #     await self.close()
+        #     return
         self.sender_profile = await self.get_user_profile(self.sender_nickname)
         self.receiver_profile = await self.get_user_profile(self.receiver_nickname)
         if self.sender_profile is None or self.receiver_profile is None:

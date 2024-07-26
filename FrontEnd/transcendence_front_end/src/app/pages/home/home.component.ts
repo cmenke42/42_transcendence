@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../service/auth.service';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChangeDetectorRef } from '@angular/core';
+import { UserComponent } from '../user/user.component';
 
 
 
@@ -24,6 +25,7 @@ import { ChangeDetectorRef } from '@angular/core';
         RouterOutlet,
         NgbDropdownModule,
         FormsModule,
+        UserComponent
     ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
@@ -35,6 +37,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   newAvatar: File | null = null;
   data: User[] = []; 
   private tokenRefreshSubScription?: Subscription;
+
+  isEditing: boolean = false;
 
   private userService = inject(UserService);
   router = inject(Router);
@@ -59,6 +63,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   //     this.tokenRefreshSubScription.unsubscribe();
   }
 
+  toggleEdit()
+  {
+    this.isEditing = !this.isEditing;
+    if (!this.isEditing)
+    {
+      this.newNickname = this.user_profile?.nickname || '';
+    }
+  }
+
   getUser()
   { 
     this.userService.getUserData().subscribe({
@@ -72,19 +85,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     })
   }
-
-  // getSpecificUser(id: number)
-  // {
-  //   this.userService.getSpecificUser(id).subscribe({
-  //     next: (data) => {
-  //       console.log("Data for specific user is...", data);
-  //       this.loggedInUser = data;
-  //     },
-  //     error: err => {
-  //       console.log("Error...", err);
-  //     }
-  //   })
-  // }
 
   toggleUserActivation(user_id: number, action: string)
   {
@@ -152,6 +152,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.newNickname = '';
           this.newAvatar = null;
           this.getProfile();
+          this.isEditing = false; // Exit edit mode
           console.log('Profile updated successfully');
         },
         error: (err) => {

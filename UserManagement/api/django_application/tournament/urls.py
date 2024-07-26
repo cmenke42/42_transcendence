@@ -12,6 +12,8 @@ urlpatterns = [
     path('list/', TournamentList.as_view(), name='tournament_list'),
     path('user-tournament-status/', UserTournamentStatusView.as_view(), name='user-tournament-status'),
 
+    #GET request to view the details of the players in a tournament
+    path('players/<int:tournament_id>/', TournamentPlayersDetails.as_view(), name='tournament-players'),
     #POST request to join Tournament
     path('join/<int:tournament_id>/', JoinTournament.as_view(), name='join-tournament'),
     #delete request to leave Tournament
