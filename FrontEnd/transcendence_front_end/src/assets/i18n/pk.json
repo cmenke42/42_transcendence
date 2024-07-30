@@ -1,0 +1,137 @@
+{
+  "Home": "گھر",
+  "Settings": "سیٹنگز",
+  "Private Chat": "ذاتی چیٹ",
+  "Match": "میچ",
+  "Notifications": "نوٹیفکیشنز",
+  "No new notifications": "کوئی نئی نوٹیفکیشن نہیں",
+  "{{nickname}} sent you a friend request": "{{nickname}} نے آپ کو دوستی کی درخواست بھیجی",
+  "Accept": "قبول کریں",
+  "Reject": "رد کریں",
+  "Theme": "تھیم",
+  "Dark": "تاریک",
+  "Light": "روشن",
+  "Enable 2FA": "2FA فعال کریں",
+  "Disable 2FA": "2FA غیر فعال کریں",
+  "Logout": "لاگ آؤٹ",
+  "English": "English",
+  "Deutsch": "Deutsch",
+  "اردو": "اردو",
+  "Русский": "Русский",
+
+
+  "Welcome to Transcendence": "تراسنڈنس میں خوش آمدید",
+  "ID": "ID",
+  "E-mail": "ای میل",
+  "Admin": "ایڈمن",
+  "Is Active": "فعال ہے",
+  "Action": "عمل",
+  "Deactivate": "غیر فعال کریں",
+  "Activate": "فعال کریں",
+  "No data": "کوئی ڈیٹا نہیں",
+  "Hello": "ہیلو",
+  "New nickname:": "نیا نک نیم:",
+  "Avatar:": "اوتار:",
+  "No avatar uploaded": "کوئی اوتار اپ لوڈ نہیں کیا گیا",
+  "Save Changes": "تبدیلیاں محفوظ کریں",
+
+  "Change email": "ای میل تبدیل کریں",
+  "EMAIL_CHANGED_SUCCESS": "ای میل کامیابی کے ساتھ تبدیل ہو گیا۔",
+  "SOMETHING_WENT_WRONG": "کچھ غلط ہو گیا ہے۔ براہ کرم بعد میں دوبارہ کوشش کریں۔",
+
+
+  "User List": "صارفین کی فہرست",
+  "Unblock": "ان بلاک کریں",
+  "Delete Friend": "دوست کو حذف کریں",
+  "Pending": "منتظر",
+  "Friend Request": "دوستی کی درخواست",
+  "Block": "بلاک کریں",
+  "No User....": "کوئی صارف نہیں....",
+  "Here we can explain the Match history and its profile": "یہاں ہم میچ کی تاریخ اور اس کی پروفائل کی وضاحت کر سکتے ہیں",
+  "send message": "پیغام بھیجیں",
+  "Detail": "تفصیل",
+
+
+  "Users": "صارفین",
+  "Online": "آن لائن",
+  "No User Sorry": "کوئی صارف نہیں، معذرت",
+  "Game Invitation": "گیم کی دعوت",
+  "Type a message...": "پیغام درج کریں...",
+  "Send": "ارسال کریں",
+
+
+  "Reset password": "پاس ورڈ دوبارہ سیٹ کریں",
+  "Old password": "پرانا پاس ورڈ",
+  "New password": "نیا پاس ورڈ",
+  "Confirm new password": "نئے پاس ورڈ کی تصدیق کریں",
+  "Change password": "پاس ورڈ تبدیل کریں",
+  "Required field": "یہ فیلڈ درکار ہے",
+  "Passwords do not match": "پاس ورڈ میل نہیں کھاتے",
+  "Success": "پاس ورڈ کامیابی کے ساتھ تبدیل کر دیا گیا۔",
+  "Error": "کچھ غلط ہوا۔ براہ کرم دوبارہ کوشش کریں۔",
+  
+  
+  "Inbox": "ان باکس",
+  "has joined the chat": "چَٹ میں شامل ہو گیا",
+  "Type a message": "پیغام ٹائپ کریں",
+
+
+  "Login": "لاگ ان",
+  "Email": "ای میل",
+  "Password": "پاس ورڈ",
+  "LOGIN": "لاگ ان",
+  "Google": "گوگل",
+  "42 Intra": "42 انٹرا",
+  "Don't have account?": "کیا آپ کا اکاؤنٹ نہیں ہے؟",
+  "Signup Now": "ابھی سائن اپ کریں",
+  "Forgot your password?": "پاس ورڈ بھول گئے؟",
+  "2FA is required. An OTP has been sent to your email. Please enter the OTP:": "دو عنصر کی توثیق درکار ہے۔ ایک وقتی پاس ورڈ آپ کی ای میل پر بھیجا گیا ہے۔ براہ کرم اسے درج کریں:",
+  "Enter OTP": "ایک وقتی پاس ورڈ درج کریں",
+  "Verify OTP": "ایک وقتی پاس ورڈ کی تصدیق کریں",
+
+
+  "Page Not Found": "صفحہ نہیں ملا",
+  "Go Home": "گھر واپس جائیں",
+
+
+
+  "Send reset link": "ری سیٹ لنک بھیجیں",
+  "success": "پاس ورڈ دوبارہ ترتیب دینے کا لنک آپ کی ای میل پر بھیج دیا گیا ہے۔",
+  "error": "کچھ غلط ہو گیا۔ براہ کرم بعد میں دوبارہ کوشش کریں۔",
+
+
+  "Confirm password": "پاس ورڈ کی تصدیق کریں",
+  "Reset Password": "پاس ورڈ دوبارہ ترتیب دیں",
+  "required": "یہ فیلڈ ضروری ہے",
+  "passwordMatchError": "پاس ورڈز مطابقت نہیں رکھتے",
+  "success_pass_reset": "پاس ورڈ کامیابی کے ساتھ دوبارہ ترتیب دے دیا گیا۔",
+
+  "Login with Google": "گوگل کے ساتھ لاگ ان کریں",
+
+  "Register": "رجسٹر کریں",
+  "Confirm Password": "پاس ورڈ کی تصدیق کریں",
+  "Signup": "سائن اپ کریں",
+  "Already have account?": "پہلے سے اکاؤنٹ موجود ہے؟",
+  "Login?": "لاگ ان کریں؟"
+  
+
+
+
+
+
+
+
+
+
+
+  
+  }
+  
+
+
+
+
+
+  
+
+  

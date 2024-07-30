@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject} from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, inject} from '@angular/core';
 import { UserService } from '../../service/user.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
@@ -9,6 +9,9 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../service/auth.service';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChangeDetectorRef } from '@angular/core';
+import { ProfileUpdateService } from '../../service/ProfileUpdateService';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { PopupMessageService } from '../../service/popup-message.service';
 import { UserComponent } from '../user/user.component';
 
 
@@ -25,11 +28,16 @@ import { UserComponent } from '../user/user.component';
         RouterOutlet,
         NgbDropdownModule,
         FormsModule,
+        TranslateModule,
         UserComponent
     ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  
+  
+  @Output() profileUpdated = new EventEmitter<UserProfile>(); // removed that 
 
+  
   loggedInUser: any;
   user_profile: UserProfile | null = null;
   warning : string = '';
@@ -44,6 +52,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   router = inject(Router);
   private auth = inject(AuthService);
   
+  
   ngOnInit() 
   {
     this.loggedInUser = this.userService.getLoggedInUser();
@@ -55,9 +64,19 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.getProfile();
       // this.getSpecificUser(this.loggedInUser.id); // do we need this?
     }
+    this.profileUpdateService.currentProfile.subscribe(profile => {
+      if (profile) {
+        this.user_profile = profile;
+      }
+    });
   }
   
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    private profileUpdateService: ProfileUpdateService,
+    private translate: TranslateService,
+    private popupMessageService: PopupMessageService,
+  ) {}
+  
   ngOnDestroy(): void {
   //   if (this.tokenRefreshSubScription)
   //     this.tokenRefreshSubScription.unsubscribe();
@@ -94,7 +113,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
     else if(action == 'deactivate' && this.loggedInUser?.id == user_id && this.loggedInUser?.is_superuser)
-      alert('Admin cannot deactivate himself');
+      this.popupMessageService.showMessage('Admin cannot deactivate himself', 'error');
     else if(confirm('Are you sure you want to ' + action + ' this user?'))
       this.userService.toggleUserActivation(user_id, action).subscribe({
         next: data => {
@@ -118,11 +137,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         next: (data) => {
           console.log("Data for profile is...", data);
           this.user_profile = data;
-          if (this.user_profile) {
-          }
+          // if (this.user_profile) {
+          // }
           if (this.user_profile?.nickname === ('nickname-' + this.user_profile?.user_id))
           {
-            // alert('Please update your profile e.g nickname');
             this.warning = 'Please update your profile e.g nickname'; 
           }
         },
@@ -148,15 +166,24 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.userService.updateProfile(this.user_profile.user_id, formData).subscribe({
         next: (updatedProfile) => {
           this.user_profile = updatedProfile;
-          this.cdr.detectChanges();
+          this.profileUpdateService.updateProfile(updatedProfile);
           this.newNickname = '';
           this.newAvatar = null;
+
           this.getProfile();
           this.isEditing = false; // Exit edit mode
           console.log('Profile updated successfully');
         },
         error: (err) => {
-          alert('Oops!\nYour avatar must be:\n -2MB max\n -800x800 max\n -Be a .jpg, .jpeg or .png file.');
+          if(err.error == "BAD REQUEST")
+            this.popupMessageService.showMessage(`Oops!\nYour avatar must be:\n 
+																									-2MB max\n -800x800 max\n 
+																									-Be a .jpg, .jpeg or .png file.`,
+																									 'error');
+          else
+             this.popupMessageService.showMessage(`Oops!\n
+																									Something went wrong during update. Please try again.`,
+																						 			'error');
           console.error('Error updating profile', err);
         }
       });
@@ -173,5 +200,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     };
     return statusMap[status] || 'Unknown';
   }
+
+
 
 }

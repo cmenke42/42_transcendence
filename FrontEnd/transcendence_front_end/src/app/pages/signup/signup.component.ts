@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
-
 import { User } from '../../interface/user';
 import { FormsModule, NgForm } from '@angular/forms';
 import { UserService } from '../../service/user.service';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { PopupMessageService } from '../../service/popup-message.service';
 
 @Component({
   selector: 'app-signup',
@@ -12,7 +13,8 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 	FormsModule,
 	RouterOutlet,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+	TranslateModule
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
@@ -26,31 +28,31 @@ export class SignupComponent {
 		is_superuser: false,
 		otp: '',
 		is_intra_user: false,
-		is_active: false
+		is_active: false,
 	};
 	userService = inject(UserService);
-	constructor()
-	{}
+	constructor( private translate: TranslateService, private popupMessageService: PopupMessageService ) {
+		this.translate.use(localStorage.getItem('preferredLanguage') ?? 'en');
+	}
 
 	//function to confirm password with password
 	confirmPassword : string = '';
 	userRegisteration()
 	{
 		if (this.user.email === '' || this.user.password === '')
-			alert('Please fill all the fields...');
+			this.popupMessageService.showMessage('Please fill all the fields...', 'error');
 		else if (this.user.password !== this.confirmPassword)
-			alert('Password and Confirm Password should be same...');
-		else
+			this.popupMessageService.showMessage('Password and Confirm Password should be same...', 'error');
 		{
 			this.userService.registerUser(this.user).subscribe(
 				{
 					next : response => {
 						console.log('successfull: ', response);
-						alert('Successfull added Player\n please check your email to verify...');
+						this.popupMessageService.showMessage('Successfull added Player\n please check your email to verify...!', 'success');
 					},
 					error: error => {
 						console.error('Error...', error);
-						alert(error);
+						this.popupMessageService.showMessage(error, 'error');
 					}
 				}
 			)

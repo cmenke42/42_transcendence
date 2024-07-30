@@ -56,9 +56,13 @@ RUN groupadd -g ${GID} appgroup && \
     --gid "${GID}" \
     appuser
 
-
+# Create logs directory and set permissions
 # Switch to the non-privileged user to run the application.
+#RUN mkdir -p /app/logs && chmod 777 /app/logs
+RUN mkdir -p /app/logs && chown ${UID}:${GID} /app/logs
+
 USER appuser
+
 
 # Prepare the application.
 ENTRYPOINT [ "entrypoint.sh" ]

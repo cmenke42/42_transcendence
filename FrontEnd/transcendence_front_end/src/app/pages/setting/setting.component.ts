@@ -5,6 +5,7 @@ import { UserService } from '../../service/user.service';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { SocketsService } from '../../service/sockets.service';
 import { Router, RouterLink } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-setting',
@@ -13,6 +14,7 @@ import { Router, RouterLink } from '@angular/router';
     FormsModule,
     CommonModule,
     NgbCollapseModule,
+    TranslateModule,
     RouterLink
   ],
   templateUrl: './setting.component.html',
@@ -30,6 +32,18 @@ export class SettingComponent implements OnInit, OnDestroy {
   userService = inject(UserService);
   socketService = inject(SocketsService);
   router = inject(Router);
+
+
+
+  constructor(
+    private translate: TranslateService,
+  ) {
+    const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+    this.translate.use(preferredLanguage); 
+  }
+
+
+
 
   ngOnInit(): void {
   this.showUserProfile();

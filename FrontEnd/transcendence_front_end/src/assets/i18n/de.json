@@ -1,0 +1,136 @@
+{
+  "Home": "Startseite",
+  "Settings": "Einstellungen",
+  "Private Chat": "Privater Chat",
+  "Match": "Match",
+  "Notifications": "Benachrichtigungen",
+  "No new notifications": "Keine neuen Benachrichtigungen",
+  "{{nickname}} sent you a friend request": "{{nickname}} hat dir eine Freundschaftsanfrage geschickt",
+  "Accept": "Akzeptieren",
+  "Reject": "Ablehnen",
+  "Theme": "Thema",
+  "Dark": "Dunkel",
+  "Light": "Hell",
+  "Enable 2FA": "2FA aktivieren",
+  "Disable 2FA": "2FA deaktivieren",
+  "Logout": "Abmelden",
+  "English": "English",
+  "Deutsch": "Deutsch",
+  "اردو": "اردو",
+  "Русский": "Русский",
+
+
+  "Welcome to Transcendence": "Willkommen bei Transcendence",
+  "ID": "ID",
+  "E-mail": "E-Mail",
+  "Admin": "Admin",
+  "Is Active": "Aktiv",
+  "Action": "Aktion",
+  "Deactivate": "Deaktivieren",
+  "Activate": "Aktivieren",
+  "No data": "Keine Daten",
+  "Hello": "Hallo, ",
+  "New nickname:": "Neuer Nickname:",
+  "Avatar:": "Avatar:",
+  "No avatar uploaded": "Kein Avatar hochgeladen",
+  "Save Changes": "Änderungen speichern",
+
+
+  "Change email": "E-Mail ändern",
+  "EMAIL_CHANGED_SUCCESS": "E-Mail erfolgreich geändert.",
+  "SOMETHING_WENT_WRONG": "Etwas ist schief gelaufen. Bitte versuchen Sie es später noch einmal.",
+
+
+  "User List": "Benutzerliste",
+  "Unblock": "Entsperren",
+  "Delete Friend": "Freund löschen",
+  "Pending": "Ausstehend",
+  "Friend Request": "Freundschaftsanfrage",
+  "Block": "Blockieren",
+  "No User....": "Kein Benutzer....",
+  "Here we can explain the Match history and its profile": "Hier können wir die Matchgeschichte und das Profil erklären",
+  "send message": "Nachricht senden",
+  "Detail": "Detail",
+
+
+  "Users": "Benutzer",
+  "Online": "Online",
+  "No User Sorry": "Kein Benutzer, entschuldigung",
+  "Game Invitation": "Spiel Einladung",
+  "Type a message...": "Nachricht eingeben...",
+  "Send": "Senden",
+
+
+  "Reset password": "Passwort zurücksetzen",
+  "Old password": "Altes Passwort",
+  "New password": "Neues Passwort",
+  "Confirm new password": "Neues Passwort bestätigen",
+  "Change password": "Passwort ändern",
+  "Required field": "Dieses Feld ist erforderlich",
+  "Passwords do not match": "Passwörter stimmen nicht überein",
+  "Success": "Passwort erfolgreich geändert.",
+  "Error": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+
+
+  "Inbox": "Posteingang",
+  "has joined the chat": "hat den Chat betreten",
+  "Type a message": "Nachricht eingeben",
+
+  
+  "Login": "Anmeldung",
+  "Email": "E-Mail",
+  "Password": "Passwort",
+  "LOGIN": "ANMELDEN",
+  "Google": "Google",
+  "42 Intra": "42 Intra",
+  "Don't have account?": "Kein Konto?",
+  "Signup Now": "Jetzt registrieren",
+  "Forgot your password?": "Passwort vergessen?",
+  "2FA is required. An OTP has been sent to your email. Please enter the OTP:": "2FA ist erforderlich. Ein Einmalpasswort wurde an Ihre E-Mail gesendet. Bitte geben Sie es ein:",
+  "Enter OTP": "Einmalpasswort eingeben",
+  "Verify OTP": "Einmalpasswort bestätigen",
+  
+  
+  "Page Not Found": "Seite nicht gefunden",
+  "Go Home": "Zurück zur Startseite",
+
+
+  "Send reset link": "Zurücksetzen-Link senden",
+  "success": "Der Link zum Zurücksetzen des Passworts wurde an Ihre E-Mail-Adresse gesendet.",
+  "error": "Etwas ist schief gelaufen. Bitte versuchen Sie es später noch einmal.",
+
+  
+  "Confirm password": "Passwort bestätigen",
+  "Reset Password": "Passwort zurücksetzen",
+  "required": "Dieses Feld ist erforderlich",
+  "passwordMatchError": "Passwörter stimmen nicht überein",
+  "success_pass_reset": "Passwort erfolgreich zurückgesetzt.",
+
+
+  "Login with Google": "Mit Google anmelden",
+
+  "Register": "Registrieren",
+  "Confirm Password": "Passwort bestätigen",
+  "Signup": "Anmelden",
+  "Already have account?": "Schon ein Konto?",
+  "Login?": "Einloggen?"
+  
+
+  
+  
+  
+
+
+
+    
+  }
+  
+
+
+  
+
+
+
+
+  
+

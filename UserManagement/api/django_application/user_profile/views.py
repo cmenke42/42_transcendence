@@ -5,7 +5,7 @@ from .models import UserProfile
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
 from .serializers import UserProfileSerializer
-from user_management.settings import MEDIA_ROOT
+from user_management.settings import MEDIA_ROOT , BASE_DIR
 import os
 import stat
 from django.contrib.auth.decorators import permission_required
@@ -84,9 +84,12 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 				data = {"avatar": user_profile.intra_avatar}
 			else:
 				data = {"avatar": user_profile.avatar}
+		elif field == 'preferred_language':
+			data = {"preferred_language": user_profile.preferred_language}
 		else:
 			serializer = self.get_serializer(user_profile)
 			data = serializer.data
+
 		return Response(data)
 	
  
@@ -98,10 +101,10 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 			return Response({"error": "UserProfile not found"}, status=404)	
 		new_nickname = request.data.get('nickname', None)
 		new_avatar = request.data.get('avatar', None)
-
+		new_language = request.data.get('preferred_language', None)
 		if new_nickname is not None and user_profile.user.is_intra_user:
 			return Response({"error": "Intra user cannot change nickname."}, status=400)
-		elif new_nickname is not None:	
+		elif new_nickname is not None:		
 			new_nickname = request.data.get('nickname', None)
 		if (request.data.get('avatar', None) is not None) and user_profile.user.is_intra_user:
 			return Response({"error": "Intra user cannot change avatar."}, status=400)
@@ -113,27 +116,21 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
 		serializer = UserProfileSerializer(user_profile, data=request.data, partial=True)
 		if serializer.is_valid():
-			if new_nickname != "":
+			if new_nickname != "" and new_nickname is not None:
 				user_profile.nickname = new_nickname
 			if new_avatar is not None:
-				new_avatar_name = f'user_{user_profile.user.id}/ava_of_user_{user_profile.user.id}'
-    
 				random_number = random.randint(100, 999)
-				new_avatar_name = f'{new_avatar_name}_{random_number}'
-    
 				extension = os.path.splitext(new_avatar.name)[1]
+				new_avatar_name = f'ava_of_user_{user_profile.user.id}_{random_number}'				
 				full_avatar_name = f'{new_avatar_name}{extension}'
-				avatar_path = os.path.join(MEDIA_ROOT, full_avatar_name)
-				avatar_dir = os.path.dirname(avatar_path)
-				os.makedirs(avatar_dir, exist_ok=True)
-				if user_profile.avatar and os.path.isfile(user_profile.avatar.path):
-					os.remove(user_profile.avatar.path)		
+				if user_profile.avatar and os.path.isfile(user_profile.avatar.path) and user_profile.avatar.path != os.path.join(MEDIA_ROOT, 'default.png'):
+					os.remove(user_profile.avatar.path)
 				user_profile.avatar.save(full_avatar_name, new_avatar)
 				if not os.path.isfile(user_profile.avatar.path):
-					return Response('new avatar failed to save', status=500)					
-				os.chmod(os.path.join(MEDIA_ROOT, full_avatar_name), stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
+					return Response('new avatar failed to save!', status=500)					
+			if new_language is not None:
+				user_profile.preferred_language = new_language
 			user_profile.save()
-			#serializer = UserProfileSerializer(user_profile)
 			print('serializer.data', serializer.data)
 			return Response(serializer.data, status=200)	
 		return Response({"error": "BAD REQUEST", "details": serializer.errors}, status=400)
@@ -161,10 +158,7 @@ class UserListView(APIView):
             else:
                 status = 'sent_request' if relationship.user_id == user_id else 'received_request'
             friendship_status[other_user_id] = status
-            # status = 'blocked' if relationship.status == Friend.BLOCKED else (
-            #     'accepted' if relationship.status == Friend.ACCEPTED else 'pending'
-            # )
-            # friendship_status[other_user_id] = status
+
         
         # Add friendship status to user profiles
         user_list = []

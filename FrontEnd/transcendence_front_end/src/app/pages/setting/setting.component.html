@@ -1,7 +1,7 @@
 <div class="container mt-3">
 	<div class="card">
 	  <div class="card-header text-center custom-bg text-white">
-		<h2>User List</h2>
+		<h2>{{ 'User List' | translate }}</h2>
 	  </div>
 	  <div class="card-body">
 		@for(user of user_list; track user.user_id) {
@@ -10,44 +10,57 @@
 			  <div class="user-item mb-3 p-2 border rounded">
 				<div class="d-flex align-items-center justify-content-between">
 				  <div>
+					<!-- <img src="../../../assets/avatar-chat.png" alt="User Picture" class="rounded-circle" width="50" height="50">  -->	
 					<a [routerLink]="['/home/user', user.user_id]">
-					<img src="../../../assets/avatar-chat.png" alt="User Picture" class="rounded-circle" width="50" height="50"> 
+						<img [src]="userService.getAvatarUrl(user)" class="rounded-circle mr-2" style="width: 40px; height: 40px;">	
 					<span class="nickname">{{ user.nickname }}</span></a>
 				  </div>
-
-
 				  <div class="btn-group" role="group">
 					@switch (user.friendship_status) 
 					{
-						@case('blocked_by_me') 
-						{
-							<button class="btn btn-outline-danger rounded-pill" (click)="unBlockUser(user.user_id)">Unblock</button>
-						}
-						@case('blocked_by_them') {}
-						@case ('friends')
-						{
-							<button class="btn btn-outline-success rounded-pill me-2" (click)="removeFriend(user.user_id)" >Delete Friend</button>
-						}
-						@case ('sent_request')
-						{
-							<button class="btn btn-outline-warning rounded-pill me-2">Pending</button>
-						}
-						@case ('received_request')
-						{
-							<button class="btn btn-outline-success rounded-pill me-2" (click)="acceptRequest(user.user_id)">Accept</button>
-							<button class="btn btn-outline-danger rounded-pill me-2" (click)="rejectRequest(user.user_id)">Reject</button>
-						}
-						@default {
-							<button class="btn btn-outline-success rounded-pill me-2" (click)="friendRequest(user.user_id)">Friend Request</button>
-							<button class="btn btn-outline-danger rounded-pill me-2" (click)="blockUser(user.user_id)">Block</button>
-						}
+					  @case('blocked_by_me') 
+					  {
+						<button class="btn btn-outline-danger rounded-pill" (click)="unBlockUser(user.user_id)">
+						  {{ 'Unblock' | translate }}
+						</button>
+					  }
+					  @case('blocked_by_them') {}
+					  @case ('friends')
+					  {
+						<button class="btn btn-outline-success rounded-pill me-2" (click)="removeFriend(user.user_id)">
+						  {{ 'Delete Friend' | translate }}
+						</button>
+					  }
+					  @case ('sent_request')
+					  {
+						<button class="btn btn-outline-warning rounded-pill me-2">
+						  {{ 'Pending' | translate }}
+						</button>
+					  }
+					  @case ('received_request')
+					  {
+						<button class="btn btn-outline-success rounded-pill me-2" (click)="acceptRequest(user.user_id)">
+						  {{ 'Accept' | translate }}
+						</button>
+						<button class="btn btn-outline-danger rounded-pill me-2" (click)="rejectRequest(user.user_id)">
+						  {{ 'Reject' | translate }}
+						</button>
+					  }
+					  @default {
+						<button class="btn btn-outline-success rounded-pill me-2" (click)="friendRequest(user.user_id)">
+						  {{ 'Friend Request' | translate }}
+						</button>
+						<button class="btn btn-outline-danger rounded-pill me-2" (click)="blockUser(user.user_id)">
+						  {{ 'Block' | translate }}
+						</button>
+					  }
 					}
 				  </div>
 				</div>
 			  </div>
 			}
 		  } @else {
-			<p>No User....</p>
+			<p>{{ 'No User....' | translate }}</p>
 		  }
 		}
 	  </div>

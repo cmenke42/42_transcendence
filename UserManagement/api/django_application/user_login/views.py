@@ -9,7 +9,9 @@ from users.models import CustomUser
 from .serializers import  OTPVerifySerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from user_login.otp_service import OTPService
+import logging
 
+logger = logging.getLogger(__name__)
 
 # class MyObtainTokenPairView(TokenObtainPairView):
 #     permission_classes = (AllowAny,)
@@ -17,7 +19,6 @@ from user_login.otp_service import OTPService
 
 class MyObtainTokenPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
-
     def post(self, request, *args, **kwargs):
         # First, handle the normal token obtain process
         serializer = self.get_serializer(data=request.data)

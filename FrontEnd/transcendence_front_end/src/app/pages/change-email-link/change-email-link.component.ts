@@ -4,6 +4,7 @@ import { UserService } from '../../service/user.service';
 import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { NgFor, NgIf } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-change-email-link',
@@ -12,6 +13,7 @@ import { NgFor, NgIf } from '@angular/common';
     ReactiveFormsModule,
     NgIf,
     NgFor,
+    TranslateModule,
   ],
   templateUrl: './change-email-link.component.html',
   styleUrl: './change-email-link.component.css'
@@ -25,8 +27,12 @@ export class ChangeEmailLinkComponent implements OnInit{
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
+    private translate: TranslateService,
   ) {
     this.changeEmailLinkForm = this.formBuilder.group({})
+    const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+    this.translate.use(preferredLanguage);
+    
   }
 
   ngOnInit(): void {

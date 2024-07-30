@@ -10,7 +10,7 @@ body {
 }
 
 body[data-bs-theme="dark"] {
-    background-color: black;
+    background-image: url("./assets/dark-theme-fotor-ai-20240725132134.jpg");
 }
 
 body[data-bs-theme="light"] {

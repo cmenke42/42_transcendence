@@ -46,7 +46,7 @@ class UserProfile(models.Model):
     # )#TODO: add validation mechanism to check extension and no malicious content
 
     avatar = models.ImageField(null = True, blank = True, verbose_name="avatar",
-                               upload_to="",
+                               upload_to="avatars/",
                                max_length=200, default= 'default.png',
     )#TODO: add validation mechanism to check extension and no malicious content
     
@@ -66,7 +66,14 @@ class UserProfile(models.Model):
         choices=ONLINE_STATUS_CHOICES,
         max_length=2,
         default="OF",
+    )    
+    LANGUAGE_CHOICES = (
+        ('en', 'English'),
+        ('ru', 'Russian'),
+        ('de', 'German'),
+        ('pk', 'Urdu'),
     )
+    preferred_language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES, default='en')
     
     def clean_nickname(self):
         nickname = str(self.nickname)

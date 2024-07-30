@@ -42,7 +42,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         blank=True,
     )
     otp_expiry = models.DateTimeField(blank=True, null=True)
-
+    
     objects = CustomUserManager()
 
     USERNAME_FIELD = "email"
@@ -90,6 +90,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             text_message_template_name,
             context,
         )
+        
+
         
 
 

@@ -8,6 +8,9 @@ from users.urls import register_with_router as register_user_with_router
 from user_profile.urls import register_with_router as register_profile_with_router
 from user_management.oauth2 import FortyTwoIntraLogin, FortyTwoIntraLoginCallback
 from user_management.oauth2  import ExchangeCodeView
+from user_management.oauth2Google import GoogleLogin, GoogleLoginCallback
+from user_management.utils import avatar_proxy
+from user_management.utils import HealthCheckView
 
 router = DefaultRouter()
 register_user_with_router(router)
@@ -27,13 +30,19 @@ urlpatterns = [
             path('', include('user_login.urls')),
 
             path('oauth_login/', FortyTwoIntraLogin, name='oauth_login'),
-            path('call_back/',FortyTwoIntraLoginCallback, name='oauth_callback'),         
+            path('oauth_google_login/', GoogleLogin, name='oauth_login'),
+            path('call_back/',FortyTwoIntraLoginCallback, name='oauth_callback'),   
+            path('google_call_back/',GoogleLoginCallback, name='oauth_callback'),       
             path('exchange-code/', ExchangeCodeView.as_view(), name='exchange_code'),
             path('profile/', include('user_profile.urls')),
+            path('avatar-proxy/', avatar_proxy, name='avatar_proxy'),
+            path('healthcheck/', HealthCheckView, name='healthcheck'),
             path('match/', include('match.urls')),
             path('tournament/', include('tournament.urls')),
             ]
         )
     ),
     path('api/v1/',include(router.urls)),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

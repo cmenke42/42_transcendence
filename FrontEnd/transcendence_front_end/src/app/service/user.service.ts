@@ -23,7 +23,7 @@ export class UserService {
  
   constructor() {}
 
-  auth_url = 'http://localhost:8000/api/v1/';
+  auth_url = 'https://localhost:6010/api/v1/';
   
 
   getLoggedInUser(): User | null 
@@ -200,6 +200,17 @@ export class UserService {
   userListRelationships() : Observable<any>
   {
     return this.http.get(this.auth_url + 'profile/list/');
+  }
+
+  
+  getAvatarUrl(user: any): string {
+    if (user.intra_avatar) {
+      return user.intra_avatar;
+    } else if (user.avatar) {
+      return user.avatar;
+    } else {
+      return '../../../assets/default-avatar.png'; //TO DO: change to default avatar
+    }
   }
 
   // Game Invitation

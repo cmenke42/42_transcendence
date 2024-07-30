@@ -10,7 +10,9 @@ import { BehaviorSubject, Observable, catchError, finalize, tap, throwError, of,
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:8000/api/v1/';
+  //private apiUrl = 'http://localhost:8000/api/v1/';
+  private apiUrl = 'https://localhost:6010/api/v1/';
+  
   private jwtHelper = new JwtHelperService();
   private accessToken: string | null = null;
   private refreshToken: string | null = null;

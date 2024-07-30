@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule,Validators } from '@angular
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { AbstractControl } from '@angular/forms';
 import { passwordMatchValidator } from '../../helper/password-match-validator.directive';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-reset-password',
@@ -16,6 +17,7 @@ import { passwordMatchValidator } from '../../helper/password-match-validator.di
     NgIf,
     NgFor,
     NgClass,
+    TranslateModule
   ],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css'
@@ -31,6 +33,7 @@ export class ResetPasswordComponent implements OnInit {
     private route: ActivatedRoute,
     private userService: UserService,
     private formBuilder: FormBuilder,
+    private translate: TranslateService
   ) {
     this.passwordResetForm = this.formBuilder.group({});
     this.payload = {
@@ -38,6 +41,9 @@ export class ResetPasswordComponent implements OnInit {
       token: "",
       new_password: "",
     };
+
+    const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+    this.translate.use(preferredLanguage);
   }
 
   ngOnInit(): void {

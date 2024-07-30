@@ -4,6 +4,7 @@ import { UserService } from '../../service/user.service';
 import { tap, catchError } from 'rxjs/operators';
 import { NgFor, NgIf } from '@angular/common';
 import { of } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-reset-password-link',
@@ -12,6 +13,7 @@ import { of } from 'rxjs';
     ReactiveFormsModule,
     NgIf,
     NgFor,
+    TranslateModule
   ],
   templateUrl: './reset-password-link.component.html',
   styleUrl: './reset-password-link.component.css'
@@ -25,6 +27,7 @@ export class ResetPasswordLinkComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
+    private translate: TranslateService
   ) {
     this.passwordResetLinkForm = this.formBuilder.group({});
   }

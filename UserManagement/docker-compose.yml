@@ -1,7 +1,34 @@
 name: user_management
 
 services:
+
+  api_nginx:
+    networks:
+    - user_management
+    build:
+      context: nginx
+      dockerfile: Dockerfile
+    expose:
+      - "443"
+    ports:
+      - "6010:443"
+    volumes:
+      - ssl_certs:/etc/nginx/ssl
+      - api-avatars:/app/avatars
+    healthcheck:
+      test: ["CMD", "curl", "-k", "-f", "https://localhost/nginx_status"]
+      interval: 30s
+      start_period: 40s
+      timeout: 5s
+      retries: 3
+    depends_on:
+    - api
+
+
+
   api:
+    networks:
+    - user_management
     build:
       context: ./api
       dockerfile: docker/dev.Dockerfile
@@ -14,14 +41,30 @@ services:
     #   - django_superuser_password
     volumes:
       - api-data:/app
-      - api-media:/media
+      - api-avatars:/app/avatars
+      - api-logs:/app/logs
     env_file:
       - ./api/dev.env
       - ./api/.env
+    # ports:
+    #    - 8000:8000
+    expose:
+      - 8000
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import requests; exit(0) if requests.get(\"http://localhost:8000/api/v1/healthcheck/\").ok else exit(1)'"]
+      interval: 30s
+      start_period: 40s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
 
-    ports:
-      - 127.0.0.1:8000:8000
   db:
+    networks:
+    - user_management
     image: postgres:14
     restart: unless-stopped
     # secrets:
@@ -38,9 +81,12 @@ services:
     healthcheck:
       test: [ "CMD", "pg_isready", -U, "postgres"]
       interval: 10s
-      timeout: 5s
+      timeout: 10s
       retries: 5
       start_period: 10s
+
+
+
 
 volumes:
   db-data:
@@ -50,15 +96,26 @@ volumes:
       type: none
       o: bind
       device: ./api/django_application
-  api-media:
+  api-avatars:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ./api/django_application/media
+      device: ./api/django_application/avatars
       #device: ./media
+  api-logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./api/django_application/logs
+
+    
 # secrets:
 #   db-password:
 #     file: secrets/db_password.txt
 #   django_superuser_password:
 #     file: secrets/django_superuser_password.txt
+networks:
+  user_management:
+    driver: bridge

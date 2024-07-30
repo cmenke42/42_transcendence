@@ -5,6 +5,7 @@ import { UserService } from '../../service/user.service';
 import { passwordMatchValidator } from '../../helper/password-match-validator.directive';
 import { tap, catchError, of } from 'rxjs';
 import { NgClass, NgFor, NgIf } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-change-password',
@@ -14,6 +15,7 @@ import { NgClass, NgFor, NgIf } from '@angular/common';
     NgClass,
     NgFor,
     NgIf,
+    TranslateModule
   ],
   templateUrl: './change-password.component.html',
   styleUrl: './change-password.component.css'
@@ -28,6 +30,7 @@ export class ChangePasswordComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
+    private translate: TranslateService
   ) {
     this.changePasswordForm = this.formBuilder.group({});
     this.payload = {

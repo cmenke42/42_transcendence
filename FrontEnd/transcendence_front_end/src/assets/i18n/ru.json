@@ -1,0 +1,128 @@
+  {
+    "Home": "Главная",
+    "Settings": "Настройки",
+    "Private Chat": "Личный чат",
+    "Match": "Матч",
+    "Notifications": "Уведомления",
+    "No new notifications": "Нет новых уведомлений",
+    "{{nickname}} sent you a friend request": "{{nickname}} отправил вам запрос в друзья",
+    "Accept": "Принять",
+    "Reject": "Отклонить",
+    "Theme": "Тема",
+    "Dark": "Темная",
+    "Light": "Светлая",
+    "Enable 2FA": "Включить двухфакторную аутентификацию",
+    "Disable 2FA": "Отключить двухфакторную аутентификацию",
+    "Logout": "Выйти",
+    "English": "English",
+    "Deutsch": "Deutsch",
+    "اردو": "اردو",
+    "Русский": "Русский",
+
+
+    "Welcome to Transcendence": "Добро пожаловать в Transcendence",
+    "ID": "ID",
+    "E-mail": "E-mail",
+    "Admin": "Админ",
+    "Is Active": "Активен",
+    "Action": "Действие",
+    "Deactivate": "Деактивировать",
+    "Activate": "Активировать",
+    "No data": "Нет данных",
+    "Hello": "Здравствуйте, ",
+    "New nickname:": "Новый никнейм:",
+    "Avatar:": "Аватар:",
+    "No avatar uploaded": "Аватар не загружен",
+    "Save Changes": "Сохранить изменения",
+
+
+    "Change email": "Изменить email",
+    "EMAIL_CHANGED_SUCCESS": "Email успешно изменен.",
+    "SOMETHING_WENT_WRONG": "Что-то пошло не так. Пожалуйста, попробуйте позже.",
+
+    
+    "User List": "Список пользователей",
+    "Unblock": "Разблокировать",
+    "Delete Friend": "Удалить друга",
+    "Pending": "Ожидание",
+    "Friend Request": "Запрос дружбы",
+    "Block": "Заблокировать",
+    "No User....": "Нет пользователей....",
+    "Here we can explain the Match history and its profile": "Здесь мы можем объяснить историю матчей и его профиль",
+    "send message": "отправить сообщение",
+    "Detail": "Детали",
+
+
+    "Users": "Пользователи",
+    "Online": "В сети",
+    "No User Sorry": "Нет пользователей, извините",
+    "Game Invitation": "Приглашение в игру",
+    "Type a message...": "Введите сообщение...",
+    "Send": "Отправить",
+
+    
+    "Reset password": "Сброс пароля",
+    "Old password": "Старый пароль",
+    "New password": "Новый пароль",
+    "Confirm new password": "Подтвердите новый пароль",
+    "Change password": "Сменить пароль",
+    "Required field": "Это поле обязательно для заполнения",
+    "Passwords do not match": "Пароли не совпадают",
+    "Success": "Пароль успешно изменен.",
+    "Error": "Произошла ошибка. Пожалуйста, попробуйте снова.",
+    
+    
+    "Inbox": "Входящие",
+    "has joined the chat": "присоединился к чату",
+    "Type a message": "Введите сообщение",
+
+    
+    "Login": "Вход",
+    "Email": "Электронная почта",
+    "Password": "Пароль",
+    "LOGIN": "ВОЙТИ",
+    "Google": "Google",
+    "42 Intra": "42 Intra",
+    "Don't have account?": "Нет аккаунта?",
+    "Signup Now": "Зарегистрируйтесь сейчас",
+    "Forgot your password?": "Забыли пароль?",
+    "2FA is required. An OTP has been sent to your email. Please enter the OTP:": "Требуется 2FA. Одноразовый пароль был отправлен на вашу электронную почту. Пожалуйста, введите его:",
+    "Enter OTP": "Введите одноразовый пароль",
+    "Verify OTP": "Подтвердить одноразовый пароль",
+
+
+    "Page Not Found": "Страница не найдена",
+    "Go Home": "На главную",
+
+
+    "Send reset link": "Отправить ссылку для сброса",
+    "success": "Ссылка для сброса пароля была отправлена на вашу электронную почту.",
+    "error": "Что-то пошло не так. Пожалуйста, попробуйте еще раз позже.",
+
+
+    "Confirm password": "Подтвердите пароль",
+    "Reset Password": "Сбросить пароль",
+    "required": "Это поле обязательно для заполнения",
+    "passwordMatchError": "Пароли не совпадают",
+    "success_pass_reset": "Пароль успешно сброшен.",
+    
+    "Login with Google": "Войти с Google",
+
+    "Register": "Регистрация",
+    "Confirm Password": "Подтвердите пароль",
+    "Signup": "Зарегистрироваться",
+    "Already have account?": "Уже есть аккаунт?",
+    "Login?": "Войти?"   
+    
+  
+    
+
+
+
+  }
+    
+
+
+
+    
+  

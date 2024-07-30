@@ -1,42 +1,41 @@
-<body>
-<div class="container">
-  <div class="card login-card">
-    <div class="card-header">
-      <h5 class="card-title">Login</h5>
+<div class="tron-background">
+  <div class="login-container">
+    <h2 class="neon-text">{{ 'Login' | translate }}</h2>
+    <form (ngSubmit)="loginUser()">
+      <div class="input-group">
+        <input type="email" [(ngModel)]="user.email" name="email" required placeholder="{{ 'Email' | translate }}">
+      </div>
+      <div class="input-group">
+        <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="user.password" name="password" required placeholder="{{ 'Password' | translate }}">
+        <span class="password-toggle" (click)="togglePassword()">
+          {{ showPassword ? 'HIDE' : 'SHOW' }}
+        </span>
+      </div>
+      <button type="submit" class="neon-button blue">{{ 'LOGIN' | translate }}</button>
+    </form>
+    <div class="oauth-buttons">
+      <button class="neon-button orange" (click)="loginGoogleOAuth()">
+        <i class="fab fa-google"></i> {{ 'Google' | translate }}
+      </button>
+      <button class="neon-button blue" (click)="loginOAuth()">
+        <i class="fas fa-code"></i> {{ '42 Intra' | translate }}
+      </button>
     </div>
-    <div class="card-body">
-      <form (ngSubmit)="loginUser()">
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" [(ngModel)]="user.email" name="email">
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" [(ngModel)]="user.password" name="password">
-        </div>
-        <button type="submit" class="btn btn-primary btn-block">Login</button>
-        <br>
-        <p> There isn't any account yet? wanna 
-          <a routerLink="/signup" class="btn btn-link">Register?</a>
-        </p>
-      </form>
-      <button class="btn btn-primary btn-block" (click)="loginOAuth()"><img src="assets/42-intra-icon.png" alt="42 Logo" class="logo">Login via Intra 
-    </button>
-    
-    
-    </div>
+    <p class="neon-text">
+      {{ 'Don\'t have account?' | translate }}
+      <a routerLink="/signup">{{ 'Signup Now' | translate }}</a>
+    </p>
+    <p class="neon-text">
+      <a routerLink="/reset-password">{{ 'Forgot your password?' | translate }}</a>
+    </p>
   </div>
 </div>
-@if(this.show2fa)
-{
-  <div class="modal">
-    <div class="modal-content">
-      <span class="close" (click)="closePopup()">&times;</span>
-      <p>2FA is required. An OTP has been sent to your email. Please enter the OTP:</p>
-      <input type="text" [(ngModel)]="user.otp" name="otp" placeholder="Enter OTP">
-      <button (click)="verifyOTP()">Verify OTP</button>
-    </div>
-  </div>
-}
 
-</body>
+<div *ngIf="show2fa" class="modal">
+  <div class="modal-content">
+    <span class="close" (click)="closePopup()">&times;</span>
+    <p>{{ '2FA is required. An OTP has been sent to your email. Please enter the OTP:' | translate }}</p>
+    <input type="text" [(ngModel)]="user.otp" name="otp" [placeholder]="'Enter OTP' | translate">
+    <button (click)="verifyOTP()" class="neon-button blue">{{ 'Verify OTP' | translate }}</button>
+  </div>
+</div>

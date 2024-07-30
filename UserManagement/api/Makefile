@@ -6,7 +6,8 @@ MANAGE_PY_PATH = ./django_application/manage.py
 PROJECT_PATH = ./django_application
 
 run:
-	python $(MANAGE_PY_PATH) runserver
+	daphne -e ssl:443:privateKey=/etc/nginx/ssl/private.key:certKey=/etc/nginx/ssl/certificate.crt django_application.asgi:application
+# python $(MANAGE_PY_PATH) runserver
 
 migrate:
 	python $(MANAGE_PY_PATH) makemigrations

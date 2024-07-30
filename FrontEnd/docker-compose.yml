@@ -1,7 +1,32 @@
 name: frontend
 
 services:
+
+  angular_nginx:
+    networks:
+    - frontend
+    build:
+      context: nginx
+      dockerfile: Dockerfile
+    expose:
+      - "443"
+    ports:
+      - "127.0.0.1:4010:443"
+    volumes:
+      - ssl_certs:/etc/nginx/ssl
+    healthcheck:
+      test: ["CMD", "curl", "-k", "-f", "https://localhost/nginx_status"]
+      interval: 30s
+      start_period: 40s
+      timeout: 5s
+      retries: 3
+
+    depends_on:
+      - angular
+
   angular:
+    networks:
+    - frontend
     build:
       context: ./transcendence_front_end
       dockerfile: ../docker/Dockerfile
@@ -13,9 +38,23 @@ services:
       # effectively excluding the .angular folder
       # from mount
       - angular_cache:/app/.angular
-    ports:
-      - 127.0.0.1:4200:4200
+    # ports:
+    #   - 127.0.0.1:4200:4200
+    expose:
+      - 4200
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://angular:4200 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+
 
 volumes:
   node_modules:
   angular_cache:
+
+networks:
+  frontend:
+    driver: bridge

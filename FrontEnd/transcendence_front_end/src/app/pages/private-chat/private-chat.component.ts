@@ -7,6 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserProfile } from '../../interface/user-profile';
 import { User } from '../../interface/user';
+import { ProfileUpdateService } from '../../service/ProfileUpdateService';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { PopupMessageService } from '../../service/popup-message.service';
+
 
 @Component({
   selector: 'app-private-chat',
@@ -15,7 +19,8 @@ import { User } from '../../interface/user';
     FormsModule,
     CommonModule,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    TranslateModule,
   ],
   templateUrl: './private-chat.component.html',
   styleUrl: './private-chat.component.css'
@@ -24,6 +29,7 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
 
   userService = inject(UserService);
   socketService = inject(SocketsService);
+  profileUpdateService = inject(ProfileUpdateService);
   router = inject(Router);
   receiver: string = '';
   receiver_data : UserProfile | null = null;
@@ -40,6 +46,12 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
   private fetchUnreadMessageCountsInterval: any;
   invitation: string | null = null;
 
+  constructor(
+    private translate: TranslateService, private popupMessageService: PopupMessageService
+  ) {
+    const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+    this.translate.use(preferredLanguage); 
+  }
 
   ngOnInit(): void {
 
@@ -201,19 +213,31 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
 
   gameInvite(receiver: number)
   {
+    this.popupMessageService.showMessage('Game invite sent to '+ receiver, 'success');
     this.userService.sendGameInvitation(receiver).subscribe(
-      {
-       next: () => {
-        alert("Game invite sent successfully");
-        // this.ngOnInit();
-        this.router.navigate(['/home/private_chat']);
-      },
-      error: (err : any) => {
-        console.log("Error sending game invite", err);
-        alert("Error sending game invite");
-      }
-    });
+        {
+         next: () => {
+          alert("Game invite sent successfully");
+          // this.ngOnInit();
+          this.router.navigate(['/home/private_chat']);
+        },
+        error: (err : any) => {
+          console.log("Error sending game invite", err);
+          alert("Error sending game invite");
+        }
+      });
   }
+
+  getAvatarUrl(user: any): string {
+    if (user.intra_avatar) {
+      return user.intra_avatar;
+    } else if (user.avatar) {
+      return user.avatar;
+    } else {
+      return '../../../assets/default-avatar.png';
+    }
+  }
+
 
   checkGameInvite(id: number)
   {

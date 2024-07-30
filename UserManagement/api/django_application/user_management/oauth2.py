@@ -50,17 +50,12 @@ def get_aes_key():
 	aes_key = get_env_or_file_value('AES_KEY')
 	if aes_key is None:
 		raise ValueError('No AES key found. needed for oauth2')
-		# #print('AES_KEY not found in .env file. Generating new key...')
-		# aes_key = AESGCM.generate_key(bit_length=256)
-		# with open('.env', 'a') as f:
-		#     f.write(f'AES_KEY={aes_key.hex()}\n')
 	else:
 		aes_key = bytes.fromhex(aes_key)
 	return aes_key
 
 # Encrypt and decrypt query parameters
 def encrypt_query_param(param_value):
-	#print('**PARAM VALUE', param_value)
 	key = get_aes_key()
 	aesgcm = AESGCM(key)
 	nonce = os.urandom(12)
@@ -77,7 +72,6 @@ def decrypt_query_param(encrypted_param):
 		encrypted_data = encrypted_bytes[12:]
 		aesgcm = AESGCM(key)
 		decrypted_string = aesgcm.decrypt(nonce, encrypted_data, None)
-		#print ('**DECRYPTED STATE', decrypted_string)
 		return True 
 	except Exception:
 		return False  
@@ -95,7 +89,6 @@ def FortyTwoIntraLogin(request):
 	uncrypted_state = ''.join(secrets.choice(characters) for _ in range(10))
 	byte_string = uncrypted_state.encode()
 	encrypted_state = encrypt_query_param(byte_string)
-	#print('**encrypted_state', encrypted_state)
 	auth_request = '{base_url}?client_id={client_id}&redirect_uri={redirect_uri}&response_type={response_type}&scope={scope}&state={state}'
 	auth_request = auth_request.format(
 		base_url=API_42_AUTH_URL,
@@ -115,7 +108,6 @@ def FortyTwoIntraLogin(request):
 @permission_classes([AllowAny])
 def FortyTwoIntraLoginCallback(request):
 
-	#print('**RECEIVED REQUEST', request.GET)
 	code = request.GET.get('code') 
 	encrypted_state = request.GET.get('state')
 
@@ -136,9 +128,8 @@ def FortyTwoIntraLoginCallback(request):
 	encrypted_state_2 = request.GET.get('state')	
 	if not decrypt_query_param(encrypted_state_2) :
 		return JsonResponse({'error': 'State from Intra callback cannot be decrypted'}, status=400)
- 
 	if not(200 <= response.status_code < 300):
-		return JsonResponse({'error': 'Failed to get access token'}, status=401)
+		return JsonResponse({'error': 'Failed to get access token from 42'}, status=401)
 	intra_access_token = response.json().get('access_token')
 	user_profile_info = retrieve_user_info(intra_access_token)
 	if not isinstance(user_profile_info, dict) or not validate_user_profile_info(user_profile_info):
@@ -215,10 +206,8 @@ def retrieve_user_info(intra_access_token):
 def signup_via_intra(user_profile_info):
 	unused_password_characters = string.ascii_letters + string.digits + string.punctuation
 	unused_password = ''.join(random.choice( unused_password_characters) for i in range(20))
-	#print('unused_password', unused_password)
 	unused_hashed_password = make_password(unused_password)
 	user_profile_info['password'] = unused_hashed_password
-	# serializer = UserRegisterSerializer(data=user_profile_info)
 	serializer = UserSerializer(fields=('email', 'password'), data=user_profile_info)
 	try:
 		serializer.is_valid(raise_exception=True)
@@ -231,9 +220,13 @@ def signup_via_intra(user_profile_info):
 		user_profile = UserProfile.objects.get(user=user)
 		user_profile.online_status = "ON"
 		user_profile.intra_avatar = user_profile_info['avatar']
-		user_profile.nickname = user_profile_info['nickname']
+		iterator = 0
+		unique_nickname = user_profile_info['nickname']
+		while UserProfile.objects.filter(nickname=unique_nickname).exists():
+			iterator += 1
+			unique_nickname = unique_nickname+'-'+str(iterator)
+		user_profile.nickname = unique_nickname
 		user_profile.save()
-
 	except IntegrityError as e:
 		return Response(data={'errors': e.detail}, status=status.HTTP_400_BAD_REQUEST)
 	return Response(data={'message': 'User\'s has been succesfully created with 42 Intra credentials'}, status=200)
@@ -242,12 +235,12 @@ def signup_via_intra(user_profile_info):
 #6. Exchange secret code for tokens
 @permission_classes([AllowAny])
 class ExchangeCodeView(APIView):
-    def post(self, request):
-        code = request.data.get('code')
-        tokens = cache.get(code)        
-        if tokens:
-            cache.delete(code)
-            return Response(tokens)
-        return Response({'error': 'Invalid code'}, status=400)
+	def post(self, request):
+		code = request.data.get('code')
+		tokens = cache.get(code)        
+		if tokens:
+			cache.delete(code)
+			return Response(tokens)
+		return Response({'error': 'Invalid code'}, status=400)
 
 

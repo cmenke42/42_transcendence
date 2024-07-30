@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'; // Import OnDestroy
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { PopupMessageService } from '../../service/popup-message.service';
 
 
 @Component({
@@ -12,6 +13,7 @@ export class OAuthCallbackComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private http: HttpClient,
+    private popupMessageService: PopupMessageService
   ) {}
 
   ngOnInit() {
@@ -29,11 +31,12 @@ export class OAuthCallbackComponent implements OnInit {
 
 
   exchangeCode(code: string) {
-    const validationUrl = 'http://localhost:8000/api/v1/exchange-code/';
+
+    const validationUrl = 'https://localhost:6010/api/v1/exchange-code/';
     const payload = { code };
     if (code == 'deactivated')
-    {
-      alert('Your account is deactivated. Please contact the administrator.');
+    {      
+      this.popupMessageService.showMessage('Your account is deactivated. Please contact the administrator.', 'error');
       this.router.navigate(['/login']);
       return;
     }

@@ -1,34 +1,89 @@
-body {
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+body, html {
   height: 100%;
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background: black;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
+  font-family: 'Orbitron', sans-serif;
+  background-color: #000810;
+}
+
+.tron-background {
+  background-color: black;
   background-size: cover;
-}
-
-*, *::before, *::after {
-  box-sizing: inherit;
-}
-
-.container {
+  background-position: center;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+}
+
+.register-container {
+  background-color: rgba(0, 8, 16, 0.8);
+  padding: 40px;
+  border-radius: 5px;
+  box-shadow: 0 0 20px #4df7ff;
+  max-width: 400px;
   width: 100%;
 }
 
-.login-card {
-  opacity: 0.7;
-  width: 400px;
-  max-width: 100%;
-  /* background: rgba(255, 255, 255, 0.9); Optional: Makes the card semi-transparent */
+.neon-text {
+  color: #4df7ff;
+  text-shadow: 0 0 5px #4df7ff;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.full-width {
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+input {
   width: 100%;
+  padding: 10px;
+  background-color: rgba(77, 247, 255, 0.1);
+  border: 2px solid #4df7ff;
+  color: #4df7ff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 16px;
+}
+
+input::placeholder {
+  color: rgba(77, 247, 255, 0.5);
+}
+
+.neon-button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  color: #000810;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.neon-button.blue {
+  background-color: #4df7ff;
+  box-shadow: 0 0 10px #4df7ff;
+}
+
+.neon-button:hover {
+  opacity: 0.8;
+}
+
+.neon-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.neon-link {
+  color: #ff9c00;
+  text-decoration: none;
+}
+
+.neon-link:hover {
+  text-shadow: 0 0 5px #ff9c00;
 }

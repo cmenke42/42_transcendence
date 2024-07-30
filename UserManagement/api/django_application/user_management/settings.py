@@ -17,6 +17,9 @@ from pathlib import Path
 import argon2
 from datetime import timedelta
 from .utils import get_env_or_file_value
+import logging
+import colorlog
+from pythonjsonlogger import jsonlogger
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,7 +51,6 @@ INSTALLED_APPS = [
     # API framework
     'rest_framework',
     # UserManagement
-    #'people',
     'users',
     'user_profile',
     'user_login',
@@ -202,10 +204,32 @@ argon2.DEFAULT_TIME_COST          = 2          # Iterations count
 
 # ------------------------ login settings -------------------------:
 # CSRF_COOKIE_HTTPONLY = False #should I set it or not?
-CORS_ORIGIN_ALLOW_ALL = False
-# CSRF_TRUSTED_ORIGINS = ['http://localhost:4200']
-CORS_ALLOWED_ORIGINS = ['http://localhost:4200']
+CORS_ALLOW_ALL_ORIGINS = False
+CSRF_TRUSTED_ORIGINS = [ "https://localhost:4010", "https://localhost:6010" ]
+CORS_ALLOWED_ORIGINS = [ "https://localhost:4010", "https://localhost:6010" ]
 CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'Content-Type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 #CORS_ALLOW_ALL_ORIGINS = True  # Только для разработки!
 #CORS_ALLOW_CREDENTIALS = True
@@ -223,16 +247,28 @@ SIMPLE_JWT = {
 }
 
 # ------------------------- Common default settings -----------------------------:
-USER_DEFAULT_HOMEPAGE = 'http://localhost:8000/api/v1/user/'
+USER_DEFAULT_HOMEPAGE = 'https://localhost:6010/api/v1/user/'
 
 
 # ----------------- OAUTH 2.0 - 42 INTRA SETTINGS -----------------:
 API_42_AUTH_URL					= 'https://api.intra.42.fr/oauth/authorize'  # 42 Intra auth URL
 API_42_ACCESS_TOKEN_ENDPOINT	= 'https://api.intra.42.fr/oauth/token'		 # 42 Intra access token endpoint
-API_42_REDIRECT_URI				= 'http://localhost:8000/api/v1/call_back/'	 # 42 Intra redirect URI
+API_42_REDIRECT_URI				= 'https://localhost:6010/api/v1/call_back/' # 42 Intra redirect URI
 API_42_INTRA_ENTRYPOINT_URL		= 'https://api.intra.42.fr/v2/'				 # 42 Intra entrypoint URL
-API_42_FRONTEND_CALLBACK_URL	= 'http://localhost:4200/auth-success'		 # 42 Intra frontend callback URL
+API_42_FRONTEND_CALLBACK_URL	= 'https://localhost:4010/auth-success'		 # 42 Intra frontend callback URL
 EXCAHNGE_CODE_TIMEOUT           =  30								         # one-time code lifetime in seconds
+
+
+# ----------------- OAUTH 2.0 - GOOGLE SETTINGS -----------------:
+GOOGLE_SCOPES        = [
+	                    'https://www.googleapis.com/auth/userinfo.email',     # access to email
+	                    'https://www.googleapis.com/auth/userinfo.profile']   # access to profile information
+GOOGLE_AUTH_URI      =  'https://accounts.google.com/o/oauth2/auth'           # request for authentication
+GOOGLE_TOKEN_URI     =  'https://accounts.google.com/o/oauth2/token'          # request for token
+GOOGLE_USER_INFO_URI =  'https://www.googleapis.com/oauth2/v1/userinfo'       # request for user information
+GOOGLE_REDIRECT_URI  =  'https://localhost:6010/api/v1/google_call_back/'     # redirect URI
+
+
 
 # ----------------- 2FA SETTINGS -----------------:
 OTP_EXPIRY_MINUTES = 2
@@ -242,7 +278,7 @@ OTP_FROM_EMAIL = "from@example.com"
 
 # ----------------- ACCOUNT ACTIVATION SETTINGS -----------------:
 ACCOUNT_ACTIVATION_TIMEOUT_SECONDS = 60 * 60 * 24 # 24 hours
-FRONTEND_URL = "http://localhost:4200"
+FRONTEND_URL                       = "https://localhost:4010"
 
 # ----------------- PASSWORD RECOVERY SETTINGS -----------------:
 PASSWORD_RESET_TIMEOUT = 60 * 60 # 1 hour
@@ -252,7 +288,9 @@ EMAIL_CHANGE_TIMEOUT_SECONDS = 60 * 30 # 30 minutes
 # --------------------Channels things---------------------------:
 ASGI_APPLICATION = 'user_management.routing.application'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0:8000']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0:8000',
+                 'localhost:6010', 'api', 'localhost:4010',
+                 'https://localhost:6010', 'https://localhost:4010']
 
 CHANNEL_LAYERS = {
     # 'default': {
@@ -279,25 +317,71 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'console': {
-#             'class': 'logging.StreamHandler',
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['console'],
-#             'level': 'DEBUG',
-#         },
-#         'channels': {
-#             'handlers': ['console'],
-#             'level': 'DEBUG',
-#         },
-#     },
-# }
+
+# ----------------------- LOGGER SETTINGS -------------------------:
+#How to use logger:
+    # add to code  logger.info('This is an info message')
+    # add to code  logger.error('This is an error message')
+
+LOG_LEVEL = 'WARNING'                # Change to level you need: (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+LOG_HANDLER = ['console']    # Change to handler you need: ['console', 'file'] 
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'colored': {
+            '()': 'colorlog.ColoredFormatter',
+            'format': '%(log_color)s%(asctime)s %(levelname)s %(name)s %(message)s',
+            'log_colors': {
+                'DEBUG': 'cyan',
+                'INFO': 'green',
+                'WARNING': 'yellow',
+                'ERROR': 'red',
+                'CRITICAL': 'red,bg_white',
+            },
+        },         
+        'json': {
+            '()': jsonlogger.JsonFormatter,
+            'format': '%(asctime)s %(levelname)s %(message)s',
+        },
+    },
+    
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'colored',
+        },
+        # 'file': {
+        #     'class': 'logging.FileHandler',
+        #     'filename': '/app/logs/app.log',
+        #     'formatter': 'json',
+        # },
+    },
+    
+    'loggers': {
+        '': {
+            'handlers': LOG_HANDLER,        
+            'level': LOG_LEVEL,
+            'propagate': True,
+        },
+        'django': {
+            'handlers': LOG_HANDLER,
+            'level': LOG_LEVEL,
+            'propagate': False,
+      },
+        'django.request': {
+            'handlers': LOG_HANDLER,
+            'level': LOG_LEVEL,
+            'propagate': False,
+        },
+        'rest_framework': {
+            'handlers': LOG_HANDLER,
+            'level': LOG_LEVEL,
+            'propagate': False,
+        },
+    },
+}
 
 # CHANNEL_LAYERS = {
 #     'default': {
@@ -308,6 +392,12 @@ CORS_ALLOW_HEADERS = [
 
 
 # Media files (Uploaded files)
-STATIC_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-#USER_UPLOADS_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_URL = '/static/'
+MEDIA_URL = 'https://localhost:6010/avatars/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'avatars')
+
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# USE_X_FORWARDED_HOST = True
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True

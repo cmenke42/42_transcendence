@@ -1,38 +1,36 @@
-<div class="container">
-    <div class="card login-card">
-      <div class="card-header">
-        <h5 class="card-title">Change email</h5>
-      </div>
-      <div class="card-body">
-        <form [formGroup]="changeEmailLinkForm" (ngSubmit)="onSubmit()">
-          <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" formControlName="email">
-            <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="text-danger">
-              <div *ngIf="email?.hasError('required')">
-                {{ getErrorMessage(email!, 'required') }}
-              </div>
-            </div>
-            <div *ngIf="emailError?.value" class="text-danger">
-              <ul>
-                <li *ngFor="let error of emailError!.value">{{ error }}</li>
-              </ul>
+
+  <div class="card login-card">
+    <div class="card-header">
+      <h5 class="card-title">{{ 'Change email' | translate }}</h5>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="changeEmailLinkForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="email" class="form-label">{{ 'Email' | translate }}</label>
+          <input type="email" class="form-control" id="email" formControlName="email">
+          <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="text-danger">
+            <div *ngIf="email?.hasError('required')">
+              {{ getErrorMessage(email!, 'required')}}
             </div>
           </div>
-  
-          <button type="submit" class="btn btn-primary btn-block" [disabled]="!changeEmailLinkForm.valid">
-            Change email
-          </button>
-        </form>
-  
-        <div *ngIf="success" class="text-success mt-2">
-          {{ message }}
+          <div *ngIf="emailError?.value" class="text-danger">
+            <ul>
+              <li *ngFor="let error of emailError!.value">{{ error }}</li>
+            </ul>
+          </div>
         </div>
-  
-        <div *ngIf="!success && message" class="text-danger mt-2">
-          {{ message }}
-        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="!changeEmailLinkForm.valid">
+          {{ 'Change email' | translate }}
+        </button>
+      </form>
+
+      <div *ngIf="success" class="text-success mt-2">
+        {{ message }}
+      </div>
+
+      <div *ngIf="!success && message" class="text-danger mt-2">
+        {{ message }}
       </div>
     </div>
-  </div>
-  
+

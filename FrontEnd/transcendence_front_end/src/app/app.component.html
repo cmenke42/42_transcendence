@@ -1,5 +1,10 @@
 
 
  <router-outlet></router-outlet>
-
+ <app-popup-message 
+ *ngIf="(popupMessage$ | async) as popupMessage"
+ [message]="popupMessage.message"
+ [type]="popupMessage.type"
+ (close)="closePopup()">
+</app-popup-message>
 

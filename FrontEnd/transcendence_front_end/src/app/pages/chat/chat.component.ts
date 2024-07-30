@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../service/user.service';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 
 
 @Component({
@@ -13,6 +15,7 @@ import { ActivatedRoute } from '@angular/router';
   imports: [
     FormsModule,
     CommonModule,
+    TranslateModule
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
@@ -85,6 +88,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
   }
 
+  constructor( private translate: TranslateService ) {}
 
   sendMessage()
   {

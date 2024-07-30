@@ -6,23 +6,40 @@
 	  <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
 		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 		  <li class="nav-item">
-			<a class="nav-link" [routerLink]="['']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+			<a class="nav-link" [routerLink]="['/home']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">{{ 'Home' | translate }}</a>
 		  </li>
 		  <li class="nav-item">
-			<a class="nav-link" [routerLink]="['setting']" routerLinkActive="active">Settings</a>
+			<a class="nav-link" [routerLink]="['/home/setting']" routerLinkActive="active">{{ 'Settings' | translate }}</a>
 		  </li>
 		  <li class="nav-item">
-			<a class="nav-link" [routerLink]="['private_chat']" routerLinkActive="active">Private Chat</a>
+			<a class="nav-link" [routerLink]="['/home/private_chat']" routerLinkActive="active">{{ 'Private Chat' | translate }}</a>
 		  </li>
 		  <li class="nav-item">
-			  <a class="nav-link" [routerLink]="['lobby']" routerLinkActive="active">Leaderboard</a>
-			</li>
-		<!-- 	<li class="nav-item">
-			  <a class="nav-link" [routerLink]="['match']" routerLinkActive="active">Match</a>
-			</li> -->
+			<a class="nav-link" [routerLink]="['/home/match']" routerLinkActive="active">{{ 'Match' | translate }}</a>
+		  </li>
 		</ul>
 		
 		<ul class="navbar-nav ms-auto">
+		  <!-- Language Dropdown -->
+		  <li class="nav-item" ngbDropdown>
+			<a class="nav-link" id="languageDropdown" role="button" ngbDropdownToggle>
+			  {{ getCurrentLanguageCode() }}
+			</a>
+			<div ngbDropdownMenu aria-labelledby="languageDropdown" class="dropdown-menu dropdown-menu-end">
+			  <button ngbDropdownItem (click)="useLanguage('en')">
+				{{ 'English' | translate }}
+			  </button>
+			  <button ngbDropdownItem (click)="useLanguage('de')">
+				{{ 'Deutsch' | translate }}
+			  </button>
+			  <button ngbDropdownItem (click)="useLanguage('pk')">
+				{{ 'اردو' | translate }}
+			  </button>
+			  <button ngbDropdownItem (click)="useLanguage('ru')">
+				{{ 'Русский' | translate }}
+			  </button>
+			</div>
+		  </li>
 		  <!-- Notification Dropdown -->
 		  <li class="nav-item" ngbDropdown>
 			<a class="nav-link" id="notificationDropdown" role="button" ngbDropdownToggle>
@@ -30,14 +47,14 @@
 			  <span class="badge bg-danger" *ngIf="user_relationship.length > 0">{{ user_relationship.length }}</span>
 			</a>
 			<div ngbDropdownMenu aria-labelledby="notificationDropdown" class="dropdown-menu dropdown-menu-end">
-			  <h6 class="dropdown-header">Notifications</h6>
-			  <div *ngIf="user_relationship.length === 0" class="dropdown-item">No new notifications</div>
+			  <h6 class="dropdown-header">{{ 'Notifications' | translate }}</h6>
+			  <div *ngIf="user_relationship.length === 0" class="dropdown-item">{{ 'No new notifications' | translate }}</div>
 			  <ng-container *ngFor="let request of user_relationship">
 				<div class="dropdown-item">
-				  <span>{{ request.nickname }} sent you a friend request</span>
+				  <span>{{ request.nickname }} {{ 'sent you a friend request' | translate }}</span>
 				  <div class="mt-2">
-					<button class="btn btn-sm btn-outline-success me-2" (click)="acceptRequest(request.user_id)">Accept</button>
-					<button class="btn btn-sm btn-outline-danger me-2" (click)="rejectRequest(request.user_id)">Reject</button>
+					<button class="btn btn-sm btn-outline-success me-2" (click)="acceptRequest(request.user_id)">{{ 'Accept' | translate }}</button>
+					<button class="btn btn-sm btn-outline-danger me-2" (click)="rejectRequest(request.user_id)">{{ 'Reject' | translate }}</button>
 				  </div>
 				</div>
 			  </ng-container>
@@ -46,29 +63,38 @@
 		  <!-- User Dropdown -->
 		  <li class="nav-item" ngbDropdown>
 			<a class="nav-link" id="userDropdown" role="button" ngbDropdownToggle>
-			  <img src="../../../assets/minion.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
-			  {{ user_profile?.nickname }}
+				@if(user_profile?.intra_avatar != null) {
+				  <img [src]="user_profile?.intra_avatar" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
+				} @else { 
+			  <!-- <img src="../../../assets/avatar-chat.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;"> -->
+				<img [src]="user_profile?.avatar" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
+				}
+				{{ user_profile?.nickname }}
 			</a>
 			<div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-end">
 			  <div class="dropdown-submenu">
-				<button ngbDropdownItem class="dropdown-toggle">Theme</button>
+				<button ngbDropdownItem class="dropdown-toggle">{{ 'Theme' | translate }}</button>
 				<div class="dropdown-menu submenu">
-				  <button ngbDropdownItem (click)="changeTheme('dark')">Dark</button>
-				  <button ngbDropdownItem (click)="changeTheme('light')">Light</button>
+				  <button ngbDropdownItem (click)="changeTheme('dark')">{{ 'Dark' | translate }}</button>
+				  <button ngbDropdownItem (click)="changeTheme('light')">{{ 'Light' | translate }}</button>
 				</div>
 			  </div>
+			  		<div class="dropdown-divider"></div>
+  					<button ngbDropdownItem [routerLink]="['/home/change-email']">{{ 'Change email' | translate }}</button>
+					<div class="dropdown-divider"></div>
+  					<button ngbDropdownItem [routerLink]="['/home/change-password']">{{ 'Change password' | translate }}</button>
 			  <div class="dropdown-divider"></div>
 				@if (userData?.is_2fa_enabled === false)
 				{
-				  <button ngbDropdownItem (click)="FA(true, userData?.id)">Enable 2FA</button>
+				  <button ngbDropdownItem (click)="FA(true, userData?.id)">{{ 'Enable 2FA' | translate }}</button>
 				}
 				@else
 				{
-					<button ngbDropdownItem (click)="FA(false, userData?.id)">Disable 2FA</button>
+				  <button ngbDropdownItem (click)="FA(false, userData?.id)">{{ 'Disable 2FA' | translate }}</button>
 				}
 			
 			  <div class="dropdown-divider"></div>
-			  <button ngbDropdownItem (click)="logout()">Logout</button>
+			  <button ngbDropdownItem (click)="logout()">{{ 'Logout' | translate }}</button>
 			</div>
 		  </li>
 		</ul>
@@ -80,5 +106,3 @@
 	<router-outlet></router-outlet>
   </div>
   
-
-<!-- <li class="nav-item" ngbDropdown> <img src="../../../assets/bell-icon.png" class="rounded-circle mr-2" style="width: 40px; height: 40px;"> </li> -->

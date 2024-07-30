@@ -26,7 +26,9 @@ RUN apk add --no-cache tini \
 COPY package.json package-lock.json ./
 
 RUN --mount=type=cache,target=/root/.npm \
-    npm clean-install
+    npm ci
+
+#    npm clean-install
 
 # RUN --mount=type=bind,source=package.json,target=package.json \
 #     --mount=type=bind,source=package-lock.json,target=package-lock.json \
@@ -34,6 +36,7 @@ RUN --mount=type=cache,target=/root/.npm \
 #     npm clean-install
 # npm install
 
+#RUN npm install @ngx-translate/core @ngx-translate/http-loader
 # Run the application as a non-root user.
 USER node
 
@@ -42,7 +45,6 @@ USER node
 
 # Expose the port that the application listens on.
 EXPOSE 4200
-
 # Tini is PID 1
 ENTRYPOINT ["/sbin/tini", "--"]
 

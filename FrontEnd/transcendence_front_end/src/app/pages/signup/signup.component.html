@@ -1,29 +1,21 @@
-<body>
-<div class="container">
-  <div class="card login-card">
-    <div class="card-header">
-      <h5 class="card-title">Register</h5>
-    </div>
-    <div class="card-body">
-      <form #registrationForm="ngForm" (ngSubmit)="userRegisteration()">
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" [(ngModel)]="user.email" name="email" required>
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" [(ngModel)]="user.password" name="password" required>
-        </div>
-        <div class="mb-3">
-          <label for="confirmPassword" class="form-label">Confirm Password</label>
-          <input type="password" class="form-control" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required>
-        </div>
-        <button type="submit" class="btn btn-primary btn-block" [disabled]="!registrationForm.valid">Signup</button>
-        <p> Already have account? wanna 
-          <a routerLink="/login" class="btn btn-link">Login?</a>
-        </p>
-      </form>
-    </div>
+<div class="tron-background">
+  <div class="register-container">
+    <h2 class="neon-text">{{ 'Register' | translate }}</h2>
+    <form #registrationForm="ngForm" (ngSubmit)="userRegisteration()">
+      <div class="input-group">
+        <input type="email" id="email" [(ngModel)]="user.email" name="email" required placeholder="{{ 'Email' | translate }}">
+      </div>
+      <div class="input-group">
+        <input type="password" id="password" [(ngModel)]="user.password" name="password" required placeholder="{{ 'Password' | translate }}">
+      </div>
+      <div class="input-group">
+        <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required placeholder="{{'Confirm Password' | translate }}">
+      </div>
+      <button type="submit" class="neon-button blue" [disabled]="!registrationForm.valid"> {{ 'Signup' | translate }} </button>
+    </form>
+    <p class="neon-text">
+      {{ 'Already have account?' | translate }}' 
+      <a routerLink="/login" class="neon-link">{{ 'Login?' | translate }} </a>
+    </p>
   </div>
 </div>
-</body>

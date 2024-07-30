@@ -5,6 +5,9 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { UserService } from '../../service/user.service';
 import { AuthService } from '../../service/auth.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { PopupMessageService } from '../../service/popup-message.service';
+
 
 @Component({
   selector: 'app-login',
@@ -14,7 +17,8 @@ import { AuthService } from '../../service/auth.service';
     CommonModule,
     RouterOutlet,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    TranslateModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -28,14 +32,18 @@ export class LoginComponent {
       is_superuser: false,
       otp: "",
       is_intra_user: false,
-      is_active: false
+      is_active: false,
     };
     show2fa : boolean = false;
     userService = inject(UserService);
     router = inject(Router);
     auth = inject(AuthService);
 
-    constructor () {}
+    showPassword: boolean = false;
+
+    constructor ( private translate: TranslateService, private popupMessageService: PopupMessageService ) {
+      this.translate.use(localStorage.getItem('preferredLanguage') ?? 'en');
+    }
     
     loginUser()
     {
@@ -49,9 +57,9 @@ export class LoginComponent {
         error: err => {
           console.log('Error...', err);
           if(err.status == 401)
-            alert('Invalid credentials. Please try again.');
+            this.popupMessageService.showMessage('Invalid credentials. Please try again', 'error');
           else
-            alert(err.message);
+            this.popupMessageService.showMessage(err.message, 'error');
         }
       })
     }
@@ -65,15 +73,20 @@ export class LoginComponent {
         },
         error: (err) => {
           console.log('Error...', err);
-          alert('OTP verification failed. Please try again. ' + err.message);
+          this.popupMessageService.showMessage('OTP verification failed. Please try again. ' + err.message, 'error');
         }
       })
     }  
 
     // 42 Intra Authentification
     loginOAuth() {
-        window.location.href = 'http://localhost:8000/api/v1/oauth_login/';
+        window.location.href = 'https://localhost:6010/api/v1/oauth_login/';
     }
+
+    loginGoogleOAuth() {
+      window.location.href = 'https://localhost:6010/api/v1/oauth_google_login/';
+    }
+    
 
     // verifyOTP()
     // {
@@ -94,5 +107,11 @@ export class LoginComponent {
     closePopup()
     {
       this.show2fa = false;
+    }
+
+
+
+    togglePassword() {
+      this.showPassword = !this.showPassword;
     }
 }

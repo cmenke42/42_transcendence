@@ -26,30 +26,29 @@ import { MatchMakingComponent } from './pages/match-making/match-making.componen
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'},
-    { path: 'login', component: LoginComponent, canActivate: [loginGuard]},
-    { path: 'signup', component: SignupComponent, canActivate: [loginGuard]},
+    { path: 'login',					component: LoginComponent, canActivate: [loginGuard]},
+    { path: 'signup',					component: SignupComponent, canActivate: [loginGuard]},
 
-    { path: 'activate-account/:user_id_b64/:token', component: ActivateAccountComponent},
-    { path: 'reset-password', component: ResetPasswordLinkComponent},
-    { path: 'reset-password/:user_id_b64/:token', component: ResetPasswordComponent},
-    { path: 'change-email/:user_id_b64/:email_b64/:token', component: ChangeEmailComponent}, 
+    { path: 'activate-account/:user_id_b64/:token', 		component: ActivateAccountComponent},
+    { path: 'reset-password',								component: ResetPasswordLinkComponent},
+    { path: 'reset-password/:user_id_b64/:token',			component: ResetPasswordComponent},
+    { path: 'change-email/:user_id_b64/:email_b64/:token',	component: ChangeEmailComponent, }, 
 
-    { path: 'change-email', component: ChangeEmailLinkComponent, canActivate: [userGuard]},
-    { path: 'change-password', component: ChangePasswordComponent, canActivate: [userGuard]},
-    { path: 'match', component: LocalMatchComponentComponent },
+   // { path: 'change-password', component: ChangePasswordComponent, canActivate: [userGuard]},
+    { path: 'match',					component: LocalMatchComponentComponent },
     {
         path: 'home',
         component: NavbarComponent,
         canActivate: [userGuard],
         children: [
-            { path: '', component: HomeComponent }, // Home as default
-            { path: 'setting', component: SettingComponent },
-            { path: 'private_chat', component: PrivateChatComponent },
-            { path: 'user/:user_id', component: UserComponent },
-            { path: 'lobby', component: LobbyComponent,
-               
-            },
-
+            { path: '',					component: HomeComponent }, // Home as default
+            { path: 'setting',			component: SettingComponent },
+            { path: 'private_chat', 	component: PrivateChatComponent },
+            { path: 'user/:user_id',	component: UserComponent },
+            { path: 'change-email', 	component: ChangeEmailLinkComponent },
+            { path: 'change-password',	component: ChangePasswordComponent },
+			{ path: 'chat/:username',	component: ChatComponent },
+            { path: 'lobby', component: LobbyComponent },
             { path: 'matchmaking/:tournament_id/:nickname', component: MatchMakingComponent},
             { path: 'chat/:tournament_id', component: ChatComponent}
         ]

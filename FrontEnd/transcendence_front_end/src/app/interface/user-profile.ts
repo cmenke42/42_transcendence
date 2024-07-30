@@ -4,4 +4,5 @@ export interface UserProfile {
 	avatar?: string;
 	intra_avatar?: string;
 	online_status: boolean;
+	preferred_language: string;
 }
