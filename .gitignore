@@ -46,3 +46,6 @@
 **/.env/
 **/env/
 **/venv/
+
+# node
+node_modules/

@@ -15,16 +15,13 @@
             {
               @for( v1 of oneVsOneMatches; track v1.id)
               {
-                @if (v1.is_played === false)
-                {
-                  <li class="list-group-item list-group-item-primary custom-blue-item">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <p class="mb-0">Vs  {{v1.opponent_username}}</p>
-                      <!-- <button class="btn btn-outline-primary custom-button" (click)="GameStart(v1.id)">Start Game</button> -->
-                    <a class="btn btn-outline-primary" [routerLink]="['/home/match', 'match' ,v1.id]">Start Game</a>
-                    </div>
-                  </li>
-                }
+                <li class="list-group-item list-group-item-primary custom-blue-item">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <p class="mb-0">Vs  {{v1.opponent_username}}</p>
+                    <!-- <button class="btn btn-outline-primary custom-button" (click)="GameStart(v1.id)">Start Game</button> -->
+                  <a class="btn btn-outline-primary" [routerLink]="['/pong-match/', MatchType.PVP ,v1.id]">Start Game</a>
+                  </div>
+                </li>
               }
             }
             @else 

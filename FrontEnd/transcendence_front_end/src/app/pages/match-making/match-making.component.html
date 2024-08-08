@@ -19,10 +19,12 @@
             </div>
             @if (match.player2 && !match.is_played) {
               <div class="score-input">
-                <button class="btn btn-outline-primary" [routerLink]="match"> Play </button>
                 <!-- <input name="player1Score" type="number" placeholder="P1 Score" [(ngModel)]="match.player1Score" min="0">
                 <input name="player2Score" type="number" placeholder="P2 Score" [(ngModel)]="match.player2Score" min="0">
                 <button class="btn btn-sm btn-outline-primary" (click)="submitScore(match.id, match.player1Score, match.player2Score)">Submit</button> -->
+                <!-- [routerLink]="['/pong-match/', MatchType.PVP ,v1.id] -->
+                 <!-- TODO: add a check that the current player is part of the match -->
+                <button *ngIf="!match.is_played" class="btn btn-outline-primary" [routerLink]="['/pong-match/', MatchType.TOURNAMENT ,match.id]">Play</button>
               </div>
             }
           </div>

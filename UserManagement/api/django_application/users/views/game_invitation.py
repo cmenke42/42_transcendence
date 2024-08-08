@@ -4,7 +4,7 @@ from rest_framework import status
 from user_profile.models import UserProfile
 from ..models.game_invitation import GameInvitation
 from ..serializers import GameInvitationSerializer
-from match.models import match1V1
+from match.models import Match1v1
 from django.db import models
 from django.db.models import Q
 
@@ -62,7 +62,7 @@ class RespondGameInvitation(APIView):
             return Response({'error': 'Invitation not found'}, status=status.HTTP_404_NOT_FOUND)
         
         if action == 'accept':
-            match = match1V1(Player1=invitation.sender, Player2=invitation.recipient)
+            match = Match1v1(player_1=invitation.sender, player_2=invitation.recipient)
             match.save()
             invitation.delete()
             return Response({'message': 'Invitation is accepted. Good luck!'}, status=status.HTTP_200_OK)

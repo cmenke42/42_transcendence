@@ -8,6 +8,7 @@ from django.core.asgi import get_asgi_application
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'user_management.settings')
 django_asgi_app = get_asgi_application()
 
+from remote_game.consumers import PongGameConsumer
 from . import consumers
 from django.urls import re_path
 
@@ -20,6 +21,7 @@ websocket_urlpatterns = [
     re_path(r'ws/game/(?P<room_name>\w+)/$', consumers.GameConsumer.as_asgi()),
     # re_path(r'^ws/general_chat/(?P<username>[\w-]+)/$', consumers.GeneralChatConsumer.as_asgi()),
 
+    re_path(r"^ws/pong-match/(?P<match_type>\w+)/(?P<match_id>\d+)/$", PongGameConsumer.as_asgi()),
 ]
 print("WebSocket Routes:", websocket_urlpatterns)
 

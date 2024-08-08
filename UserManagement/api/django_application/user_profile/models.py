@@ -19,6 +19,7 @@ class UserProfile(models.Model):
         to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         primary_key=True,
+        related_name="profile",
     )
     #TODO: add a default value of nickname-<user.id> and reserve it for that user
     nickname = models.CharField(verbose_name="nickname",

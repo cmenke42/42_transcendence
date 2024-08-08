@@ -11,11 +11,18 @@ import { ChatComponent } from "../chat/chat.component";
 import { UserProfile } from '../../interface/user-profile';
 import { SocketsService } from '../../service/sockets.service';
 import { Subscription } from 'rxjs';
+import { MatchType } from '../../interface/remote-game.interface';
 
 @Component({
   selector: 'app-match-making',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbModalModule, ChatComponent, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgbModalModule,
+    ChatComponent,
+    RouterLink,
+  ],
   templateUrl: './match-making.component.html',
   styleUrls: ['./match-making.component.css'],
 
@@ -40,6 +47,11 @@ export class MatchMakingComponent implements OnInit, OnDestroy {
   isOpen: boolean = false;
   playerInfo: any = null;
 
+  MatchType = MatchType;
+
+  constructor() {
+
+  }
 
   ngOnInit(): void {
     this.router.params.subscribe(params => {

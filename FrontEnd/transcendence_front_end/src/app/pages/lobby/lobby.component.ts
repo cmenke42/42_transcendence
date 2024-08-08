@@ -5,6 +5,7 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, RouterLinkActive, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatchMakingComponent } from "../match-making/match-making.component";
+import { MatchType } from '../../interface/remote-game.interface';
 
 @Component({
   selector: 'app-lobby',
@@ -13,7 +14,7 @@ import { MatchMakingComponent } from "../match-making/match-making.component";
     NgbNavModule,
     CommonModule,
     RouterModule,
-    MatchMakingComponent
+    MatchMakingComponent,
 ],
   templateUrl: './lobby.component.html',
   styleUrl: './lobby.component.css'
@@ -29,6 +30,8 @@ export class LobbyComponent implements OnInit{
   user_data : UserProfile | null = null;
   nickname: string = '';
   brackets: any[] = [];
+
+  MatchType = MatchType;
 
   ngOnInit(): void {
     this.getUser();

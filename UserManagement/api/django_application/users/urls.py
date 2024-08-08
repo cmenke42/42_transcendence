@@ -7,7 +7,6 @@ from .views.friendship_view import FriendViewSet, FriendAcceptView, FriendDeclin
 from .views.blocklist import BlockListAddView, BlockListRemoveView, BlockListView
 from django.urls import path, include
 from .views.game_invitation import GameInvitationView, RespondGameInvitation, CheckGameInvitation
-from rest_framework.routers import DefaultRouter
 
 def register_with_router(router):
 	"""
@@ -15,10 +14,6 @@ def register_with_router(router):
 	"""
 	router.register(r'users', UserAccountViewSet, basename='user')
 	router.register(r'friends', FriendViewSet, basename='friend')
-
-router = DefaultRouter()
-
-router.register(r'friends', FriendViewSet, basename='friend')
 
 urlpatterns = [
     

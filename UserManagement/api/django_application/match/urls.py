@@ -1,13 +1,7 @@
-from django.urls import path
-from .views import MatchView
+from .views import Match1v1ViewSet
 
-""" def match_1v1(router):
-    router.register(r'match1v1', MatchView, basename='match1v1')
-    urlpatterns = router.urls """
-
-# GET Method http://localhost:8000/api/v1/match/list/ checks if a match is remaining
-urlpatterns = [
-    path('list/', MatchView, name='match'),
-]
-
-
+def register_with_router(router):
+	"""
+	Register the UserAccountViewSet with the given router.
+	"""
+	router.register(r'matches', Match1v1ViewSet, basename='match')

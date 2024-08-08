@@ -5,7 +5,7 @@ def register_with_router(router):
     """
     Register the UserAccountViewSet with the given router.
     """
-    router.register(r'profiles', UserProfileViewSet, basename='profile')
+    router.register(r'profiles', UserProfileViewSet, basename='userprofile')
 
 urlpatterns = [
     # Add this line for the UserListView

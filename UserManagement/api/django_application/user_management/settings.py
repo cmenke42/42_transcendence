@@ -39,8 +39,8 @@ WSGI_APPLICATION = 'user_management.wsgi.application'
 
 # Application definition
 INSTALLED_APPS = [
-    'channels',
     'daphne',
+    'channels',
     'corsheaders',
     # 'django.contrib.admin',
     'django.contrib.auth',
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # API framework
     'rest_framework',
+    'django_filters',
     # UserManagement
     'users',
     'user_profile',
@@ -63,6 +64,8 @@ INSTALLED_APPS = [
 
     #TODO: remove
     # 'django_extensions',
+
+    'remote_game',
 ]
 
 

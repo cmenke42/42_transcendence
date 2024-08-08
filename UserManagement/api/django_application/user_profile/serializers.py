@@ -2,14 +2,15 @@ from rest_framework import serializers
 from .models import UserProfile
 import re
 from django.core.files.images import get_image_dimensions
+from user_management.serializers import DynamicHyperlinkedModelSerializer
 
-class UserProfileSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(DynamicHyperlinkedModelSerializer):
     
     nickname = serializers.CharField(allow_blank=True)
 
     class Meta:
         model = UserProfile
-        fields = ['user_id', 'nickname', 'avatar', 'online_status', 'intra_avatar', 'preferred_language']
+        fields = ['user_id', 'nickname', 'avatar', 'intra_avatar', 'preferred_language']
 
     def validate_nickname(self, value):
         if not re.match(r'^[a-zA-Z0-9-]+$', value) and not "" in value:
@@ -37,3 +38,4 @@ class UserProfileSerializer(serializers.ModelSerializer):
             width, height = get_image_dimensions(value)
             if width > max_width or height > max_height:
                 raise serializers.ValidationError("Image dimensions should not exceed 800x800 pixels.")
+

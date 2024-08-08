@@ -10,7 +10,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ChatComponent } from './pages/chat/chat.component';
 import { PrivateChatComponent } from './pages/private-chat/private-chat.component';
 import { UserComponent } from './pages/user/user.component';
-import { LocalMatchComponentComponent } from './local-match-component/local-match-component.component';
+import { PongGameComponent } from './pages/pong-game/pong-game.component';
 import { OAuthCallbackComponent } from './pages/oauth/oauth.component';
 import { ActivateAccountComponent } from './pages/activate-account/activate-account.component';
 import { ResetPasswordLinkComponent } from './pages/reset-password-link/reset-password-link.component';
@@ -34,8 +34,11 @@ export const routes: Routes = [
     { path: 'reset-password/:user_id_b64/:token',			component: ResetPasswordComponent},
     { path: 'change-email/:user_id_b64/:email_b64/:token',	component: ChangeEmailComponent, }, 
 
-   // { path: 'change-password', component: ChangePasswordComponent, canActivate: [userGuard]},
-    { path: 'match',					component: LocalMatchComponentComponent },
+    { path: 'change-email', component: ChangeEmailLinkComponent, canActivate: [userGuard]},
+    { path: 'change-password', component: ChangePasswordComponent, canActivate: [userGuard]},
+
+
+    { path: 'pong-match/:match_type/:match_id', component: PongGameComponent },
     {
         path: 'home',
         component: NavbarComponent,

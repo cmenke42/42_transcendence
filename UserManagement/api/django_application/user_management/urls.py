@@ -6,6 +6,8 @@ from rest_framework.routers import DefaultRouter
 
 from users.urls import register_with_router as register_user_with_router
 from user_profile.urls import register_with_router as register_profile_with_router
+from tournament.urls import register_with_router as register_tournament_with_router
+from match.urls import register_with_router as register_match_with_router
 from user_management.oauth2 import FortyTwoIntraLogin, FortyTwoIntraLoginCallback
 from user_management.oauth2  import ExchangeCodeView
 from user_management.oauth2Google import GoogleLogin, GoogleLoginCallback
@@ -15,6 +17,8 @@ from user_management.utils import HealthCheckView
 router = DefaultRouter()
 register_user_with_router(router)
 register_profile_with_router(router)
+register_tournament_with_router(router)
+register_match_with_router(router)
 
 urlpatterns = [
     path('', RedirectView.as_view(url='/api/v1/')),
@@ -37,8 +41,6 @@ urlpatterns = [
             path('profile/', include('user_profile.urls')),
             path('avatar-proxy/', avatar_proxy, name='avatar_proxy'),
             path('healthcheck/', HealthCheckView, name='healthcheck'),
-            path('match/', include('match.urls')),
-            path('tournament/', include('tournament.urls')),
             ]
         )
     ),

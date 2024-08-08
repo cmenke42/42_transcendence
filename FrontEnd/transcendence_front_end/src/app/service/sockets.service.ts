@@ -1,10 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, Subscriber, timestamp } from 'rxjs';
-import player from '../local-match-component/game/entitiy/player';
 import { AuthService } from './auth.service';
-
-
 
 @Injectable({
   providedIn: 'root'

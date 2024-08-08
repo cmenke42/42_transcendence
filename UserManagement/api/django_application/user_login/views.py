@@ -13,6 +13,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
+from rest_framework_simplejwt.tokens import UntypedToken
+
+
 # class MyObtainTokenPairView(TokenObtainPairView):
 #     permission_classes = (AllowAny,)
 #     serializer_class = MyTokenObtainPairSerializer
