@@ -6,6 +6,7 @@ import { ActivatedRoute, RouterLinkActive, RouterModule } from '@angular/router'
 import { CommonModule } from '@angular/common';
 import { MatchMakingComponent } from "../match-making/match-making.component";
 import { MatchType } from '../../interface/remote-game.interface';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-lobby',
@@ -15,6 +16,7 @@ import { MatchType } from '../../interface/remote-game.interface';
     CommonModule,
     RouterModule,
     MatchMakingComponent,
+    FormsModule
 ],
   templateUrl: './lobby.component.html',
   styleUrl: './lobby.component.css'
@@ -25,6 +27,8 @@ export class LobbyComponent implements OnInit{
   oneVsOneMatches: any[] = []; // Populate this with your 1v1 matches
   tournamentMatches: any[] = [];
   tournamentList: any[] = [];
+  isModalOpen: boolean = false;
+  maxPlayers: number = 8;
 
   userService = inject(UserService);
   user_data : UserProfile | null = null;
@@ -41,8 +45,8 @@ export class LobbyComponent implements OnInit{
       this.matchDetails(this.user_data!);
     });
 
-    // this.showTournament();
-    this.getUserTournamentStatus();
+    this.showTournament();
+    // this.getUserTournamentStatus();
    
   }
 
@@ -54,7 +58,7 @@ export class LobbyComponent implements OnInit{
         next: (data: any) => {
           // if (data && data.matches && Array.isArray(data.matches))
             this.oneVsOneMatches = data;
-          console.log('match details data...', data);
+            console.log('match details data to show...', data);
             // this.matchData(user_data, data.matches);
           // else
           //   this.oneVsOneMatches = [];
@@ -73,17 +77,18 @@ export class LobbyComponent implements OnInit{
     alert('Game start with id: ' + id);
   }
 
-  createTournament()
+  createTournament(maxPlayers : number)
   {
-    this.userService.createTournament().subscribe({
+    this.userService.createTournament(maxPlayers).subscribe({
       next: (data: any) => {
-        console.log('create tournament data...', data);
+        alert("Tournament created successfully...")
         this.ngOnInit();
       },
       error: (err: any) => {
         console.log('error from create tournament...', err);
       }
     });
+    this.closeModal();
   }
 
   showTournament()
@@ -91,6 +96,7 @@ export class LobbyComponent implements OnInit{
     this.userService.showTournament().subscribe({
       next: (data: any) => {
         this.tournamentList = data;
+        console.log('show tournament data...', data);
       },
       error: (err: any) => {
         console.log('error from show tournament...', err);
@@ -98,28 +104,18 @@ export class LobbyComponent implements OnInit{
     });
   }
 
-  getUserTournamentStatus()
-  {
-    this.userService.UserTournamentStatus().subscribe({
-      next: (data: any) => {
-        this.tournamentList = data;
-        console.log('user tournament status...', data);
-      },
-      error: (err: any) => {
-        console.log('error from user tournament status...', err);
-      }
-    });
-  }
+
 
   joinTournament(id: number)
   {
     this.userService.joinTournament(id).subscribe({
       next: (data: any) => {
-        alert(data.message);
+        alert(data.detail);
         console.log('join tournament data...', data);
         this.ngOnInit();
       },
       error: (err: any) => {
+        alert(err.error.detail)
         console.log('error from join tournament...', err);
       }
     });
@@ -129,7 +125,7 @@ export class LobbyComponent implements OnInit{
   {
     this.userService.leaveTournament(id).subscribe({
       next: (data: any) => {
-        alert(data.message);
+        alert(data.detail);
         console.log('leave tournament data...', data);
         this.ngOnInit();
       },
@@ -143,7 +139,7 @@ export class LobbyComponent implements OnInit{
   {
     this.userService.startTournament(id).subscribe({
       next: (data: any) => {
-        alert(data.message);
+        alert(data.detail);
         this.ngOnInit();
         console.log('start tournament data...', data);
       },
@@ -153,19 +149,15 @@ export class LobbyComponent implements OnInit{
     });
   }
 
-  viewMatches(id: number)
+  openModal()
   {
-    this.userService.checkTournamentMatches(id).subscribe({
-      next: (data: any) => {
-        this.brackets = data;
-        console.log('tournament matches data...', this.brackets);
-      },
-      error: (err: any) => {
-        console.log('error from tournament matches...', err);
-      }
-    });
+    this.isModalOpen = true;
+  
   }
-
+  closeModal()
+  {
+    this.isModalOpen = false;
+  }
   getUser()
   {
     this.userService.getterProfile().subscribe({
@@ -178,9 +170,4 @@ export class LobbyComponent implements OnInit{
     });
   }
 
- /*  matchData(user_data: UserProfile, match_detail: any)
-  {
-    console.log('joining the data of ', user_data, ' and ', match_detail)
-  }
- */
 }

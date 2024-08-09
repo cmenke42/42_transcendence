@@ -291,9 +291,7 @@ EMAIL_CHANGE_TIMEOUT_SECONDS = 60 * 30 # 30 minutes
 # --------------------Channels things---------------------------:
 ASGI_APPLICATION = 'user_management.routing.application'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0:8000',
-                 'localhost:6010', 'api', 'localhost:4010',
-                 'https://localhost:6010', 'https://localhost:4010']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0:8000']
 
 CHANNEL_LAYERS = {
     # 'default': {

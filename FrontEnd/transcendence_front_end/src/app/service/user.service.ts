@@ -230,24 +230,25 @@ export class UserService {
   {
     return this.http.get(`${this.auth_url}users/game/invitation/?user_id=${id}`);
   }
-
+  
   // Match 1v1
   match1v1List(user_id: number) : Observable<any>
   {
-    return this.http.get(`${this.auth_url}match/list/?user_id=${user_id}`);
+    return this.http.get(`${this.auth_url}matches/?player_id=${user_id}` );
+    // return this.http.get(`${this.auth_url}match/list/?user_id=${user_id}`);
   }
 
   //Tournament
   // Create Tournament
-  createTournament() : Observable<any>
+  createTournament(maxPlayers: number) : Observable<any>
   {
-    return this.http.post(`${this.auth_url}tournament/create/`, {});
+    return this.http.post(`${this.auth_url}tournaments/`, {max_players: maxPlayers});
   }
 
   // show Tournament
   showTournament() : Observable<any>
   {
-    return this.http.get(`${this.auth_url}tournament/list/`);
+    return this.http.get(`${this.auth_url}tournaments/`);
   }
 
   UserTournamentStatus() : Observable<any> //Test this one
@@ -258,65 +259,31 @@ export class UserService {
   // join Tournament
   joinTournament(id: number) : Observable<any>
   {
-    return this.http.post(`${this.auth_url}tournament/join/${id}/`, {});
+    return this.http.post(`${this.auth_url}tournaments/${id}/join/`, {});
   }
 
   // leave Tournament
   leaveTournament(id: number) : Observable<any>
   {
-    return this.http.delete(`${this.auth_url}tournament/leave/${id}/`);
+    return this.http.delete(`${this.auth_url}tournaments/${id}/leave/`);
   }
 
   // Tournament Start
   startTournament(id: number) : Observable<any>
   {
-    return this.http.post(`${this.auth_url}tournament/start/${id}/`, {});
+    return this.http.post(`${this.auth_url}tournaments/${id}/start/`, {});
   }
 
   //check the matches of the tournament
   checkTournamentMatches(id: number) : Observable<any>
   {
-    return this.http.get(`${this.auth_url}tournament/matches/${id}/`);
-  }
-
-  matchScore(tournament_detail: match): Observable<any> {
-    return this.http.post(
-      `${this.auth_url}tournament/matches/result/${tournament_detail.match_id}/`,
-      { 
-        player1_score: tournament_detail.player1_Score, 
-        player2_score: tournament_detail.player2_Score 
-      }
-    ).pipe(
-      tap(response => console.log('matchScore', response)),
-      switchMap((response: any) => {
-        if (response.round_completed) {
-          return this.advancedToNextRound(tournament_detail.tournament_id).pipe(
-            tap((advanceResponse: any) => {
-              if (advanceResponse.tournament_completed) {
-                alert(`Tournament completed! Winner: ${advanceResponse.winner}`);
-              }
-            })
-          );
-        } else {
-          return of(response);
-        }
-      }),
-      catchError(error => {
-        console.log('error', error);
-        throw error;
-      })
-    );
-  }
-
-  private advancedToNextRound(tournament_id: number) : Observable<any>
-  {
-    return this.http.post(`${this.auth_url}tournament/advance/${tournament_id}/`, {});
+    return this.http.get(`${this.auth_url}tournaments/${id}/matches/`);
   }
 
   // fetch the players in the tournament
   fetchTournamentPlayers(id: number) : Observable<any>
   {
-    return this.http.get(`${this.auth_url}tournament/players/${id}/`);
+    return this.http.get(`${this.auth_url}tournaments/${id}/participants/`);
   }
 
 }

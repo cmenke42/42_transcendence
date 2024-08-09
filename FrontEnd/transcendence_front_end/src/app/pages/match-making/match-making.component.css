@@ -1,62 +1,130 @@
-/* Container for the entire content */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
+:host {
+  opacity: 0.7;
+  display: block;
   padding: 20px;
 }
 
-/* Tournament Bracket Styles */
-.tournament-bracket {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  overflow-x: auto;
-  padding: 20px 0;
-  margin-bottom: 30px;
+.container-fluid {
+  padding: 20px;
 }
 
-.tournament-bracket__round {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+.tournament-rounds, .chat-section {
+  background-color: #1e1e1e;
+  border: 2px solid #3f3f3f;
+  border-radius: 10px;
+  padding: 20px;
+  height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.participants-list {
+  background-color: #1e1e1e;
+  border: 2px solid #3f3f3f;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.participants-list h3, .chat-section h3 {
+  color: #ededed;
+  margin-bottom: 15px;
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #3f3f3f;
+}
+
+.list-group-item {
+  background-color: #2d2d2d;
+  color: #ededed;
+  border-color: #3f3f3f;
+}
+
+.round {
+  flex: 1;
   min-width: 200px;
-  margin-right: 20px;
+  border-bottom: 1px solid #3f3f3f;
+  padding: 0 15px;
 }
 
-.tournament-bracket__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.round:last-child {
+  border-bottom: none;
 }
 
-.tournament-bracket__item {
-  margin: 10px 0;
-  position: relative;
+h3 {
+  color: #ededed;
+  margin-bottom: 15px;
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #3f3f3f;
 }
 
-.tournament-bracket__match {
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  padding: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.match {
+  border: 1px solid #3f3f3f;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 15px;
+  background-color: #2d2d2d;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Chat Section Styles */
-.chat-section {
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  padding: 20px;
-  margin-top: 30px;
+.match .d-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.match span {
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  min-height: 30px;
+}
+
+.vs {
+  color: #fdfdfd;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.winner {
+  color: #03dac6;
+  font-weight: bold;
+}
+
+.trophy {
+  margin-left: 5px;
+  font-size: 16px;
+}
+
+.tbd {
+  color: #888888;
+  font-style: italic;
+}
+
+.btn-outline-primary {
+  color: #03dac6;
+  border-color: #03dac6;
+  background-color: transparent;
+  margin-top: 10px;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+  color: #000;
+  background-color: #03dac6;
 }
 
 .chat-box {
-  height: 300px;
+  height: calc(100% - 150px);
   overflow-y: auto;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   padding: 10px;
   margin-bottom: 15px;
-  
 }
 
 .chat-input {
@@ -68,14 +136,13 @@
   margin-right: 10px;
 }
 
-/* Updated and new styles for chat messages */
 .chat-message, .system-message {
   margin-bottom: 10px;
   padding: 8px 12px;
   border-radius: 18px;
   max-width: 80%;
   clear: both;
-  display: block; /* Ensure each message is a block element */
+  display: block;
 }
 
 .system-message {
@@ -84,36 +151,33 @@
 }
 
 .join-message {
-  background-color: white;
-  color: #6c757d; /* Gray text color */
+  background-color: #ffffff;
+  color: #100000;
   padding: 5px 10px;
-  border-radius: 15px;
+  border-radius: 15px;    
   display: inline-block;
   margin: 0 auto;
 }
 
 .user-message {
-  background-color: #007bff; /* Blue background for user messages */
+  background-color: #007bff;
   color: white;
-  display: block; /* Ensure each message is a block element */
+  display: block;
   margin-bottom: 10px;
 }
 
-/* Optional: Style for the current user's messages */
 .user-message.current-user {
-  background-color: #28a745; /* Green background for current user's messages */
+  background-color: #28a745;
 }
 
-/* Responsive styles */
 @media (max-width: 768px) {
-  .tournament-bracket {
-    flex-direction: column;
+  .tournament-rounds, .chat-section {
+    height: auto;
+    margin-bottom: 20px;
   }
 
-  .tournament-bracket__round {
-    width: 100%;
-    margin-right: 0;
-    margin-bottom: 20px;
+  .chat-box {
+    height: 300px;
   }
 
   .chat-input {

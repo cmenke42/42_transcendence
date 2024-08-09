@@ -52,22 +52,7 @@ class UserProfile(models.Model):
     )#TODO: add validation mechanism to check extension and no malicious content
     
     intra_avatar = models.URLField(verbose_name="intra_avatar",null = True, blank=True)
-   
-    
-    ONLINE_STATUS_CHOICES = {
-        "ON": "Online",
-        "OF": "Offline",
-        "IA": "Inactive",
-        "GA": "Playing",
-    }
 
-    online_status = models.CharField(
-        verbose_name="online status",
-        help_text="Text describing the current user activity",
-        choices=ONLINE_STATUS_CHOICES,
-        max_length=2,
-        default="OF",
-    )    
     LANGUAGE_CHOICES = (
         ('en', 'English'),
         ('ru', 'Russian'),
@@ -95,8 +80,6 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return str(self.nickname)
-    
-
 
 # class UserProfile(models.Model):
 #     person = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='userprofile', primary_key=True)

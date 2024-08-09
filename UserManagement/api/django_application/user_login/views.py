@@ -1,21 +1,17 @@
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.permissions import AllowAny
-from .serializers import MyTokenObtainPairSerializer
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from users.models import CustomUser
-from .serializers import  OTPVerifySerializer
-from rest_framework_simplejwt.tokens import RefreshToken
-from user_login.otp_service import OTPService
 import logging
 
+from rest_framework import status
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
+from user_login.otp_service import OTPService
+from users.models import CustomUser
+
+from .serializers import MyTokenObtainPairSerializer, OTPVerifySerializer
+
 logger = logging.getLogger(__name__)
-
-
-from rest_framework_simplejwt.tokens import UntypedToken
-
 
 # class MyObtainTokenPairView(TokenObtainPairView):
 #     permission_classes = (AllowAny,)

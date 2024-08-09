@@ -5,6 +5,8 @@ import { NgbAccordionBody, NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap
 import { NgbOffcanvasPanel } from '@ng-bootstrap/ng-bootstrap/offcanvas/offcanvas-panel';
 import { CommonModule } from '@angular/common';
 import { NgxChartsModule, ScaleType, Color } from '@swimlane/ngx-charts';
+import { match } from '../../interface/match';
+import { UserProfile } from '../../interface/user-profile';
 
 @Component({
   selector: 'app-user',
@@ -26,7 +28,7 @@ export class UserComponent implements OnInit{
   userService = inject(UserService);
 
   user_id: number = this.userId;
-  User: any = null;
+  User: UserProfile | null = null;
   match_details : any = null;
 
   winLossData: any[] = [];
@@ -51,7 +53,7 @@ export class UserComponent implements OnInit{
   {
     console.log("User component is loaded...", this.userId)
     this.userInfo();
-    this.matchDetail();
+    // this.matchDetail();
   }
 
   @HostListener('window:resize')
@@ -68,18 +70,14 @@ export class UserComponent implements OnInit{
 
   calculateWinLoss(match_details: any[])
   {
-    let win = 0;
-    let loss = 0;
-    let draw = 0;
-   
-      match_details.forEach((element : any) => {
-      if (element.user_score > element.opponent_score)
-        win++;
-      else if (element.user_score < element.opponent_score)
-        loss++;
-      else
-        draw++;
-    });
+    const win = match_details.reduce((count, match) => {
+      const isPlayer1 = match.player_1.user_id === this.user_id || match.player_1.user_id === this.userId;
+      const playerScore = isPlayer1 ? match.player_1_score : match.player_2_score;
+      const opponentScore = isPlayer1 ? match.player_2_score : match.player_1_score;
+      return count + (playerScore > opponentScore ? 1 : 0);
+    }, 0);
+    
+    const loss = match_details.length - win;
 
     if(win < 5)
       this.UserTitle = "Beginner";
@@ -96,30 +94,41 @@ export class UserComponent implements OnInit{
     this.calculatePerformance(match_details);
   }
 
-  calculateScore(match_details: any[])
-  {
-    this.scoreData = match_details.map(match => ({
-      name: `Match ${match.id}`,
-      series: [
-        {name: 'User Score', value: match.user_score},
-        {name: 'Opponent Score', value: match.opponent_score}
-      ]
-    }))
+  calculateScore(match_details: any[]): void {
+    this.scoreData = match_details.map(match => {
+      const isPlayer1 = match.player_1.user_id === this.user_id || match.player_1.user_id === this.userId;
+      const userScore = isPlayer1 ? match.player_1_score : match.player_2_score;
+      const opponentScore = isPlayer1 ? match.player_2_score : match.player_1_score;
+  
+      return {
+        name: `Match ${match.id}`,
+        series: [
+          { name: 'User Score', value: userScore },
+          { name: 'Opponent Score', value: opponentScore }
+        ]
+      };
+    });
   }
+  
 
   calculatePerformance(match_details: any[])
   {
     this.performanceData = [
       {
         name: 'User Performance',
-        series: match_details.map(match => ({
-          name: new Date(match.finished_data).toLocaleDateString(),
-          value: match.user_score
-        }))
+        series: match_details.map(match => {
+          const isPlayer1 = match.player_1.user_id === this.user_id || match.player_1.user_id === this.userId;
+          const userScore = isPlayer1 ? match.player_1_score : match.player_2_score;
+          console.log("User Score: ", userScore);
+          return {
+            name: new Date(match.end_time).toLocaleDateString(),
+            value: userScore
+          }
+        })
       }
     ]
   }
-
+  
   userInfo()
   {
     this.router.params.subscribe(params => {
@@ -135,13 +144,15 @@ export class UserComponent implements OnInit{
         console.log("user component error...", error);
       }
     });
+    this.matchDetail(this.user_id);
   }
 
 
-  matchDetail()
+  matchDetail(user_id: number)
   {
-    this.userService.match1v1List(this.user_id).subscribe({
+    this.userService.match1v1List(user_id).subscribe({
       next: (match) => {
+        console.log("match details...", match);
         this.match_details = match;
         this.calculateWinLoss(this.match_details);
         console.log("data from match detail", this.match_details);
@@ -162,6 +173,7 @@ export class UserComponent implements OnInit{
     this.userService.showTournament().subscribe({
       next: (data: any) => {
         this.tournamentList = data;
+        console.log('show tournament data...', data);
         this.showTournamentPopup = true;
       },
       error: (err: any) => {

@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    wsEndpoint: 'ws://localhost:8000/ws/',
+    wsEndpoint: 'wss://localhost:6010/ws/',
     remoteGameReconnectAttempts: 3,
     remoteGameReconnectIntervalMilliseconds: 12000, //Try reconnecting after timeout from backend
 };

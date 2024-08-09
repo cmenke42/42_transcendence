@@ -35,6 +35,7 @@
 # Docker and secrets
 **/secrets/*
 .env
+**/ssl/certs*
 
 # Visual Studio Code
 .vscode/*

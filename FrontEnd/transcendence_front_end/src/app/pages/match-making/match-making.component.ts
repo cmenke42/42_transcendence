@@ -32,22 +32,25 @@ export class MatchMakingComponent implements OnInit, OnDestroy {
   router = inject(ActivatedRoute);
 
   webSocket = inject(SocketsService);
-  brackets: any[][] = []; // 2D array to represent the brackets
+  
 
 
-  selectMatch: any = null;
-  tournamentStatus: string = '';
-  tournamentWinner: string | null = null;
-  isChatOpen: boolean = false;
+  // selectMatch: any = null;
+  // tournamentStatus: string = '';
+  // tournamentWinner: string | null = null;
+  // // isChatOpen: boolean = false;
+  
+  // isOpen: boolean = false;
+  MatchType = MatchType;
+  playerInfo: any = null;
+  showPlayerInfo: boolean = false;
+  private subscription: Subscription | null = null;
+  user: UserProfile | any = {};
   messages: any[] = [];
   message: string = '';
   tournament_matches: match | any = {};
-  user: UserProfile | any = {};
-  private subscription: Subscription | null = null;
-  isOpen: boolean = false;
-  playerInfo: any = null;
-
-  MatchType = MatchType;
+  // matches_round : {[key: number]: match[]} = {};
+  matchesByRound: Map<number, match[]> = new Map();
 
   constructor() {
 
@@ -69,12 +72,24 @@ export class MatchMakingComponent implements OnInit, OnDestroy {
       this.messages.push(message);
       console.log('Received message:', message);
     });
-    this.fetchPlayerInfo();
+    // this.fetchPlayerInfo();
   }
 
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
     this.webSocket.close();
+  }
+
+
+  togglePlayerInfo()
+  {
+    this.showPlayerInfo = !this.showPlayerInfo;
+  }
+
+
+  playMatch()
+  {
+    alert('Match started');
   }
   
   fetchPlayerInfo()
@@ -91,78 +106,40 @@ export class MatchMakingComponent implements OnInit, OnDestroy {
   
   }
 
-sendUpcomingMatchesInfo() {
-  const upcomingMatches = this.getUpcomingMatches();
-  const byeMatches = this.getByeMatches();
 
-  if (upcomingMatches.length > 0 || byeMatches.length > 0) {
-    const messageObj = {
-      type: 'system',
-      message: 'Match Information:',
-      upcomingMatches: upcomingMatches,
-      byeMatches: byeMatches
-    };
-    this.webSocket.sendMessage(messageObj);
-  }
-}
-
- 
-sendBracketInfo()
-{
-  let bracketInfo = "Tournament info: \n";
-
-  this.brackets.forEach((stage, stageIndex) => {
-    bracketInfo += `\nRound ${stageIndex + 1}:\n`;
-    stage.forEach(match => {
-      bracketInfo += `Match ${match.id}: ${match.player1 || 'Bye'} vs ${match.player2 || 'Bye'}\n`;
-      if (match.is_played) {
-        bracketInfo += ` - Winner: ${match.winner || 'Not determined'}\n`;
-      }
-      bracketInfo += '\n';
-    })
-  })
-
-  const messageObj = {
-    type: 'system',
-    message: bracketInfo
-  };
-  this.webSocket.sendMessage(messageObj);
-}
-
-
-getUpcomingMatches(): any[] {
-  const upcomingMatches = [];
-  for (const stage of this.brackets) {
-    for (const match of stage) {
-      if (!match.is_played && match.player1 && match.player2) {
-        upcomingMatches.push({
-          id: match.id,
-          player1: match.player1,
-          player2: match.player2
-        });
-      }
-    }
-    if (upcomingMatches.length > 0) break;
-  }
-  return upcomingMatches;
-}
-
-getByeMatches(): any[] {
-  const byeMatches = [];
-  for (const stage of this.brackets) {
-    for (const match of stage) {
+sendMatchInfoToChat() {
+  this.matchesByRound.forEach((matches, round) => {
+    matches.forEach(match => {
+      let messageText = `Round ${round + 1}, Match ${match.id}: `;
+      
       if (match.is_bye) {
-        byeMatches.push({
-          id: match.id,
-          player1: match.player1,
-          player2: 'Bye',
-          winner: match.player1
-        });
+        messageText += `${match.player_1?.nickname || 'Player'} received a bye.`;
+      } else if (match.is_played) {
+        const player1Name = match.player_1?.nickname || 'Player 1';
+        const player2Name = match.player_2?.nickname || 'Player 2';
+        messageText += `${player1Name} vs ${player2Name} - `;
+        if (match.winner) {
+          messageText += `Winner: ${match.winner.nickname}`;
+        } else {
+          messageText += `Result: ${match.player_1_score} - ${match.player_2_score}`;
+        }
+      } else {
+        const player1Name = match.player_1?.nickname || 'TBD';
+        const player2Name = match.player_2?.nickname || 'TBD';
+        messageText += `${player1Name} vs ${player2Name}`;
       }
-    }
-  }
-  return byeMatches;
+
+      const messageObj = {
+        type: 'match_info',
+        message: messageText
+      };
+
+      this.webSocket.sendMessage(messageObj);
+    });
+  });
 }
+
+
 
 
  
@@ -183,64 +160,29 @@ viewMatches(id: number) {
     this.userService.checkTournamentMatches(id).subscribe({
       next: (data: any) => {
         // this.brackets = data;
-        this.tournament_matches.tournament_id = id;
-        this.tournamentStatus = data.status;
-        this.tournamentWinner = data.winner;
-        this.brackets = this.formatMatches(data.matches);
-        console.log('tournament matches data...', this.brackets);
-        //send initial bracket info
-        this.sendBracketInfo();
+        this.tournament_matches = data;
+        console.log('tournament matches data...', this.tournament_matches);
+        this.organizeMatches();
       },
       error: (err: any) => {
         console.log('error from tournament matches...', err);
       }
     });
+    this.fetchPlayerInfo();
   }
 
-  formatMatches(data: any): any[][] {
-    const stages = [];
-    let matchesPerStage = Math.pow(2, Math.floor(Math.log2(data.length)));
-  
-    while (matchesPerStage >= 1) {
-      const currentStage = [];
-      for (let i = 0; i < matchesPerStage && data.length > 0; i++) {
-        const match = data.shift();
-        if (match) {
-          currentStage.push({
-            ...match,
-            winner: match.is_bye ? match.player1 : 
-                    (match.is_played ? 
-                      (match.player1Score > match.player2Score ? match.player1 : match.player2) 
-                      : null)
-          });
-        }
+  organizeMatches() {
+    this.matchesByRound = new Map();
+    for (const match of this.tournament_matches) {
+      if (!this.matchesByRound.has(match.tree_level)) {
+        this.matchesByRound.set(match.tree_level, []);
       }
-      stages.push(currentStage);
-      matchesPerStage = Math.floor(matchesPerStage / 2);
+      this.matchesByRound.get(match.tree_level)?.push(match);
     }
-  
-    return stages;
-  }
-  
-
-
-  
-  submitScore(id: number, player1Score: number, player2Score: number) 
-  {
-    this.tournament_matches.match_id = id;
-    this.tournament_matches.player1_Score = player1Score;
-    this.tournament_matches.player2_Score = player2Score;
-    console.log('tournament match data...', this.tournament_matches);
-    this.userService.matchScore(this.tournament_matches).subscribe({
-    next: (response: any) => {
-        alert('Score submitted successfully');
-        this.viewMatches(this.tournament_matches.tournament_id);
-        this.sendBracketInfo();
-    },
-    error: (err: any) => {
-        console.log('error from submit score...', err);
-    }
-    });
+    console.log('matchesByRound', this.matchesByRound);
+    this.sendMatchInfoToChat();
   }
 }
+
+ 
 

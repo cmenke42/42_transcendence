@@ -11,15 +11,20 @@
 		  <hr>
 		  <button class="btn btn-outline-primary me-2" (click)="showTournament()">Tournament History</button>
 		</div>
+		@if (match_details)
+		{
 		<div class="card-body">
 		  <h5 class="mb-3 text-center">Match History</h5>
+		 
+
+		  
 		  <div class="table-responsive">
 			<table class="table table-striped table-hover">
 			  <thead class="thead-light">
 				<tr>
 				  <th>Date</th>
-				  <th>Opponent</th>
 				  <th>Result</th>
+				  <th>Opponent</th>
 				  <th>Score</th>
 				</tr>
 			  </thead>
@@ -27,14 +32,23 @@
 				@for(match of match_details; track user_id) {
 				  @if (match.is_played === true) {
 					<tr>
-					  <td>{{ match.finished_data | date:'MMM d, y, h:mm a' }}</td>
-					  <td>{{match.opponent_username}}</td>
-					  @if(match.user_score > match.opponent_score) {
-						<td><span class="badge bg-success">Win</span></td> 
-					  } @else {
-						<td><span class="badge bg-danger">Loss</span></td> 
+					  <td>{{ match.end_time | date:'MMM d, y, h:mm a' }}</td>
+					  <td> {{match.winner.nickname}} </td>
+					  @if (match.player_1.user_id === user_id || match.player_1.user_id === userId)
+					  {
+						  <td>{{match.player_2.nickname}}</td>
+						  <td> {{match.player_2_score}} - {{match.player_1_score}} </td>
 					  }
-					  <td>{{match.user_score}} - {{match.opponent_score}}</td>
+					  @else 
+					  {
+						  <td>{{match.player_1.nickname}}</td>
+						  <td> {{match.player_1_score}} - {{match.player_2_score}} </td>
+					  }
+					  <!-- @if (match.player_1.user_id === user_id || match.player_1.user_id === userId)
+					  {
+						  <td>{{match.player_2.nickname}}</td>
+					  }
+					  <td>{{match.user_score}} - {{match.opponent_score}}</td> -->
 					</tr>
 				  } 
 				}
@@ -96,12 +110,14 @@
 			}
 		  </div>
 		</div>
-	  } @else {
-		<div class="card-header bg-primary text-white text-center">
-		  <h3 class="mb-0">No User profile....</h3>
-		</div>
-	  }
+	  } 
+	}
+	@else 
+	{
+	  <p>No matches found.</p>
+	}
 	</div>
+	
   </div>
   
   <div class="tournament-popup" [ngClass]="{'show': showTournamentPopup}">
@@ -111,7 +127,7 @@
 		<button type="button" class="close" (click)="closeTournamentPopup()">&times;</button>
 	  </div>
 	  @if (tournamentList.length > 0) {
-		<table class="table table-striped">
+		<table class="table table-striped text-center">
 		  <thead>
 			<tr>
 			  <th>Date</th>
@@ -124,17 +140,28 @@
 		  <tbody>
 			@for (tournament of tournamentList; track tournament.id) {
 			  <tr>
-				<td>{{tournament.created_date | date:'MMM d, y, h:mm a'}}</td>
+				<td>{{tournament.date_of_creation | date:'MMM d, y, h:mm a'}}</td>
 				<td>{{tournament.max_players}}</td>
-				<td>{{tournament.tournament_status}}</td>
-				<td>{{tournament.winner_id || 'N/A'}}</td>
-				@if(User)
+				<td>{{tournament.status_display}}</td>
+				@if (tournament.winner)
 				{
-					<td>
-						<a class="btn btn-outline-primary btn-sm" [routerLink]="['/home/matchmaking', tournament.id, User.nickname]">View</a>
-						</td>
+					<td>{{tournament.winner.nickname}}</td>
+					
 				}
-							  
+				@else 
+				{
+					<td>N/A</td>
+				}
+				<td>
+				@if(User && tournament.status_display !== 'created' )
+				{
+					<a class="btn btn-outline-primary btn-sm" [routerLink]="['/home/matchmaking', tournament.id, User.nickname]">View</a>
+				}
+				@else 
+				{
+					<p>Not available</p>
+				}
+				</td>			  
 			</tr>
 			}
 		  </tbody>
