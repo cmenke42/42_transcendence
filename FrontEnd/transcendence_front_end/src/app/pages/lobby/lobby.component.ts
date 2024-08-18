@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { MatchMakingComponent } from "../match-making/match-making.component";
 import { MatchType } from '../../interface/remote-game.interface';
 import { FormsModule } from '@angular/forms';
+import { PopupMessageService } from '../../service/popup-message.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-lobby',
@@ -16,13 +18,19 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     RouterModule,
     MatchMakingComponent,
-    FormsModule
+    FormsModule,
+    TranslateModule,
 ],
   templateUrl: './lobby.component.html',
   styleUrl: './lobby.component.css'
 })
 export class LobbyComponent implements OnInit{
-
+  constructor(
+    private popupMessageService: PopupMessageService,
+    private translate: TranslateService) {
+      const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+      this.translate.use(preferredLanguage); 
+    }
   active = 1;
   oneVsOneMatches: any[] = []; // Populate this with your 1v1 matches
   tournamentMatches: any[] = [];
@@ -74,14 +82,16 @@ export class LobbyComponent implements OnInit{
 
   GameStart(id: number)
   {
-    alert('Game start with id: ' + id);
+    //alert('Game start with id: ' + id);
+    this.popupMessageService.showMessage(('Game start with id: ' + id), 'info');
   }
 
   createTournament(maxPlayers : number)
   {
     this.userService.createTournament(maxPlayers).subscribe({
       next: (data: any) => {
-        alert("Tournament created successfully...")
+        this.popupMessageService.showMessage('Tournament created successfully...', 'success');
+        //alert("Tournament created successfully...")
         this.ngOnInit();
       },
       error: (err: any) => {
@@ -110,12 +120,14 @@ export class LobbyComponent implements OnInit{
   {
     this.userService.joinTournament(id).subscribe({
       next: (data: any) => {
-        alert(data.detail);
+        //alert(data.detail);
+        this.popupMessageService.showMessage(data.detail, 'info');
         console.log('join tournament data...', data);
         this.ngOnInit();
       },
       error: (err: any) => {
-        alert(err.error.detail)
+        this.popupMessageService.showMessage(err.error.detail, 'error');
+        //alert(err.error.detail)
         console.log('error from join tournament...', err);
       }
     });
@@ -125,7 +137,8 @@ export class LobbyComponent implements OnInit{
   {
     this.userService.leaveTournament(id).subscribe({
       next: (data: any) => {
-        alert(data.detail);
+        //alert(data.detail);
+        this.popupMessageService.showMessage(data.detail, 'info');
         console.log('leave tournament data...', data);
         this.ngOnInit();
       },
@@ -139,7 +152,8 @@ export class LobbyComponent implements OnInit{
   {
     this.userService.startTournament(id).subscribe({
       next: (data: any) => {
-        alert(data.detail);
+        //alert(data.detail);
+        this.popupMessageService.showMessage(data.detail, 'info');
         this.ngOnInit();
         console.log('start tournament data...', data);
       },

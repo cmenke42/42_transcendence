@@ -150,7 +150,8 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
       },
       error: (err : any) => {
         console.log("Error checking game invite", err);
-        alert(this.user_id);
+        this.popupMessageService.showMessage(this.user_id.toString(), 'error');
+        //alert(this.user_id);
       }
     });
   }
@@ -213,17 +214,17 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
 
   gameInvite(receiver: number)
   {
-    this.popupMessageService.showMessage('Game invite sent to '+ receiver, 'success');
+    this.popupMessageService.showMessage('Game invite has been sent', 'success');
     this.userService.sendGameInvitation(receiver).subscribe(
         {
          next: () => {
-          alert("Game invite sent successfully");
           // this.ngOnInit();
           this.router.navigate(['/home/private_chat']);
         },
         error: (err : any) => {
           console.log("Error sending game invite", err);
-          alert("Error sending game invite");
+          this.popupMessageService.showMessage("Error sending game invite", 'error');
+          //alert("Error sending game invite");
         }
       });
   }
@@ -245,13 +246,16 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
       {
        next: (response: any) => {
         if (response.invitation)
-          alert("You have a game invitation from " + response.invitation.sender);
+          //alert("You have a game invitation from " + response.invitation.sender);
+          this.popupMessageService.showMessage("You have a game invitation from " + response.invitation.sender, 'info');
         else
-          alert("No game invitation");
+          //alert("No game invitation");
+          this.popupMessageService.showMessage("No game invitation", 'info');
       },
       error: (err : any) => {
         console.log("Error checking game invite", err);
-        alert("Error checking game invite");
+        this.popupMessageService.showMessage("Error checking game invite", 'error');
+        //alert("Error checking game invite");
       }
     });
   }
@@ -261,13 +265,15 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
     this.userService.InvitationResponse(id, status).subscribe(
       {
        next: () => {
-        alert("Game invite response sent successfully");
+        this.popupMessageService.showMessage("Game invite response sent successfully", 'success');
+        //alert("Game invite response sent successfully");
         // this.ngOnInit();
         this.router.navigate(['/home/private_chat']);
       },
       error: (err : any) => {
         console.log("Error sending game invite response", err);
-        alert("Error sending game invite response");
+        this.popupMessageService.showMessage("Error sending game invite response", 'error');
+        //alert("Error sending game invite response");
       }
     });
   }

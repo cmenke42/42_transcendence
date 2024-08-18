@@ -1,7 +1,7 @@
 <div class="popup-overlay" (click)="onClose()">
     <div class="popup-content" [ngClass]="type">
       <span class="close" (click)="onClose()">&times;</span>
-      <p>{{ message }}</p>
+      <div [innerHTML]="message"></div>
     </div>
   </div>
   

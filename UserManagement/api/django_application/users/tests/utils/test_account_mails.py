@@ -34,7 +34,7 @@ class SendAccountActivationEmailTest(SimpleTestCase):
         mock_urlsafe_base64_encode.assert_called_once_with(b'bytes_user_id')
         mock_make_token.assert_called_once_with(self.user)
 
-        expected_link = f"{settings.FRONTEND_URL}{reverse('user-activate')}encoded_user_id/token/"
+        expected_link = f"https://{settings.FRONTEND_URL}{reverse('user-activate')}encoded_user_id/token/"
         self.user.email_user.assert_called_once_with(
             subject="Pong - Account Activation",
             text_message_template_name='users/email/account_activate_mail.txt',

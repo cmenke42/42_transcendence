@@ -21,7 +21,7 @@ websocket_urlpatterns = [
     re_path(r'ws/game/(?P<room_name>\w+)/$', consumers.GameConsumer.as_asgi()),
     # re_path(r'^ws/general_chat/(?P<username>[\w-]+)/$', consumers.GeneralChatConsumer.as_asgi()),
 
-    re_path(r"^ws/pong-match/(?P<match_type>\w+)/(?P<match_id>\d+)/$", PongGameConsumer.as_asgi()),
+    re_path(r"^ws/home/pong-match/(?P<match_type>\w+)/(?P<match_id>\d+)/$", PongGameConsumer.as_asgi()),
 ]
 print("WebSocket Routes:", websocket_urlpatterns)
 

@@ -158,7 +158,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   saveProfileChanges() {
     if (this.user_profile) {
       const formData = new FormData();
-      formData.append('nickname', this.newNickname);
+      if(this.newNickname)
+        formData.append('nickname', this.newNickname);
       if (this.newAvatar) {
         formData.append('avatar', this.newAvatar, this.newAvatar.name);
       }

@@ -6,11 +6,13 @@ import { GameSceneService, gameStatusKeyToString } from './game/game-scene.servi
 import { RemoteGameService } from '../../service/remote-game.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IGameEndUpdate, MatchType } from '../../interface/remote-game.interface';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    TranslateModule
   ],
   selector: 'app-pong-game',
   templateUrl: './pong-game.component.html',
@@ -32,7 +34,11 @@ export class PongGameComponent implements OnInit, AfterViewInit {
     public remoteGameService: RemoteGameService,
     private _route: ActivatedRoute,
     private _router: Router,
+    private translate: TranslateService,
   ) {
+      const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+      this.translate.use(preferredLanguage); 
+
     effect(() => {
       const gameEndData = this.remoteGameService.gameEnd();
       if (gameEndData) {
@@ -105,7 +111,7 @@ export class PongGameComponent implements OnInit, AfterViewInit {
 
     if (this._match_type !== MatchType.LOCAL) {
       this.remoteGameService.connect({
-        urlPath: 'pong-match/' + this._match_type + '/' + this._match_id + '/'
+        urlPath: 'home/pong-match/' + this._match_type + '/' + this._match_id + '/'
       });
     }
   }
@@ -114,4 +120,8 @@ export class PongGameComponent implements OnInit, AfterViewInit {
     this._gameSceneService.stop();
     window.removeEventListener('keydown', this._handleKeyDownBound);
   }
+
+//   closeModal() {
+//     this.showGameOverModal = false;
+// }
 }

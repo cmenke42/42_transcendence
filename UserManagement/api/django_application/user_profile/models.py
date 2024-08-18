@@ -32,8 +32,8 @@ class UserProfile(models.Model):
                                     message="Only alphanumeric characters and -"
                                     ),
                                     MinLengthValidator(
-                                        8,
-                                        message="Nickname must be at least 8 characters long.",
+                                        5,
+                                        message="Nickname must be at least 5 characters long.",
                                     ),
                                 ],
     )
@@ -76,6 +76,7 @@ class UserProfile(models.Model):
     def save(self, *args, **kwargs):
         if not self.nickname:
             self.nickname = "nickname-{0}".format(self.user.id)
+        # self.full_clean()
         super().save(*args, **kwargs)
 
     def __str__(self):

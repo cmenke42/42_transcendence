@@ -1,45 +1,26 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
+
+<!-- To make background plain black 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
 </head>
-<body>
-	<div id='game' #gameContainer></div>
-</body>
-</html> -->
+<body style="background-color: #000; color: #fff;">
+ ---------------------------------->
 
-<!-- <div class="container-fluid game-container">
-	<div class="row">
-	  <div class="col-12">
-		<h2 class="game-title text-center mb-3">Pong Battle</h2>
-	  </div>
-	</div>
-	
-	<div class="row mb-3">
-	  <div class="col-6">
-		<div class="score player1">
-		  <span class="player-name">Player 1</span>
-		  <span class="score-value">{{ player1Score }}</span>
-		</div>
-	  </div>
-	  <div class="col-6">
-		<div class="score player2">
-		  <span class="player-name">Player 2</span>
-		  <span class="score-value">{{ player2Score }}</span>
-		</div>
-	  </div>
-	</div>
-	<button (click)="toggleGame()">{{ buttonText }}</button>
-	<div>
- -->
- 
 
- <div class="container game-container py-3">
+<div class="container game-container py-3">
 	<div class="row mb-3">
 	  <div class="col-12">
-		<h2 class="game-title text-center">Pong Battle</h2>
+		<h2 class="game-title text-center">{{ 'Pong Battle' | translate }}</h2>
 	  </div>
 	</div>
 	
@@ -47,18 +28,18 @@
 	  <div class="col-5">
 		<div class="card bg-primary text-white">
 		  <div class="card-body py-2">
-			<h5 class="card-title mb-0">Player 1</h5>
+			<h5 class="card-title mb-0">{{ 'Player 1' | translate }}</h5>
 			<p class="card-text score">{{ remoteGameService.gameState().score1 }}</p>
 		  </div>
 		</div>
 	  </div>
 	  <div class="col-2 d-flex align-items-center justify-content-center">
-		<h3 class="text-muted mb-0">VS</h3>
+		<h3 class="text-muted mb-0">{{ 'VS' | translate }}</h3>
 	  </div>
 	  <div class="col-5">
 		<div class="card bg-orange text-white">
 		  <div class="card-body py-2">
-			<h5 class="card-title mb-0">Player 2</h5>
+			<h5 class="card-title mb-0">{{ 'Player 2' | translate }}</h5>
 			<p class="card-text score">{{ remoteGameService.gameState().score2 }}</p>
 		  </div>
 		</div>
@@ -68,27 +49,28 @@
 	<div class="row">
 	  <div class="col-12 text-center">
 		<button class="btn" (click)="togglePauseResume()">
-		  {{ gameStatusButtonText }}
+		  {{ gameStatusButtonText | translate }}
 		</button>
 	  </div>
 	</div>
   </div>
   
-  
-<div class="game-box">
+  <div class="game-box">
 	<div id='game' #gameContainer></div>
-</div>
-
-<div class="modal" [ngClass]="{'show': showGameOverModal}">
+  </div>
+  
+  <div class="modal" [ngClass]="{'show': showGameOverModal}">
 	<div class="modal-content">
-		<h2>Game Over!</h2>
-		<p>{{ gameOverMessage }}</p>
+	  <h2>{{ 'Game Over!' | translate }}</h2>
+	  <p>{{ gameOverMessage | translate }}</p>
 	</div>
-</div>
-
-<!-- <button class="btn btn-outline-primary" (click)="startGame()" [disabled]="gameStatus === 'running'">
-	{{ gameStatus === 'paused' ? 'Resume' : 'Start' }} Game
+  </div>
+  
+  <!--
+  <button class="btn btn-outline-primary" (click)="startGame()" [disabled]="gameStatus === 'running'">
+	{{ (gameStatus === 'paused' ? 'Resume' : 'Start') | translate }} {{ 'Game' | translate }}
   </button>
   <button class="btn btn-outline-warning" (click)="pauseGame()" [disabled]="gameStatus !== 'running'">
-	Pause Game
-  </button> -->
+	{{ 'Pause Game' | translate }}
+  </button>
+  -->

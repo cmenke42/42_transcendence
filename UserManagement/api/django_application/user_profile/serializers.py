@@ -6,18 +6,18 @@ from user_management.serializers import DynamicHyperlinkedModelSerializer
 
 class UserProfileSerializer(DynamicHyperlinkedModelSerializer):
     
-    nickname = serializers.CharField(allow_blank=True)
+    # nickname = serializers.CharField(allow_blank=True)
 
     class Meta:
         model = UserProfile
         fields = ['user_id', 'nickname', 'avatar', 'intra_avatar', 'preferred_language']
 
-    def validate_nickname(self, value):
-        if not re.match(r'^[a-zA-Z0-9-]+$', value) and not "" in value:
-            raise serializers.ValidationError("Nickname can only contain alphanumeric characters.")
+    # def validate_nickname(self, value):
+    #     if not re.match(r'^[a-zA-Z0-9-]+$', value) and not "" in value:
+    #         raise serializers.ValidationError("Nickname can only contain alphanumeric characters.")
 
-        if UserProfile.objects.filter(nickname=value).exists() and (value != self.instance.nickname):
-            raise serializers.ValidationError("Nickname already exists.")
+    #     if UserProfile.objects.filter(nickname=value).exists() and (value != self.instance.nickname):
+    #         raise serializers.ValidationError("Nickname already exists.")
 
         
     def validate_avatar(self, value):

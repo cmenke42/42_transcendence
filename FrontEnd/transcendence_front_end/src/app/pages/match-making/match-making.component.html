@@ -53,7 +53,7 @@
                   @if (match.player_1 && match.player_2 && match.is_played === false) {
                     @if (user.nickname === match.player_1.nickname || user.nickname === match.player_2.nickname) {
 
-                      <button class="btn btn-outline-primary" [routerLink]="['/pong-match/', MatchType.TOURNAMENT ,match.id]">Play the Match</button>
+                      <button class="btn btn-outline-primary" [routerLink]="['/home/pong-match/', MatchType.TOURNAMENT ,match.id]">Play the Match</button>
                     }
                   }
                 </div>

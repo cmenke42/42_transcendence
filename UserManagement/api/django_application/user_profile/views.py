@@ -110,9 +110,6 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 			return Response({"error": "Intra user cannot change avatar."}, status=400)
 		elif request.data.get('avatar', None) is not None:
 			new_avatar = request.data.get('avatar', None)		
-		# TO DELETE	  
-		# if  request.data.get('online_status', None) is not None:
-		# 	return Response({"error": "You cannot update the online status."}, status=400)	
 
 		serializer = UserProfileSerializer(user_profile, data=request.data, partial=True)
 		if serializer.is_valid():

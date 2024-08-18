@@ -1,18 +1,27 @@
+HOST_IP := $(shell ip route get 1 | awk '{print $$7;exit}')
+#export HOST_IP
 
-all:
-	chmod +x UserManagement/nginx/entrypoint.sh && chmod +x ssl/generate_certificates.sh && chmod +x UserManagement/api/docker/init.sh
+all: set_permissions
+	echo "HOST_IP=$(HOST_IP)"
 	./UserManagement/nginx/entrypoint.sh
-	./UserManagement/api/docker/init.sh
 	./ssl/generate_certificates.sh
+	./UserManagement/api/docker/init.sh
+	./FrontEnd/docker/init.sh
 	$(MAKE) build
+
+set_permissions:
+	chmod +x UserManagement/nginx/entrypoint.sh \
+			 ssl/generate_certificates.sh \
+			 UserManagement/api/docker/init.sh \
+			 FrontEnd/docker/init.sh
 
 up:
 	echo "** Starting containers **"
-	docker-compose up
+	HOST_IP=$(HOST_IP) docker-compose up
 
 build:
 	echo "** Starting build **"
-	docker-compose up --build
+	HOST_IP=$(HOST_IP) docker-compose up --build
 	echo "** Build has been completed **"
 
 down:

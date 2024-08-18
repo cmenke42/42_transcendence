@@ -4,15 +4,15 @@ import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { User } from '../interface/user';
 import { BehaviorSubject, Observable, catchError, finalize, tap, throwError, of, switchMap } from 'rxjs';
+import { environment } from '../../environments/environment.development';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  //private apiUrl = 'http://localhost:8000/api/v1/';
-  private apiUrl = 'https://localhost:6010/api/v1/';
-  
+  private apiUrl = 'https://'+environment.Backend_IP+':6010/api/v1/';  
   private jwtHelper = new JwtHelperService();
   private accessToken: string | null = null;
   private refreshToken: string | null = null;

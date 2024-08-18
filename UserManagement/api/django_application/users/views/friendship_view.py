@@ -16,6 +16,14 @@ from rest_framework import viewsets
 # ====================================================================================================================
 
 class FriendViewSet(viewsets.ViewSet):
+	def list(self, request):
+	# Этот метод нужен для GET запросов к корневому URL друзей
+		return Response({"message": "List of friends"})
+
+	def retrieve(self, request, pk=None):
+		# Этот метод нужен для GET запросов к конкретному другу
+		return Response({"message": f"Details of friend {pk}"})
+	
 	@action(detail=False, methods=['get'])
 	def status(self, request):
 		user_id = request.user.id

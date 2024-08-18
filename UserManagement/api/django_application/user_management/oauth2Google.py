@@ -34,8 +34,9 @@ from user_management.settings import	GOOGLE_SCOPES, \
 				 						GOOGLE_TOKEN_URI , \
 										API_42_FRONTEND_CALLBACK_URL , \
 										EXCAHNGE_CODE_TIMEOUT, \
-              							GOOGLE_USER_INFO_URI, \
-										GOOGLE_REDIRECT_URI \
+			  							GOOGLE_USER_INFO_URI, \
+										GOOGLE_REDIRECT_URI ,\
+										BACKEND_IP \
 
 
 
@@ -107,7 +108,6 @@ def GoogleLogin(request):
 @require_http_methods(["GET"])
 @permission_classes([AllowAny])
 def GoogleLoginCallback(request):
-
 	code = request.GET.get('code')
 	encrypted_state = request.GET.get('state')
 
@@ -118,7 +118,7 @@ def GoogleLoginCallback(request):
 	 
 	print('get_env_or_file_value("GOOGLE_CLIENT_ID")', get_env_or_file_value("GOOGLE_CLIENT_ID"))
 	print('get_env_or_file_value("GOOGLE_CLIENT_SECRET")', get_env_or_file_value("GOOGLE_CLIENT_SECRET"))
-	print('get_env_or_file_value("GOOGLE_REDIRECT_URI")', get_env_or_file_value("GOOGLE_REDIRECT_URI"))
+	#print('get_env_or_file_value("GOOGLE_REDIRECT_URI")', get_env_or_file_value("GOOGLE_REDIRECT_URI"))
 	
 	token_request = {
 	'client_id'     : get_env_or_file_value("GOOGLE_CLIENT_ID"),
@@ -201,9 +201,15 @@ def signup_via_google(user_profile_info):
 		user_profile.online_status = "ON"  
 		google_avatar_url = user_profile_info['avatar']
 		encoded_url = urllib.parse.quote(google_avatar_url)
-		user_profile.intra_avatar = f"https://localhost:6010/api/v1/avatar-proxy/?url={encoded_url}"
+		user_profile.intra_avatar = f"https://{BACKEND_IP}:6010/api/v1/avatar-proxy/?url={encoded_url}"
 		iterator = 0
-		unique_nickname = user_profile_info['nickname']
+  
+		import re
+		nickname = user_profile_info['nickname']
+		nickname = re.sub(r'[^a-zA-Z0-9]', '', nickname)
+    
+		unique_nickname = nickname  
+		#unique_nickname = user_profile_info['nickname']
 		while UserProfile.objects.filter(nickname=unique_nickname).exists():
 			iterator += 1
 			unique_nickname = unique_nickname+'-'+str(iterator)

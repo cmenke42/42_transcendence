@@ -7,8 +7,9 @@ import { UserService } from '../../service/user.service';
 import { AuthService } from '../../service/auth.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PopupMessageService } from '../../service/popup-message.service';
+import { environment } from '../../../environments/environment.development';
 
-
+//src/environments/environment.development.ts
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -38,7 +39,6 @@ export class LoginComponent {
     userService = inject(UserService);
     router = inject(Router);
     auth = inject(AuthService);
-
     showPassword: boolean = false;
 
     constructor ( private translate: TranslateService, private popupMessageService: PopupMessageService ) {
@@ -80,14 +80,14 @@ export class LoginComponent {
 
     // 42 Intra Authentification
     loginOAuth() {
-        window.location.href = 'https://localhost:6010/api/v1/oauth_login/';
+       window.location.href = 'https://'+environment.Backend_IP+':6010/api/v1/oauth_login/';
+        
     }
 
     loginGoogleOAuth() {
-      window.location.href = 'https://localhost:6010/api/v1/oauth_google_login/';
+      window.location.href = 'https://'+environment.Backend_IP+':6010/api/v1/oauth_google_login/';
     }
     
-
     // verifyOTP()
     // {
     //   // const user = {email: this.user.email, otp: this.user.otp};
@@ -108,8 +108,6 @@ export class LoginComponent {
     {
       this.show2fa = false;
     }
-
-
 
     togglePassword() {
       this.showPassword = !this.showPassword;

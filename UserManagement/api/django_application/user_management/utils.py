@@ -16,12 +16,13 @@ def get_env_or_file_value(key, default=None):
     if value and os.path.isfile(value):
         with open(file=value, encoding='utf-8') as file:
             return file.read()
+    if value is None:
+         raise ValueError(f'Can\'t find value for {key}')
     return value
 
 def avatar_proxy(request):
     # Extract the URL from the request (assuming it's passed as a query parameter)
     url = request.GET.get('url')
-    print('URL:', url)
     if not url:
         return HttpResponse("URL parameter is missing", status=400)
 

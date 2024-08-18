@@ -217,7 +217,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   updateLanguage(language: string | undefined): void {
     if (language) {
-      console.log('updateLanguage:', this.user_profile?.preferred_language);
+      //console.log('updateLanguage:', this.user_profile?.preferred_language);
       this.currentLang = language;
       this.translate.use(language);
       localStorage.setItem('preferredLanguage', language);

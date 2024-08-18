@@ -11,7 +11,8 @@ services:
     expose:
       - "443"
     ports:
-      - "127.0.0.1:4010:443"
+      #- "127.0.0.1:4010:443"
+      - "4010:443"
     volumes:
       - ssl_certs:/etc/nginx/ssl
     healthcheck:
@@ -30,6 +31,12 @@ services:
     build:
       context: ./transcendence_front_end
       dockerfile: ../docker/Dockerfile
+
+      args:
+        - HOST_IP=${HOST_IP}
+    environment:
+      - HOST_IP=${HOST_IP}
+
     restart: unless-stopped
     volumes:
       - ./transcendence_front_end:/app

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core'; // Import OnDestro
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { PopupMessageService } from '../../service/popup-message.service';
-
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-oauth-callback',
@@ -13,7 +13,8 @@ export class OAuthCallbackComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private http: HttpClient,
-    private popupMessageService: PopupMessageService
+    private popupMessageService: PopupMessageService,
+
   ) {}
 
   ngOnInit() {
@@ -31,8 +32,7 @@ export class OAuthCallbackComponent implements OnInit {
 
 
   exchangeCode(code: string) {
-
-    const validationUrl = 'https://localhost:6010/api/v1/exchange-code/';
+    const validationUrl = 'https://'+environment.Backend_IP+':6010/api/v1/exchange-code/';
     const payload = { code };
     if (code == 'deactivated')
     {      

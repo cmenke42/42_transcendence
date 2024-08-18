@@ -13,6 +13,7 @@ from user_management.oauth2  import ExchangeCodeView
 from user_management.oauth2Google import GoogleLogin, GoogleLoginCallback
 from user_management.utils import avatar_proxy
 from user_management.utils import HealthCheckView
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 router = DefaultRouter()
 register_user_with_router(router)
@@ -23,6 +24,9 @@ register_match_with_router(router)
 urlpatterns = [
     path('', RedirectView.as_view(url='/api/v1/')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'), #https://10.12.10.5:6010/api/schema/swagger-ui/
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),             #https://10.12.10.5:6010/api/schema/redoc/
     # TODO: remove /v1 from path
     path('api/v1/',
         include([
@@ -45,6 +49,7 @@ urlpatterns = [
         )
     ),
     path('api/v1/',include(router.urls)),
+    
 ]
 # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 #urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -112,8 +112,46 @@
   "Confirm Password": "پاس ورڈ کی تصدیق کریں",
   "Signup": "سائن اپ کریں",
   "Already have account?": "پہلے سے اکاؤنٹ موجود ہے؟",
-  "Login?": "لاگ ان کریں؟"
+  "Login?": "لاگ ان کریں؟",
+
   
+  "Deactivate Account": "اکاؤنٹ غیر فعال کریں",
+  "1v1 Matches": "1 بمقابلہ 1 میچز",
+  "1v1 matches List": "1 بمقابلہ 1 میچز کی فہرست",
+  "No Match is available": "کوئی میچ دستیاب نہیں ہے",
+  "Start Game": "کھیل شروع کریں",
+  "Tournament Matches": "ٹورنامنٹ میچز",
+  "This box is for tournament matches.": "یہ باکس ٹورنامنٹ میچز کے لیے ہے۔",
+  "Create Tournament": "ٹورنامنٹ بنائیں",
+  "Maximum Number of Players:": "زیادہ سے زیادہ کھلاڑیوں کی تعداد:",
+  "Min Players : 3 & Max Players : 128": "کم از کم کھلاڑی: 3 & زیادہ سے زیادہ کھلاڑی: 128",
+  "Create": "بنائیں",
+  "Cancel": "منسوخ کریں",
+  "Join Player": "کھلاڑی شامل ہوں",
+  "Created By": "بنایا گیا",
+  "Max Players": "زیادہ سے زیادہ کھلاڑی",
+  "Winner": "فاتح",
+  "Status": "حالت",
+  "Not decided": "فیصلہ نہیں ہوا",
+  "Start": "شروع کریں",
+  "Leave": "چھوڑ دیں",
+  "Join": "شامل ہوں",
+  "View": "دیکھیں",
+  "No Tournaments available right now": "اس وقت کوئی ٹورنامنٹ دستیاب نہیں ہے",
+  "Join Game": "کھیل میں شامل ہوں",
+  "Decline Game": "کھیل کو مسترد کریں",
+  "Vs": "بمقابلہ",
+  "Pong Battle": "پونگ جنگ",
+  "Player 1": "کھلاڑی 1",
+  "Player 2": "کھلاڑی 2",
+  "VS": "بمقابلہ",
+  "Game Over!": "کھیل ختم!",
+  "Resume": "دوبارہ شروع کریں",
+  "Game": "کھیل",
+  "Pause Game": "کھیل روکیں",
+  "Lobby": "لابی"
+
+
 
 
 

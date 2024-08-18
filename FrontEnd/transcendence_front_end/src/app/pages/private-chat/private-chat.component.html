@@ -75,11 +75,11 @@
 				  <div class="btn-group" role="group">
 					<button class="btn btn-outline-success custom-pill mr-2" (click)="responseGameInvite(receiver_data.user_id, 'accept')">
 					  <!-- <i class="fas fa-check mr-2"></i>Accept -->
-					  <small class="d-block">Join Game</small>
+					  <small class="d-block">{{ 'Join Game' | translate }}</small>
 					</button>
 					<button class="btn btn-outline-danger custom-pill" (click)="responseGameInvite(receiver_data.user_id, 'decline')">
 					  <!-- <i class="fas fa-times mr-2"></i>Reject -->
-					  <small class="d-block">Decline Game</small>
+					  <small class="d-block">{{ 'Decline Game' | translate }} </small>
 					</button>
 				  </div>
 				}

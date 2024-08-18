@@ -38,6 +38,7 @@ RUN --mount=type=cache,target=/root/.npm \
 
 #RUN npm install @ngx-translate/core @ngx-translate/http-loader
 # Run the application as a non-root user.
+
 USER node
 
 # Copy the rest of the source files into the image.

@@ -10,6 +10,7 @@ import { IResetPassword } from '../pages/reset-password/reset-password.interface
 import { IChangeEmail } from '../pages/change-email/change-email.interface';
 import { IChangePassword } from '../pages/change-password/change-password.interface';
 import { match } from '../interface/match';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class UserService {
  
   constructor() {}
 
-  auth_url = 'https://localhost:6010/api/v1/';
+  auth_url = 'https://'+environment.Backend_IP+':6010/api/v1/';
   
 
   getLoggedInUser(): User | null 

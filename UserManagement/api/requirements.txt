@@ -22,3 +22,4 @@ channels_redis==4.2.0 #for channels
 daphne==4.1.2 #for channels
 python-json-logger  #for logging
 colorlog            #for logging
+drf-spectacular

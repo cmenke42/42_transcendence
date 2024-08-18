@@ -12,6 +12,7 @@ import { UserProfile } from '../../interface/user-profile';
 import { SocketsService } from '../../service/sockets.service';
 import { Subscription } from 'rxjs';
 import { MatchType } from '../../interface/remote-game.interface';
+import { PopupMessageService } from '../../service/popup-message.service';
 
 @Component({
   selector: 'app-match-making',
@@ -52,7 +53,7 @@ export class MatchMakingComponent implements OnInit, OnDestroy {
   // matches_round : {[key: number]: match[]} = {};
   matchesByRound: Map<number, match[]> = new Map();
 
-  constructor() {
+  constructor(private popupMessageService: PopupMessageService) {
 
   }
 
@@ -89,7 +90,8 @@ export class MatchMakingComponent implements OnInit, OnDestroy {
 
   playMatch()
   {
-    alert('Match started');
+    this.popupMessageService.showMessage('Match started', 'info');
+    //alert('Match started');
   }
   
   fetchPlayerInfo()

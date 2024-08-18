@@ -19,7 +19,7 @@ def send_account_activation_email(user: 'CustomUser'):
     encoded_user_id = urlsafe_base64_encode(force_bytes(user.id))
     token = account_activation_token_generator.make_token(user)
     # TODO: adjust link so user goes to angular page
-    link = "{FRONTEND_URL}{route}{encoded_user_id}/{token}"
+    link = "https://{FRONTEND_URL}{route}{encoded_user_id}/{token}"
     link = link.format(
         FRONTEND_URL=settings.FRONTEND_URL,
         route='/activate-account/',

@@ -52,7 +52,19 @@ export class SignupComponent {
 					},
 					error: error => {
 						console.error('Error...', error);
-						this.popupMessageService.showMessage(error, 'error');
+						let errorMessage = 'An unexpected error occurred';
+						if (error.error) {
+							const errorMessages = [];
+							for (const key in error.error) {
+								if (Array.isArray(error.error[key])) {
+									errorMessages.push(...error.error[key]);
+								}
+							}
+							if (errorMessages.length > 0) {
+								errorMessage = errorMessages.join('<br>');
+							}
+						}
+						this.popupMessageService.showMessage(errorMessage, 'error');
 					}
 				}
 			)
