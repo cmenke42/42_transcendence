@@ -43,7 +43,7 @@ export class UserComponent implements OnInit{
     name: 'custom',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#007bff', '#dc3545']
+    domain: ['#3273a8', '#e05109']
   };
   view: [number, number] = [700, 400];
   showTournamentPopup: boolean = false;
@@ -68,31 +68,40 @@ export class UserComponent implements OnInit{
     }
   }
 
-  calculateWinLoss(match_details: any[])
-  {
-    const win = match_details.reduce((count, match) => {
+  calculateWinLoss(match_details: any[]) {
+    // Filter out matches that haven't started (no score or scores are equal)
+    const validMatches = match_details.filter(match => {
+      const isPlayer1 = match.player_1.user_id === this.user_id || match.player_1.user_id === this.userId;
+      const playerScore = isPlayer1 ? match.player_1_score : match.player_2_score;
+      const opponentScore = isPlayer1 ? match.player_2_score : match.player_1_score;
+      return playerScore !== null && opponentScore !== null && playerScore !== opponentScore;
+    });
+  
+    const win = validMatches.reduce((count, match) => {
       const isPlayer1 = match.player_1.user_id === this.user_id || match.player_1.user_id === this.userId;
       const playerScore = isPlayer1 ? match.player_1_score : match.player_2_score;
       const opponentScore = isPlayer1 ? match.player_2_score : match.player_1_score;
       return count + (playerScore > opponentScore ? 1 : 0);
     }, 0);
-    
-    const loss = match_details.length - win;
-
-    if(win < 5)
+  
+    const loss = validMatches.length - win;
+  
+    if (win < 5)
       this.UserTitle = "Beginner";
-    else if(win < 10)
+    else if (win < 10)
       this.UserTitle = "Intermediate";
     else
       this.UserTitle = "Expert";
+  
     console.log("User Title: ", this.UserTitle);
     this.winLossData = [
-      {name: 'Win', value: win},
-      {name: 'Loss', value: loss},
+      { name: 'Win', value: win },
+      { name: 'Loss', value: loss },
     ];
     this.calculateScore(match_details);
     this.calculatePerformance(match_details);
   }
+  
 
   calculateScore(match_details: any[]): void {
     this.scoreData = match_details.map(match => {

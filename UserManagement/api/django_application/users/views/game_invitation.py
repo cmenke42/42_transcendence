@@ -27,6 +27,14 @@ class GameInvitationView(APIView):
             # Check if there is already an invitation between the two users
         except UserProfile.DoesNotExist:
             return Response({'error': 'Sender not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        #check if there is already an invitation between the two users
+        existing_invitation = GameInvitation.objects.filter(
+            sender = sender_profile, recipient = recipient
+        ).first()
+        if existing_invitation:
+            return Response({'error ': 'Invitation already sent'}, status=status.HTTP_400_BAD_REQUEST)
+        
         
         invitation = GameInvitation(sender=sender_profile, recipient=recipient)
         invitation.save()

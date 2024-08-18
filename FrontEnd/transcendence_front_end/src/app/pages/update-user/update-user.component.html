@@ -1,0 +1,39 @@
+
+@if(loggedInUser)
+{
+
+ <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-4">
+        <div class="card shadow">
+          <div class="card-body">
+            <h2 class="card-title text-center mb-4">{{ 'Hello' | translate }} {{ user_profile?.nickname }}</h2>
+            @if(loggedInUser?.is_intra_user) {
+              <img [src]="user_profile?.intra_avatar" alt="User Avatar" class="img-fluid rounded-circle mb-4 d-block mx-auto" style="max-width: 150px;">
+              <button class="btn btn-danger btn-lg w-40 d-block mx-auto" (click)="toggleUserActivation(loggedInUser?.id, 'deactivate')">{{ 'Deactivate Account' | translate }}</button>
+            } @else {
+              <form (ngSubmit)="saveProfileChanges()">
+                <div class="mb-3">
+                  <label for="nickname" class="form-label">{{ 'New nickname:' | translate }}</label>
+                  <input type="text" id="nickname" name="nickname" [(ngModel)]="newNickname" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label for="avatar" class="form-label">{{ 'Avatar:' | translate }}</label>
+                  <input type="file" id="avatar" (change)="onFileSelected($event)" class="form-control">
+                </div>
+                @if(user_profile?.avatar) {
+                  <img [src]="user_profile?.avatar" alt="User Avatar" class="img-fluid rounded-circle mb-4 d-block mx-auto" style="max-width: 150px;">
+                } @else {
+                  <p class="text-muted text-center">{{ 'No avatar uploaded' | translate }}</p>
+                }
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-outline-info btn-lg">{{ 'Save Changes' | translate }}</button>
+                  <button type="button" class="btn btn-outline-danger btn-lg" (click)="toggleUserActivation(loggedInUser?.id, 'deactivate')">{{ 'Deactivate Account' | translate }}</button>
+                </div>
+              </form>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+}

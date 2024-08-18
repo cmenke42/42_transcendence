@@ -28,7 +28,7 @@ body, html {
 
 .neon-text {
   color: #4df7ff;
-  text-shadow: 0 0 5px #4df7ff;
+  /* text-shadow: 0 0 5px #4df7ff; */
   text-align: center;
   margin-bottom: 20px;
 }
@@ -80,10 +80,10 @@ input::placeholder {
 }
 
 .neon-link {
-  color: #ff9c00;
+  color: #e05109;
   text-decoration: none;
 }
 
 .neon-link:hover {
-  text-shadow: 0 0 5px #ff9c00;
+  text-shadow: 0 0 5px #e05109;
 }

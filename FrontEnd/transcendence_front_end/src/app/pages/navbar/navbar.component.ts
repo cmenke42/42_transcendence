@@ -8,6 +8,7 @@ import { UserProfile } from '../../interface/user-profile';
 import { ProfileUpdateService } from '../../service/ProfileUpdateService';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ChangeDetectorRef } from '@angular/core';
+import { User } from '../../interface/user';
 
 @Component({
   selector: 'app-navbar',
@@ -39,6 +40,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   jwt: any;
   userData: any;
   currentLang = this.user_profile?.preferred_language;
+  user_info:User | null = null;
+  // user_info: any;
 
 
   @HostListener('window:scroll', [])
@@ -66,8 +69,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void {
-
+  ngOnInit(): void 
+  {
+    this.user_info = this.userService.getLoggedInUser();
     this.changeTheme('dark');
     this.getProfile();
     this.relationProfile();
@@ -119,8 +123,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.userService.getSpecificUser(this.user_profile.user_id).subscribe({
           next: (data: any) =>
           {
-            console.log('data......', data);
+            // console.log('data......', data);
             this.userData = data;
+            console.log('User Data...', this.userData);
           },
           error: (err: any) => 
           {
@@ -152,7 +157,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       next: (data: any) =>
       {
         this.ngOnInit();
-        this.router.navigate(['/home/setting'])
+        this.router.navigate(['/home/Users'])
         console.log("Friend Request Accepted", data);
       },
       error: (err) =>
@@ -168,7 +173,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       next: (data: any) =>
       {
         this.ngOnInit();
-        this.router.navigate(['/home/setting'])
+        this.router.navigate(['/home/Users'])
         console.log("Friend Request Rejected", data);
       },
       error: (err) =>

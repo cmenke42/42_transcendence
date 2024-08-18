@@ -1,5 +1,5 @@
 <div class="container-fluid py-5">
-  <h1 class="text-center mb-5 display-4 fw-bold">{{ 'Welcome to Transcendence' | translate }}</h1>
+  <!-- <h1 class="text-center mb-5 display-4 fw-bold">{{ 'Welcome to Transcendence' | translate }}</h1> -->
 
   @if(loggedInUser?.is_superuser) {
     <div class="row justify-content-center">
@@ -43,7 +43,9 @@
       </div>
     </div>
   } @else {
-    <div class="row justify-content-center">
+
+    <app-user [userId]="loggedInUser.id"></app-user>
+    <!-- <div class="row justify-content-center">
       <div class="col-md-6 col-lg-4">
         <div class="card shadow">
           <div class="card-body">
@@ -67,7 +69,7 @@
                   <p class="text-muted text-center">{{ 'No avatar uploaded' | translate }}</p>
                 }
                 <div class="d-grid gap-2">
-                  <button type="submit" class="btn btn-primary btn-lg">{{ 'Save Changes' | translate }}</button>
+                  <button type="submit" class="btn btn-outline-info btn-lg">{{ 'Save Changes' | translate }}</button>
                   <button type="button" class="btn btn-outline-danger btn-lg" (click)="toggleUserActivation(loggedInUser?.id, 'deactivate')">{{ 'Deactivate Account' | translate }}</button>
                 </div>
               </form>
@@ -75,6 +77,6 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   }
 </div>

@@ -192,15 +192,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
 
-  getStatusLabel(status: string): string {
-    const statusMap: { [key: string]: string } = {
-      'ON': 'Online',
-      'OF': 'Offline',
-      'IA': 'Inactive',
-      'GA': 'Playing'
-    };
-    return statusMap[status] || 'Unknown';
-  }
+  // getStatusLabel(status: string): string {
+  //   const statusMap: { [key: string]: string } = {
+  //     'ON': 'Online',
+  //     'OF': 'Offline',
+  //     'IA': 'Inactive',
+  //     'GA': 'Playing'
+  //   };
+  //   return statusMap[status] || 'Unknown';
+  // }
 
 
 

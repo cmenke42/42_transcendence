@@ -28,7 +28,6 @@ body, html {
 
 .neon-text {
   color: #4df7ff;
-  text-shadow: 0 0 5px #4df7ff;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -80,8 +79,8 @@ input::placeholder {
 }
 
 .neon-button.orange {
-  background-color: #ff9c00;
-  box-shadow: 0 0 10px #ff9c00;
+  background-color: #e05109;
+  box-shadow: 0 0 10px #e05109;
 }
 
 .neon-button:hover {
@@ -91,20 +90,33 @@ input::placeholder {
 .oauth-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .oauth-buttons .neon-button {
   width: 48%;
 }
 
+.play-button-container {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.play-button {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
 a {
-  color: #ff9c00;
+  color: #e05109;
   text-decoration: none;
 }
 
 a:hover {
-  text-shadow: 0 0 5px #ff9c00;
+  text-shadow: 0 0 5px #e05109;
 }
 
 .modal {
@@ -124,7 +136,6 @@ a:hover {
   background-color: #000810;
   padding: 20px;
   border: 2px solid #4df7ff;
-  box-shadow: 0 0 20px #4df7ff;
   max-width: 400px;
   width: 100%;
 }
@@ -138,5 +149,5 @@ a:hover {
 }
 
 .close:hover {
-  color: #ff9c00;
+  color: #e05109;
 }

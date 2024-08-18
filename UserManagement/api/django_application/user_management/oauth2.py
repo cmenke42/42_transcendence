@@ -156,30 +156,6 @@ def FortyTwoIntraLoginCallback(request):
 	return redirect(f'{API_42_FRONTEND_CALLBACK_URL}?code={one_time_code}')
 
 
-#5 STANDART JWT TOKEN GENERATION:
-# def generate_tokens(user):
-#     refresh = RefreshToken.for_user(user)
-
-#     return {
-#         'refresh': str(refresh),
-#         'access': str(refresh.access_token),
-#     }
-
-# #5 CUSTOM JWT TOKEN GENERATION:
-# def generate_tokens(user):
-# 	refresh = RefreshToken.for_user(user)
-# 	refresh['email'] = user.email
-# 	refresh['is_superuser'] = user.is_superuser
-# 	refresh['is_intra_user'] = user.is_intra_user
-# 	#refresh['is_admin'] = user.is_admin
-
-# 	access_token = refresh.access_token
-# 	# access_token['email'] = user.email
-# 	# access_token['is_admin'] = user.is_admin
-# 	return {
-# 		'refresh': str(refresh),
-# 		'access': str(access_token),
-# 	}
 
  
 #3 42 Retrieves User Info from 42 Intra
@@ -244,3 +220,27 @@ class ExchangeCodeView(APIView):
 		return Response({'error': 'Invalid code'}, status=400)
 
 
+#5 STANDART JWT TOKEN GENERATION:
+# def generate_tokens(user):
+#     refresh = RefreshToken.for_user(user)
+
+#     return {
+#         'refresh': str(refresh),
+#         'access': str(refresh.access_token),
+#     }
+
+# #5 CUSTOM JWT TOKEN GENERATION:
+# def generate_tokens(user):
+# 	refresh = RefreshToken.for_user(user)
+# 	refresh['email'] = user.email
+# 	refresh['is_superuser'] = user.is_superuser
+# 	refresh['is_intra_user'] = user.is_intra_user
+# 	#refresh['is_admin'] = user.is_admin
+
+# 	access_token = refresh.access_token
+# 	# access_token['email'] = user.email
+# 	# access_token['is_admin'] = user.is_admin
+# 	return {
+# 		'refresh': str(refresh),
+# 		'access': str(access_token),
+# 	}

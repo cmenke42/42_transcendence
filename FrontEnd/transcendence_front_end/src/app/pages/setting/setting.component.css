@@ -1,10 +1,12 @@
+
 .card {
-	opacity: 0.9;
+	box-shadow: 0 0 20px #4df7ff;
 }
+
 .custom-bg {
-	background-color: rgba(89, 89, 252, 0.2); /* Matching the scrolled navbar color */
+	background-color: rgba(0, 255, 255, 0.2); /* Matching the scrolled navbar color */
 	backdrop-filter: blur(5px);
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	
   }
   
   /* Optional: Add a gradient for more depth */
@@ -17,6 +19,7 @@
 	bottom: 0;
 	background: linear-gradient(to bottom, rgba(0, 0, 255, 0.1), transparent);
 	pointer-events: none;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
   
   /* Ensure text is readable */

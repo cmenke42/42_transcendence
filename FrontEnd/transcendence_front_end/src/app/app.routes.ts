@@ -4,7 +4,6 @@ import { ChangeEmailLinkComponent } from './pages/change-email-link/change-email
 import { ChangeEmailComponent } from './pages/change-email/change-email.component';
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { ChatComponent } from './pages/chat/chat.component';
-import { DesignComponent } from './pages/design/design.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LobbyComponent } from './pages/lobby/lobby.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -21,6 +20,7 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { UserComponent } from './pages/user/user.component';
 import { loginGuard } from './service/login.guard';
 import { userGuard } from './service/user.guard';
+import { UpdateUserComponent } from './pages/update-user/update-user.component';
 
 
 export const routes: Routes = [
@@ -43,7 +43,7 @@ export const routes: Routes = [
         canActivate: [userGuard],
         children: [
             { path: '',					component: HomeComponent }, // Home as default
-            { path: 'setting',			component: SettingComponent },
+            { path: 'Users',			component: SettingComponent },
             { path: 'private_chat', 	component: PrivateChatComponent },
             { path: 'user/:user_id',	component: UserComponent },
             { path: 'change-email', 	component: ChangeEmailLinkComponent },
@@ -52,23 +52,14 @@ export const routes: Routes = [
             { path: 'lobby', component: LobbyComponent },
             { path: 'matchmaking/:tournament_id/:nickname', component: MatchMakingComponent},
             { path: 'chat/:tournament_id', component: ChatComponent},
+            { path: 'update-user', component: UpdateUserComponent}
             { path: 'pong-match/:match_type/:match_id', component: PongGameComponent },
         ]
     },
     // { path: 'chat/:username', component: ChatComponent },
-    { path: 'design', component: DesignComponent },
+
     { path: 'auth-success', component: OAuthCallbackComponent },
     { path: '404', component: NotFoundComponent},
     { path: '**', redirectTo: '/404'},
 
 ];
-
-// { path: 'navbar', component: NavbarComponent, canActivate: [userGuard]},
-// { path: 'design', component: DesignComponent},
-// { path: 'chat/:username', component: ChatComponent, canActivate: [userGuard]},
-// { path: 'private_chat', component: PrivateChatComponent, canActivate: [userGuard]},
-// { path: 'setting', component: SettingComponent, canActivate: [userGuard]},
-// { path : 'home', component: HomeComponent, canActivate: [userGuard]},
-// {path: 'user/:user_id', component: UserComponent, canActivate: [userGuard]},
-// { path: 'match', component: LocalMatchComponentComponent},
-  // Navbar as the shell component

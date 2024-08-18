@@ -62,7 +62,7 @@
 			  </h5>
 			  <div class="game-invitation-controls">
 				@if (invitation === 'no invitation') {
-				  <button class="btn btn-outline-primary custom-pill" (click)="gameInvite(receiver_data.user_id)">
+				  <button class="btn btn-outline-info custom-pill" (click)="gameInvite(receiver_data.user_id)">
 					<i class="fas fa-gamepad mr-2"></i>{{ 'Game Invitation' | translate }}
 				  </button>	
 				}
@@ -100,7 +100,7 @@
 		  </div>
 		  <form class="d-flex" *ngIf="receiver_data">
 			<input type="text" class="form-control mr-2" [(ngModel)]="message" name="message" placeholder="{{ 'Type a message...' | translate }}">
-			<button type="button" class="btn btn-primary" (click)="sendMessage()">{{ 'Send' | translate }}</button>
+			<button type="button" class="btn btn-info" (click)="sendMessage()">{{ 'Send' | translate }}</button>
 		  </form>
 		</div>
 	  </div>

@@ -1,6 +1,6 @@
 /* Existing styles */
 .users-list {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 255, 255, 0.2); 
   border-radius: 10px;
 }
 
@@ -10,12 +10,12 @@
 
 .users-list .list-group-item:hover,
 .users-list .list-group-item.active {
-  background-color: #007bff;
+  background-color: #3cc5fc;
   color: white;
 }
 
 .chat-container {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px #4df7ff;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -59,7 +59,7 @@
 }
 
 .message-right .message-bubble {
-  background-color: #007bff;
+  background-color: #3cc5fc;
   color: white;
 }
 
@@ -89,7 +89,7 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #007bff;
+  background-color: #3cc5fc;
   color: white;
   padding: 10px;
   border-radius: 5px;

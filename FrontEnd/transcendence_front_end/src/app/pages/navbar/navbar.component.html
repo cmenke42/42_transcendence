@@ -8,8 +8,10 @@
 		  <li class="nav-item">
 			<a class="nav-link" [routerLink]="['/home']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">{{ 'Home' | translate }}</a>
 		  </li>
+		  @if (!user_info?.is_superuser)
+		  {
 		  <li class="nav-item">
-			<a class="nav-link" [routerLink]="['/home/setting']" routerLinkActive="active">{{ 'Settings' | translate }}</a>
+			<a class="nav-link" [routerLink]="['/home/Users']" routerLinkActive="active">{{ 'Users' | translate }}</a>
 		  </li>
 		  <li class="nav-item">
 			<a class="nav-link" [routerLink]="['/home/private_chat']" routerLinkActive="active">{{ 'Private Chat' | translate }}</a>
@@ -17,6 +19,7 @@
 		  <li class="nav-item">
 			<a class="nav-link" [routerLink]="['/home/lobby']" routerLinkActive="active">{{ 'Lobby' | translate }}</a>
 		  </li>
+			}
 		</ul>
 		
 		<ul class="navbar-nav ms-auto">
@@ -79,6 +82,12 @@
 				  <button ngbDropdownItem (click)="changeTheme('light')">{{ 'Light' | translate }}</button>
 				</div>
 			  </div>
+			  @if(user_info?.is_intra_user === false)
+			  {
+
+			  
+			  		<div class="dropdown-divider"></div>
+			  		<button ngbDropdownItem [routerLink]="['/home/update-user']">{{ 'Update User' | translate }}</button>
 			  		<div class="dropdown-divider"></div>
   					<button ngbDropdownItem [routerLink]="['/home/change-email']">{{ 'Change email' | translate }}</button>
 					<div class="dropdown-divider"></div>
@@ -92,7 +101,7 @@
 				{
 				  <button ngbDropdownItem (click)="FA(false, userData?.id)">{{ 'Disable 2FA' | translate }}</button>
 				}
-			
+				}
 			  <div class="dropdown-divider"></div>
 			  <button ngbDropdownItem (click)="logout()">{{ 'Logout' | translate }}</button>
 			</div>

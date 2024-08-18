@@ -11,20 +11,25 @@
             <p class="card-text">{{ '1v1 matches List' | translate }}</p>
             <hr>
             <ul class="list-group mt-3">
-              @if (oneVsOneMatches.length > 0) {
-                @for (v1 of oneVsOneMatches; track v1.id) {
-                  @if (v1.is_played === false) {
-                    <li class="list-group-item list-group-item-primary custom-blue-item">
-                      <div class="d-flex justify-content-between align-items-center">
-                        @if (v1.player_1.user_id === user_data?.user_id) {
-                          <p class="mb-0">{{ 'Vs' | translate }} {{ v1.player_2.nickname }}</p>
-                        } @else {
-                          <p class="mb-0">{{ 'Vs' | translate }} {{ v1.player_1.nickname }}</p>
-                        }
-                        <a class="btn btn-outline-primary" [routerLink]="['/home/pong-match/', MatchType.PVP, v1.id]">{{ 'Start Game' | translate }}</a>
-                      </div>
-                    </li>
-                  }
+            @if (oneVsOneMatches.length > 0)
+            {
+              @for( v1 of oneVsOneMatches; track v1.id)
+              {
+                @if (v1.is_played === false)
+                {
+                  <li class="list-group-item list-group-item-info custom-blue-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                      @if (v1.player_1.user_id === user_data?.user_id)
+                      {
+                        <p class="mb-0">Vs  {{v1.player_2.nickname}}</p>
+                      }
+                      @else 
+                      {
+                        <p class="mb-0">Vs  {{v1.player_1.nickname}}</p>
+                      }
+                    <a class="btn btn-outline-info" [routerLink]="['/pong-match/', MatchType.PVP ,v1.id]">Start Game</a>
+                    </div>
+                  </li>
                 }
               } @else {
                 <div class="d-flex justify-content-between align-items-center">
@@ -44,22 +49,25 @@
       <ng-template ngbNavContent>
         <div class="card custom-card">
           <div class="card-body text-center">
-            <p class="card-text">{{ 'This box is for tournament matches.' | translate }}</p>
-            <button class="btn btn-outline-primary" (click)="openModal()">{{ 'Create Tournament' | translate }}</button>
+            <p class="card-text">This box is for tournament matches.</p>
+            <button class="btn btn-outline-info" (click)="openModal()">Create Tournament</button>
 
-            <div class="modal" [ngClass]="{'show': isModalOpen}">
-              <div class="modal-content">
-                <div class="form-group">
-                  <label for="maxPlayers">{{ 'Maximum Number of Players:' | translate }}</label>
-                  <small>{{ 'Min Players : 3 & Max Players : 128' | translate }}</small>
-                  <input type="number" id="maxPlayers" [(ngModel)]="maxPlayers" min="3" max="128">
-                </div>
-                <div class="button-group">
-                  <button class="btn btn-outline-primary" (click)="createTournament(maxPlayers)">{{ 'Create' | translate }}</button>
-                  <button class="btn btn-outline-secondary" (click)="closeModal()">{{ 'Cancel' | translate }}</button>
-                </div>
-              </div>
-            </div>
+            <!-- <button class="btn btn-outline-info btn-sm" (click)="openModal()">start</button> -->
+
+                  <div class="modal" [ngClass]="{'show': isModalOpen}">
+                    <div class="modal-content">
+                      
+                      <div class="form-group">
+                        <label for="maxPlayers">Maximum Number of Players:</label>
+                        <small>Min Players : 3 & Max Players : 128</small>
+                        <input type="number" id="maxPlayers" [(ngModel)]="maxPlayers" min="3" max="128">
+                      </div>
+                      <div class="button-group">
+                        <button class="btn btn-outline-info" (click)="createTournament(maxPlayers)">Create</button>
+                        <button class="btn btn-outline-secondary" (click)="closeModal()">Cancel</button>
+                      </div>
+                    </div>
+                  </div>
 
             <div class="table-responsive mt-3">
               @if (tournamentList.length > 0) {
@@ -75,35 +83,48 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @for (tournament of tournamentList; track tournament.id) {
-                      <tr>
-                        <td>{{ tournament.current_number_of_players }}</td>
-                        <td>{{ tournament.creator.nickname }}</td>
-                        <td>{{ tournament.max_players }}</td>
-                        <td>
-                          @if (tournament.winner) {
-                            {{ tournament.winner.nickname }} 🏆
-                          } @else {
-                            {{ 'Not decided' | translate }}
-                          }
-                        </td>
-                        <td>{{ tournament.status_display }}</td>
-                        <td>
-                          @if (tournament.status_display === 'created') {
-                            @if (tournament.creator.nickname === user_data?.nickname && tournament.current_number_of_players > 2) {
-                              <button class="btn btn-outline-primary btn-sm" (click)="startTournament(tournament.id)">{{ 'Start' | translate }}</button>
-                            }
-                            @if (tournament.is_user_participant) {
-                              <button class="btn btn-outline-danger btn-sm" (click)="leaveTournament(tournament.id)">{{ 'Leave' | translate }}</button>
-                            } @else {
-                              <button class="btn btn-outline-primary btn-sm" (click)="joinTournament(tournament.id)">{{ 'Join' | translate }}</button>
-                            }
-                          } @else {
-                            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/home/matchmaking', tournament.id, nickname]">{{ 'View' | translate }}</a>
-                          }
-                        </td>
-                      </tr>
-                    }
+              @for(tournament of tournamentList; track tournament.id)
+              {
+                <tr>
+                  <td>{{ tournament.current_number_of_players }}</td>
+                  <td>{{tournament.creator.nickname}}</td>
+                  <td>{{ tournament.max_players }}</td>
+                  <td>
+              @if (tournament.winner)
+              {
+                {{ tournament.winner.nickname}}  🏆
+              }
+              @else
+              {
+                Not decided
+              }
+            </td>
+            <td>{{ tournament.status_display }}</td>
+            <td>
+              
+              @if(tournament.status_display === 'created')
+              {
+                @if (tournament.creator.nickname === user_data?.nickname && tournament.current_number_of_players > 2)
+                {
+                  <button class="btn btn-outline-info btn-sm" (click)="startTournament(tournament.id)">start</button>
+                }
+                @if (tournament.is_user_participant)
+                {
+                  <button class="btn btn-outline-danger btn-sm" (click)="leaveTournament(tournament.id)">leave</button>
+                }
+                @else 
+                {
+                  <button class="btn btn-outline-info btn-sm" (click)="joinTournament(tournament.id)">Join</button>
+                }
+              }
+              @else 
+              {
+                <a class="btn btn-outline-info btn-sm" [routerLink]="['/home/matchmaking', tournament.id, nickname]">View</a>
+              }
+            </td>
+
+          </tr>
+        }
                   </tbody>
                 </table>
               } @else {

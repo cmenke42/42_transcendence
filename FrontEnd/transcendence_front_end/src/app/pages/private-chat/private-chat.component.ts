@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { UserService } from '../../service/user.service';
 import { SocketsService } from '../../service/sockets.service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
@@ -30,6 +30,7 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
   userService = inject(UserService);
   socketService = inject(SocketsService);
   profileUpdateService = inject(ProfileUpdateService);
+  // cdr = inject(ChangeDetectorRef);
   router = inject(Router);
   receiver: string = '';
   receiver_data : UserProfile | null = null;
@@ -45,6 +46,7 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
   unreadMessages: { [key: string]: number } = {};
   private fetchUnreadMessageCountsInterval: any;
   invitation: string | null = null;
+
 
   constructor(
     private translate: TranslateService, private popupMessageService: PopupMessageService
@@ -64,15 +66,15 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
 
     this.userRelation();
 
-    this.fetchUnreadMessageCountsInterval =  setInterval(() => this.fetchUnreadMessageCounts(), 3000);
-    setInterval(() => this.fetchUnreadMessageCounts(), 3000)
+    // this.fetchUnreadMessageCountsInterval =  setInterval(() => this.fetchUnreadMessageCounts(), 3000);
+    // setInterval(() => this.fetchUnreadMessageCounts(), 3000)
   }
 
   ngOnDestroy()
   {
     this.subscription?.unsubscribe();
     this.socketService.privateClose();
-    clearInterval(this.fetchUnreadMessageCountsInterval);
+    clearInterval(this.fetchUnreadMessageCountsInterval); // do we need it?
     this.socketService.disconnectOnlineStatus(this.current_user);
   }
 
@@ -219,7 +221,9 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
         {
          next: () => {
           // this.ngOnInit();
-          this.router.navigate(['/home/private_chat']);
+          this.router.navigate(['/home/lobby']);
+          // this.cdr.detectChanges();
+          
         },
         error: (err : any) => {
           console.log("Error sending game invite", err);
@@ -240,25 +244,24 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
   }
 
 
-  checkGameInvite(id: number)
-  {
-    this.userService.checkGameInvitation(id).subscribe(
-      {
-       next: (response: any) => {
-        if (response.invitation)
-          //alert("You have a game invitation from " + response.invitation.sender);
-          this.popupMessageService.showMessage("You have a game invitation from " + response.invitation.sender, 'info');
-        else
-          //alert("No game invitation");
-          this.popupMessageService.showMessage("No game invitation", 'info');
-      },
-      error: (err : any) => {
-        console.log("Error checking game invite", err);
-        this.popupMessageService.showMessage("Error checking game invite", 'error');
-        //alert("Error checking game invite");
-      }
-    });
-  }
+  // checkGameInvite(id: number)
+  // {
+  //   this.userService.checkGameInvitation(id).subscribe(
+  //     {
+  //      next: (response: any) => {
+  //       if (response.invitation)
+  //         alert("You have a game invitation from " + response.invitation.sender);
+  //       else
+  //         alert("No game invitation");
+  //       // this.cdr.detectChanges();
+  //       // this.ngOnInit();
+  //     },
+  //     error: (err : any) => {
+  //       console.log("Error checking game invite", err);
+  //       alert("Error checking game invite");
+  //     }
+  //   });
+  // }
 
   responseGameInvite(id: number, status: string)
   {
@@ -268,7 +271,10 @@ export class PrivateChatComponent implements OnInit, OnDestroy {
         this.popupMessageService.showMessage("Game invite response sent successfully", 'success');
         //alert("Game invite response sent successfully");
         // this.ngOnInit();
-        this.router.navigate(['/home/private_chat']);
+        this.router.navigate(['/home/lobby']);
+        // this.cdr.detectChanges();
+        // this.router.navigate(['/home/private_chat'], { queryParams: { refresh: new Date().getTime() } });
+        
       },
       error: (err : any) => {
         console.log("Error sending game invite response", err);

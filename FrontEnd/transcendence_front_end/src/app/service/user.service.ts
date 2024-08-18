@@ -30,6 +30,7 @@ export class UserService {
   getLoggedInUser(): User | null 
   {
     const token = this.auth.getAccessToken();
+    // console.log('Token: ', jwtDecode(token || ""));
     if (!token)
       return null;
     try 
