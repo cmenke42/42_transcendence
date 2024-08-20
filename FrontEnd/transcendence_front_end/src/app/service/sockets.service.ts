@@ -29,7 +29,7 @@ export class SocketsService {
   connect(roomName: string, user: string) 
   {
     //const socket  = this.connectionAll(`wss://localhost:6010/ws/chat/${roomName}/`);
-    const socket  = this.connectionAll(`wss://${environment.Backend_IP}:6010/ws/chat/${roomName}/`);
+    const socket  = this.connectionAll(`wss://${environment.HOST_IP}:6010/ws/chat/${roomName}/`);
 
 
     socket.onopen = () =>
@@ -90,7 +90,7 @@ export class SocketsService {
     // if (this.private_socket) 
     //   this.private_socket.close();
     // this.private_socket = new WebSocket(`ws://localhost:8000/ws/private_chat/${sender}/${receiver}/`);
-    const private_socket = this.connectionAll(`wss://${environment.Backend_IP}:6010/ws/private_chat/${sender}/${receiver}/`);
+    const private_socket = this.connectionAll(`wss://${environment.HOST_IP}:6010/ws/private_chat/${sender}/${receiver}/`);
     private_socket.onopen = () =>
     {
       console.log('Websocket connected');
@@ -143,16 +143,16 @@ export class SocketsService {
 
   getChatMessages(sender: string, receiver: string): Observable<any>
   {
-    return this.http.get(`https://${environment.Backend_IP}:6010/api/v1/get_messages/?sender=${sender}&receiver=${receiver}`);
+    return this.http.get(`https://${environment.HOST_IP}:6010/api/v1/get_messages/?sender=${sender}&receiver=${receiver}`);
   }
 
   messageRead(receiver:string, sender:string,) : Observable<any>
   {
-    return this.http.put(`https://${environment.Backend_IP}:6010/api/v1/mark_message_as_read/`, { receiver, sender });
+    return this.http.put(`https://${environment.HOST_IP}:6010/api/v1/mark_message_as_read/`, { receiver, sender });
   }
 
   getUnreadMessageCounts(currentUser: string): Observable<any> {
-    return this.http.get(`https://${environment.Backend_IP}:6010/api/v1/get_unread_message_counts/?current_user=${currentUser}`);
+    return this.http.get(`https://${environment.HOST_IP}:6010/api/v1/get_unread_message_counts/?current_user=${currentUser}`);
   }
   
   privateClose()
@@ -164,7 +164,7 @@ export class SocketsService {
     // online status
     connectOnlineStatus(username: string)
     {
-      const socket = this.connectionAll(`wss://${environment.Backend_IP}:6010/ws/online_status/`);
+      const socket = this.connectionAll(`wss://${environment.HOST_IP}:6010/ws/online_status/`);
       socket.onopen = () =>
       {
         console.log('Websocket connected');

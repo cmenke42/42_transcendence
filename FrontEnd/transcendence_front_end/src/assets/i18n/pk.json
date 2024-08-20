@@ -149,12 +149,27 @@
   "Resume": "دوبارہ شروع کریں",
   "Game": "کھیل",
   "Pause Game": "کھیل روکیں",
-  "Lobby": "لابی"
+  "Lobby": "لابی",
 
-
-
-
-
+  "Profile": "پروفائل",
+  "Player Avatar": "کھلاڑی کا اوتار",
+  "Tournament History": "ٹورنامنٹ کی تاریخ",
+  "Match History": "میچ کی تاریخ",
+  "Date": "تاریخ",
+  "Result": "نتیجہ",
+  "Opponent": "حریف",
+  "Score": "اسکور",
+  "Match Statistics": "میچ کے اعدادوشمار",
+  "Win/Loss": "جیت/ہار",
+  "Score update": "اسکور اپ ڈیٹ",
+  "Performance": "کارکردگی",
+  "No matches found.": "کوئی میچ نہیں ملا۔",
+  "Winner ID": "فاتح کا شناختی نمبر",
+  "N/A": "لاگو نہیں",
+  "Not available": "دستیاب نہیں",
+  "No tournaments found.": "کوئی ٹورنامنٹ نہیں ملا۔"
+  
+  
 
 
 

@@ -23,7 +23,7 @@ websocket_urlpatterns = [
 
     re_path(r"^ws/home/pong-match/(?P<match_type>\w+)/(?P<match_id>\d+)/$", PongGameConsumer.as_asgi()),
 ]
-print("WebSocket Routes:", websocket_urlpatterns)
+#print("WebSocket Routes:", websocket_urlpatterns)
 
 application = ProtocolTypeRouter({
     'http': django_asgi_app,

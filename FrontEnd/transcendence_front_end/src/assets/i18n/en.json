@@ -147,7 +147,27 @@
     "Resume": "Resume",
     "Game": "Game",
     "Pause Game": "Pause Game",
-    "Lobby": "Lobby"
+    "Lobby": "Lobby",
+    
+    "Profile": "Profile",
+    "Player Avatar": "Player Avatar",
+    "Tournament History": "Tournament History",
+    "Match History": "Match History",
+    "Date": "Date",
+    "Result": "Result",
+    "Opponent": "Opponent",
+    "Score": "Score",
+    "Match Statistics": "Match Statistics",
+    "Win/Loss": "Win/Loss",
+    "Score update": "Score update",
+    "Performance": "Performance",
+    "No matches found.": "No matches found.",
+    "Winner ID": "Winner ID",
+    "N/A": "N/A",
+    "Not available": "Not available",
+    "No tournaments found.": "No tournaments found."
+      
+      
     
     
     }

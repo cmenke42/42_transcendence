@@ -32,7 +32,7 @@ export class OAuthCallbackComponent implements OnInit {
 
 
   exchangeCode(code: string) {
-    const validationUrl = 'https://'+environment.Backend_IP+':6010/api/v1/exchange-code/';
+    const validationUrl = 'https://'+environment.HOST_IP+':6010/api/v1/exchange-code/';
     const payload = { code };
     if (code == 'deactivated')
     {      

@@ -39,8 +39,12 @@ WORKDIR /app
 # Copy the dependencies from the builder stage.
 COPY --from=builder /usr/local /usr/local
 
+# Copy application code
+COPY . /app
+
 # Copy entrypoint script
 COPY ./docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Create a non-privileged user that the app will run under.
 ARG UID=10001
@@ -63,12 +67,9 @@ RUN mkdir -p /app/logs && chown ${UID}:${GID} /app/logs
 
 USER appuser
 
-
 # Prepare the application.
+#CMD ["ls", "-la", "/app/django_application"]
 ENTRYPOINT [ "entrypoint.sh" ]
 
 # Run the application.
-CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
-
-# check again for channels setting
-# CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "user_management.asgi:application"]
+CMD [ "python", "/app/django_application/manage.py", "runserver", "0.0.0.0:8000" ]

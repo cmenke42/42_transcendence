@@ -14,7 +14,7 @@ services:
       - "6010:443"
     volumes:
       - ssl_certs:/etc/nginx/ssl
-      - api-avatars:/app/avatars
+      - api-avatars:/app/django_application/avatars
     healthcheck:
       test: ["CMD", "curl", "-k", "-f", "https://localhost/nginx_status"]
       interval: 30s
@@ -22,32 +22,27 @@ services:
       timeout: 5s
       retries: 3
     depends_on:
-    - api
+      api:
+        condition: service_healthy
 
-
-
+        
   api:
     networks:
     - user_management
     build:
       context: ./api
-      dockerfile: docker/dev.Dockerfile
+      dockerfile: docker/Dockerfile
     depends_on:
       db:
         condition: service_healthy
     restart: unless-stopped
-    # secrets:
-    #   - db-password
-    #   - django_superuser_password
     volumes:
-      - api-data:/app
-      - api-avatars:/app/avatars
+      - api-avatars:/app/django_application/avatars
       - api-logs:/app/logs
+#- api-data:/app
     env_file:
       - ./api/dev.env
       - ./api/.env
-    # ports:
-    #    - 8000:8000
     expose:
       - 8000
     healthcheck:
@@ -67,15 +62,10 @@ services:
     - user_management
     image: postgres:14
     restart: unless-stopped
-    # secrets:
-    #   - db-password
     volumes:
       - db-data:/var/lib/db
     env_file:
       - ./api/dev.env
-    # environment:
-      # - POSTGRES_DB=user_management
-      # - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
     expose:
       - 5432
     healthcheck:
@@ -84,7 +74,6 @@ services:
       timeout: 10s
       retries: 5
       start_period: 10s
-
 
 
 
@@ -102,7 +91,6 @@ volumes:
       type: none
       o: bind
       device: ./api/django_application/avatars
-      #device: ./media
   api-logs:
     driver: local
     driver_opts:
@@ -110,12 +98,6 @@ volumes:
       o: bind
       device: ./api/django_application/logs
 
-    
-# secrets:
-#   db-password:
-#     file: secrets/db_password.txt
-#   django_superuser_password:
-#     file: secrets/django_superuser_password.txt
 networks:
   user_management:
     driver: bridge

@@ -24,7 +24,7 @@ export class UserService {
  
   constructor() {}
 
-  auth_url = 'https://'+environment.Backend_IP+':6010/api/v1/';
+  auth_url = 'https://'+environment.HOST_IP+':6010/api/v1/';
   
 
   getLoggedInUser(): User | null 

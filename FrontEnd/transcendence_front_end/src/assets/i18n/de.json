@@ -149,7 +149,26 @@
   "Resume": "Fortsetzen",
   "Game": "Spiel",
   "Pause Game": "Spiel pausieren",
-  "Lobby": "Lobby"
+  "Lobby": "Lobby",
+
+    
+  "Profile": "Profil",
+  "Player Avatar": "Spieler-Avatar",
+  "Tournament History": "Turnierverlauf",
+  "Match History": "Spielverlauf",
+  "Date": "Datum",
+  "Result": "Ergebnis",
+  "Opponent": "Gegner",
+  "Score": "Punktestand",
+  "Match Statistics": "Spielstatistik",
+  "Win/Loss": "Sieg/Niederlage",
+  "Score update": "Punktestand aktualisieren",
+  "Performance": "Leistung",
+  "No matches found.": "Keine Spiele gefunden.",
+  "Winner ID": "Gewinner-ID",
+  "N/A": "Nicht verfügbar",
+  "Not available": "Nicht verfügbar",
+  "No tournaments found.": "Keine Turniere gefunden."
 
   
 

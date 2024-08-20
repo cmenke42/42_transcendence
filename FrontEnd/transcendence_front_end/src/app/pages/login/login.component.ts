@@ -80,12 +80,12 @@ export class LoginComponent {
 
     // 42 Intra Authentification
     loginOAuth() {
-       window.location.href = 'https://'+environment.Backend_IP+':6010/api/v1/oauth_login/';
+       window.location.href = 'https://'+environment.HOST_IP+':6010/api/v1/oauth_login/';
         
     }
 
     loginGoogleOAuth() {
-      window.location.href = 'https://'+environment.Backend_IP+':6010/api/v1/oauth_google_login/';
+      window.location.href = 'https://'+environment.HOST_IP+':6010/api/v1/oauth_google_login/';
     }
     
     // verifyOTP()

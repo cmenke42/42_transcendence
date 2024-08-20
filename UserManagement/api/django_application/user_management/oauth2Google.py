@@ -36,7 +36,7 @@ from user_management.settings import	GOOGLE_SCOPES, \
 										EXCAHNGE_CODE_TIMEOUT, \
 			  							GOOGLE_USER_INFO_URI, \
 										GOOGLE_REDIRECT_URI ,\
-										BACKEND_IP \
+										HOST_IP \
 
 
 
@@ -201,7 +201,7 @@ def signup_via_google(user_profile_info):
 		user_profile.online_status = "ON"  
 		google_avatar_url = user_profile_info['avatar']
 		encoded_url = urllib.parse.quote(google_avatar_url)
-		user_profile.intra_avatar = f"https://{BACKEND_IP}:6010/api/v1/avatar-proxy/?url={encoded_url}"
+		user_profile.intra_avatar = f"https://{HOST_IP}:6010/api/v1/avatar-proxy/?url={encoded_url}"
 		iterator = 0
   
 		import re

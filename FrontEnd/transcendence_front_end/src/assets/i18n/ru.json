@@ -148,7 +148,31 @@
     "Resume": "Продолжить",
     "Game": "Игра",
     "Pause Game": "Пауза",
-    "Lobby" : "Лобби"     
+    "Lobby" : "Лобби" ,
+    
+    "Profile": "Профиль",
+    "Player Avatar": "Аватар Игрока",
+    "Tournament History": "История турниров",
+    "Match History": "История матчей",
+    "Date": "Дата",
+    "Result": "Результат",
+    "Opponent": "Противник",
+    "Score": "Счет",
+    "Match Statistics": "Статистика матчей",
+    "Win/Loss": "Победы/Поражения",
+    "Score update": "Обновление счета",
+    "Performance": "Производительность",
+    "No matches found.": "Матчи не найдены.",
+    "Max Players": "Максимум игроков",
+    "Status": "Статус",
+    "Winner ID": "Идентификатор победителя",
+    "Action": "Действие",
+    "N/A": "Н/Д",
+    "View": "Просмотр",
+    "Not available": "Недоступно",
+    "No tournaments found.": "Турниры не найдены."
+    
+    
     
   
     

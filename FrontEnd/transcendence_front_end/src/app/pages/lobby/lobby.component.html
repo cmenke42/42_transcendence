@@ -50,8 +50,8 @@
       <ng-template ngbNavContent>
         <div class="card custom-card">
           <div class="card-body text-center">
-            <p class="card-text">This box is for tournament matches.</p>
-            <button class="btn btn-outline-info" (click)="openModal()">Create Tournament</button>
+            <p class="card-text">{{ 'This box is for tournament matches.' | translate  }}</p>
+            <button class="btn btn-outline-info" (click)="openModal()">{{ 'Create Tournament' | translate }}</button>
 
             <!-- <button class="btn btn-outline-info btn-sm" (click)="openModal()">start</button> -->
 
@@ -59,7 +59,7 @@
                     <div class="modal-content">
                       
                       <div class="form-group">
-                        <label for="maxPlayers">Maximum Number of Players:</label>
+                        <label for="maxPlayers">{{ 'Maximum Number of Players:' | translate }} </label>
                         <small>Min Players : 3 & Max Players : 128</small>
                         <input type="number" id="maxPlayers" [(ngModel)]="maxPlayers" min="3" max="128">
                       </div>

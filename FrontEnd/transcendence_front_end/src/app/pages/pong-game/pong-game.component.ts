@@ -10,6 +10,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../service/user.service';
 import { toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 
+
+
 @Component({
   standalone: true,
   imports: [
@@ -157,6 +159,10 @@ export class PongGameComponent implements OnInit, AfterViewInit {
   ngOnDestroy() {
     this._gameSceneService.stop();
     window.removeEventListener('keydown', this._handleKeyDownBound);
+  }
+
+  goToHome() {
+    this._router.navigate(['/home']);
   }
 
 //   closeModal() {

@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 #TODO: make sure secret is onlz from env file in production
 SECRET_KEY = get_env_or_file_value("SECRET_KEY", "asjhdghasj")
-BACKEND_IP = get_env_or_file_value("BACKEND_IP", "localhost")
+HOST_IP = get_env_or_file_value("HOST_IP", "localhost")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_env_or_file_value("DEBUG", False)
@@ -213,14 +213,14 @@ argon2.DEFAULT_TIME_COST          = 2          # Iterations count
 CORS_ALLOW_ALL_ORIGINS = False #True TODO: change to False
 CSRF_TRUSTED_ORIGINS = ["https://localhost:4010", "https://localhost:6010", "http://localhost:8000", ]
 CORS_ALLOWED_ORIGINS = ["https://localhost:4010", "https://localhost:6010", "http://localhost:8000", ]
-if BACKEND_IP:
+if HOST_IP:
     CORS_ALLOWED_ORIGINS.extend([
-        f"https://{BACKEND_IP}:4010",
-        f"https://{BACKEND_IP}:6010",
+        f"https://{HOST_IP}:4010",
+        f"https://{HOST_IP}:6010",
     ])
     CSRF_TRUSTED_ORIGINS.extend([
-        f"https://{BACKEND_IP}:4010",
-        f"https://{BACKEND_IP}:6010",
+        f"https://{HOST_IP}:4010",
+        f"https://{HOST_IP}:6010",
     ])
     
     
@@ -266,16 +266,16 @@ SIMPLE_JWT = {
 }
 
 # ------------------------- Common default settings -----------------------------:
-USER_DEFAULT_HOMEPAGE = 'f"{BACKEND_IP}:6010/api/v1/user/'
+USER_DEFAULT_HOMEPAGE = 'f"{HOST_IP}:6010/api/v1/user/'
 
 
 # ----------------- OAUTH 2.0 - 42 INTRA SETTINGS -----------------:
 API_42_AUTH_URL					= 'https://api.intra.42.fr/oauth/authorize'  # 42 Intra auth URL
 API_42_ACCESS_TOKEN_ENDPOINT	= 'https://api.intra.42.fr/oauth/token'		 # 42 Intra access token endpoint
-API_42_REDIRECT_URI			    = f'https://{BACKEND_IP}:6010/api/v1/call_back/'  # FOR PRODUCTION! #42 Intra redirect URI
+API_42_REDIRECT_URI			    = f'https://{HOST_IP}:6010/api/v1/call_back/'  # FOR PRODUCTION! #42 Intra redirect URI
 #API_42_REDIRECT_URI			= f'https://localhost:6010/api/v1/call_back/' #FOR DEVELOPMENT # 42 Intra redirect URI
 API_42_INTRA_ENTRYPOINT_URL		= 'https://api.intra.42.fr/v2/'				 # 42 Intra entrypoint URL
-API_42_FRONTEND_CALLBACK_URL	= f'https://{BACKEND_IP}:4010/auth-success'		 # 42 Intra frontend callback URL
+API_42_FRONTEND_CALLBACK_URL	= f'https://{HOST_IP}:4010/auth-success'		 # 42 Intra frontend callback URL
 EXCAHNGE_CODE_TIMEOUT           =  30								         # one-time code lifetime in seconds
 
 
@@ -286,7 +286,7 @@ GOOGLE_SCOPES        = [
 GOOGLE_AUTH_URI      =  'https://accounts.google.com/o/oauth2/auth'           # request for authentication
 GOOGLE_TOKEN_URI     =  'https://accounts.google.com/o/oauth2/token'          # request for token
 GOOGLE_USER_INFO_URI =  'https://www.googleapis.com/oauth2/v1/userinfo'       # request for user information
-#GOOGLE_REDIRECT_URI  =  f'https://{BACKEND_IP}:6010/api/v1/google_call_back/'     # FOR PRODUCTION! # redirect URI
+#GOOGLE_REDIRECT_URI  =  f'https://{HOST_IP}:6010/api/v1/google_call_back/'     # FOR PRODUCTION! # redirect URI
 GOOGLE_REDIRECT_URI  =  f'https://localhost:6010/api/v1/google_call_back/'     # FOR PRODUCTION! # redirect URI
 
 
@@ -299,7 +299,7 @@ OTP_FROM_EMAIL = "from@example.com"
 
 # ----------------- ACCOUNT ACTIVATION SETTINGS -----------------:
 ACCOUNT_ACTIVATION_TIMEOUT_SECONDS = 60 * 60 * 24 # 24 hours
-FRONTEND_URL                       = f"{BACKEND_IP}:4010"
+FRONTEND_URL                       = f"{HOST_IP}:4010"
 
 # ----------------- PASSWORD RECOVERY SETTINGS -----------------:
 PASSWORD_RESET_TIMEOUT = 60 * 60 # 1 hour
@@ -311,8 +311,8 @@ ASGI_APPLICATION = 'user_management.routing.application'
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0:8000', 'api:8000', 'api']
 
-if BACKEND_IP:
-    ALLOWED_HOSTS.append(BACKEND_IP.split('//')[-1])
+if HOST_IP:
+    ALLOWED_HOSTS.append(HOST_IP.split('//')[-1])
 
 
 CHANNEL_LAYERS = {
@@ -416,10 +416,10 @@ LOGGING = {
 
 # Media files (Uploaded files)
 STATIC_URL = '/static/'
-MEDIA_URL = f'https://{BACKEND_IP}:6010/avatars/'
-#MEDIA_ROOT = f'https://{BACKEND_IP}:6010/avatars/'
+MEDIA_URL = f'https://{HOST_IP}:6010/avatars/'
+#MEDIA_ROOT = f'https://{HOST_IP}:6010/avatars/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'avatars')
+MEDIA_ROOT = '/app/django_application/avatars/'
 
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # USE_X_FORWARDED_HOST = True

@@ -43,6 +43,7 @@ export class UpdateUserComponent implements OnInit {
     this.loggedInUser = this.userService.getLoggedInUser();
     console.log("Update User component is loaded...", this.loggedInUser);
     // if (this.loggedInUser?.id && this.loggedInUser?.is_intra_user)
+    // if (this.loggedInUser?.id && this.loggedInUser?.is_intra_user)
       this.getProfile();
   }
 
@@ -91,7 +92,10 @@ export class UpdateUserComponent implements OnInit {
   saveProfileChanges() {
     if (this.user_profile) {
       console.log('Saving profile changes...');
+      console.log('Saving profile changes...');
       const formData = new FormData();
+      if(this.newNickname)
+        formData.append('nickname', this.newNickname);
       if(this.newNickname)
         formData.append('nickname', this.newNickname);
       if (this.newAvatar) {
@@ -106,24 +110,43 @@ export class UpdateUserComponent implements OnInit {
           this.newAvatar = null;
 
           this.getProfile();
-          this.isEditing = false; // Exit edit mode
+          this.isEditing = false; 
           console.log('Profile updated successfully');
         },
         error: (err) => {
-          if(err.error.error == "BAD REQUEST")
-            this.popupMessageService.showMessage(`Oops!\nYour avatar must be:\n 
-																									-2MB max\n -800x800 max\n 
-																									-Be a .jpg, .jpeg or .png file.`,
-																									 'error');
-          else
-             this.popupMessageService.showMessage(`Oops!\n
-																									Something went wrong during update. Please try again.`,
-																						 			'error');
-
-
-            console.log(err);
-          console.error('Error updating profile', err.error.details.Array);
-        }
+          console.log(err.error.details.Array);
+            const details = err.error.details;
+              this.popupMessageService.showMessage('bad req', 'error');
+            if (details) {
+              this.popupMessageService.showMessage('details', 'error');
+              for (const field in details) {
+                if (field === 'nickname') {
+                  const nicknameErrors = details[field];
+                  if (nicknameErrors) {
+                    const nicknameErrorMessage = nicknameErrors[0];
+                    this.popupMessageService.showMessage(nicknameErrorMessage, 'error');
+                  }
+                  break; 
+                }
+                else if (field === 'avatar') {
+                  this.popupMessageService.showMessage(`Oops!\nYour avatar must be:\n 
+				 							  -2MB max\n -800x800 max\n -Be a .jpg, .jpeg or .png file.`,
+ 											  'error');            
+                    break; 
+                  }
+                else
+                  this.popupMessageService.showMessage(`Oops!\n
+                    Something went wrong during update. Please try again.`,
+                     'error');
+                  break;
+              }
+            }
+            else {
+                  this.popupMessageService.showMessage(`Oops!\n
+										Something went wrong during update. Please try again.`,
+										'error');
+            }
+          }
       });
     }
   }

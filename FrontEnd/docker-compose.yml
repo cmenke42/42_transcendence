@@ -11,7 +11,6 @@ services:
     expose:
       - "443"
     ports:
-      #- "127.0.0.1:4010:443"
       - "4010:443"
     volumes:
       - ssl_certs:/etc/nginx/ssl
@@ -32,21 +31,15 @@ services:
       context: ./transcendence_front_end
       dockerfile: ../docker/Dockerfile
 
-      args:
-        - HOST_IP=${HOST_IP}
-    environment:
-      - HOST_IP=${HOST_IP}
+     # args:
+      #  - HOST_IP=${HOST_IP}
+   # environment:
+      #- HOST_IP=${HOST_IP}
 
     restart: unless-stopped
     volumes:
-      - ./transcendence_front_end:/app
-      # - node_modules:/app/node_modules
-      # to avoid permission issues
-      # effectively excluding the .angular folder
-      # from mount
+      #- ./transcendence_front_end:/app
       - angular_cache:/app/.angular
-    # ports:
-    #   - 127.0.0.1:4200:4200
     expose:
       - 4200
     healthcheck:

@@ -2,8 +2,8 @@
 
 # Apply database migrations
 
-python manage.py migrate
-python manage.py createsuperuser --noinput
+python /app/django_application/manage.py migrate
+python /app/django_application/manage.py createsuperuser --noinput
 
 # Start server and execute CMDs passed
 exec "$@"

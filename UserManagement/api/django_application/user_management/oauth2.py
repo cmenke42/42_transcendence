@@ -129,6 +129,7 @@ def FortyTwoIntraLoginCallback(request):
 	if not decrypt_query_param(encrypted_state_2) :
 		return JsonResponse({'error': 'State from Intra callback cannot be decrypted'}, status=400)
 	if not(200 <= response.status_code < 300):
+		print(response.json())
 		return JsonResponse({'error': 'Failed to get access token from 42'}, status=401)
 	intra_access_token = response.json().get('access_token')
 	user_profile_info = retrieve_user_info(intra_access_token)

@@ -79,8 +79,8 @@ input::placeholder {
 }
 
 .neon-button.orange {
-  background-color: #e05109;
-  box-shadow: 0 0 10px #e05109;
+  background-color: #FFA500;
+  box-shadow: 0 0 10px #FFA500;
 }
 
 .neon-button:hover {
@@ -111,12 +111,12 @@ input::placeholder {
 }
 
 a {
-  color: #e05109;
+  color: #FFA500;
   text-decoration: none;
 }
 
 a:hover {
-  text-shadow: 0 0 5px #e05109;
+  text-shadow: 0 0 5px #FFA500;
 }
 
 .modal {
@@ -149,5 +149,5 @@ a:hover {
 }
 
 .close:hover {
-  color: #e05109;
+  color: #FFA500;
 }

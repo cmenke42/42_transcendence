@@ -12,7 +12,7 @@ import { environment } from '../../environments/environment.development';
 })
 export class AuthService {
 
-  private apiUrl = 'https://'+environment.Backend_IP+':6010/api/v1/';  
+  private apiUrl = 'https://'+environment.HOST_IP+':6010/api/v1/';  
   private jwtHelper = new JwtHelperService();
   private accessToken: string | null = null;
   private refreshToken: string | null = null;

@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { NgxChartsModule, ScaleType, Color } from '@swimlane/ngx-charts';
 import { match } from '../../interface/match';
 import { UserProfile } from '../../interface/user-profile';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-user',
@@ -15,7 +17,8 @@ import { UserProfile } from '../../interface/user-profile';
     NgbAccordionModule,
     CommonModule,
     NgxChartsModule,
-    RouterLink
+    RouterLink,
+    TranslateModule,
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
@@ -48,6 +51,7 @@ export class UserComponent implements OnInit{
   view: [number, number] = [700, 400];
   showTournamentPopup: boolean = false;
   
+  constructor( private translate: TranslateService ) {}
 
   ngOnInit(): void 
   {
