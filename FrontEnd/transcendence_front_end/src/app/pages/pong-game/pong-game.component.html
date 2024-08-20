@@ -26,9 +26,16 @@
 	
 	<div class="row mb-3">
 	  <div class="col-5">
-		<div class="card bg-primary text-white">
-		  <div class="card-body py-2">
-			<h5 class="card-title mb-0">{{ 'Player 1' | translate }}</h5>
+		<div class="card bg-black text-white">
+		  <div class="card-body py-2" style="color: #007bff;">
+			@if (player1_nickname)
+			{
+				<h5 class="card-title mb-0" >{{ player1_nickname | translate }}</h5>
+			}
+			@else 
+			{
+				<h5 class="card-title mb-0">{{ 'Player 1' | translate }}</h5>
+			}
 			<p class="card-text score">{{ remoteGameService.gameState().score1 }}</p>
 		  </div>
 		</div>
@@ -38,8 +45,15 @@
 	  </div>
 	  <div class="col-5">
 		<div class="card bg-orange text-white">
-		  <div class="card-body py-2">
-			<h5 class="card-title mb-0">{{ 'Player 2' | translate }}</h5>
+		  <div  style="color: #e05109;" class="card-body py-2">
+			@if (player2_nickname)
+			{
+				<h5 class="card-title mb-0">{{ player2_nickname | translate }}</h5>
+			}
+			@else 
+			{
+				<h5 class="card-title mb-0">{{ 'Player 2' | translate }}</h5>
+			}
 			<p class="card-text score">{{ remoteGameService.gameState().score2 }}</p>
 		  </div>
 		</div>

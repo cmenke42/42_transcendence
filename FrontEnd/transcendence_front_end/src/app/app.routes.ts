@@ -35,7 +35,7 @@ export const routes: Routes = [
 
     { path: 'change-email', component: ChangeEmailLinkComponent, canActivate: [userGuard]},
     { path: 'change-password', component: ChangePasswordComponent, canActivate: [userGuard]},
-
+    { path: 'pong-match/:match_type/:match_id', component: PongGameComponent },
 
     {
         path: 'home',
@@ -52,7 +52,7 @@ export const routes: Routes = [
             { path: 'lobby', component: LobbyComponent },
             { path: 'matchmaking/:tournament_id/:nickname', component: MatchMakingComponent},
             { path: 'chat/:tournament_id', component: ChatComponent},
-            { path: 'update-user', component: UpdateUserComponent}
+            { path: 'update-user', component: UpdateUserComponent},
             { path: 'pong-match/:match_type/:match_id', component: PongGameComponent },
         ]
     },

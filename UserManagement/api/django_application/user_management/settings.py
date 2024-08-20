@@ -272,7 +272,8 @@ USER_DEFAULT_HOMEPAGE = 'f"{BACKEND_IP}:6010/api/v1/user/'
 # ----------------- OAUTH 2.0 - 42 INTRA SETTINGS -----------------:
 API_42_AUTH_URL					= 'https://api.intra.42.fr/oauth/authorize'  # 42 Intra auth URL
 API_42_ACCESS_TOKEN_ENDPOINT	= 'https://api.intra.42.fr/oauth/token'		 # 42 Intra access token endpoint
-API_42_REDIRECT_URI				= f'https://{BACKEND_IP}:6010/api/v1/call_back/' # 42 Intra redirect URI
+API_42_REDIRECT_URI			    = f'https://{BACKEND_IP}:6010/api/v1/call_back/'  # FOR PRODUCTION! #42 Intra redirect URI
+#API_42_REDIRECT_URI			= f'https://localhost:6010/api/v1/call_back/' #FOR DEVELOPMENT # 42 Intra redirect URI
 API_42_INTRA_ENTRYPOINT_URL		= 'https://api.intra.42.fr/v2/'				 # 42 Intra entrypoint URL
 API_42_FRONTEND_CALLBACK_URL	= f'https://{BACKEND_IP}:4010/auth-success'		 # 42 Intra frontend callback URL
 EXCAHNGE_CODE_TIMEOUT           =  30								         # one-time code lifetime in seconds
@@ -285,7 +286,8 @@ GOOGLE_SCOPES        = [
 GOOGLE_AUTH_URI      =  'https://accounts.google.com/o/oauth2/auth'           # request for authentication
 GOOGLE_TOKEN_URI     =  'https://accounts.google.com/o/oauth2/token'          # request for token
 GOOGLE_USER_INFO_URI =  'https://www.googleapis.com/oauth2/v1/userinfo'       # request for user information
-GOOGLE_REDIRECT_URI  =  f'https://{BACKEND_IP}:6010/api/v1/google_call_back/'     # redirect URI
+#GOOGLE_REDIRECT_URI  =  f'https://{BACKEND_IP}:6010/api/v1/google_call_back/'     # FOR PRODUCTION! # redirect URI
+GOOGLE_REDIRECT_URI  =  f'https://localhost:6010/api/v1/google_call_back/'     # FOR PRODUCTION! # redirect URI
 
 
 

@@ -94,3 +94,12 @@ class TournamentViewSet(
         queryset = tournament.matches.all()
         serializer = TournamentMatchSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
+
+
+class TournamentMatchViewSet(
+    GenericViewSet,
+    RetrieveModelMixin,
+    ListModelMixin,
+): 
+    queryset = TournamentMatch.objects.all().order_by('-id')
+    serializer_class = TournamentMatchSerializer

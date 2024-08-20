@@ -131,7 +131,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 			print('serializer.data', serializer.data)
 			return Response(serializer.data, status=200)	
 		return Response({"error": "BAD REQUEST", "details": serializer.errors}, status=400)
-
+		
 
 
 class UserListView(APIView):

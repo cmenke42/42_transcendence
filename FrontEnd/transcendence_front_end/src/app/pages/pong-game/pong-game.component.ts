@@ -7,6 +7,8 @@ import { RemoteGameService } from '../../service/remote-game.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IGameEndUpdate, MatchType } from '../../interface/remote-game.interface';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { UserService } from '../../service/user.service';
+import { toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 
 @Component({
   standalone: true,
@@ -14,6 +16,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     CommonModule,
     TranslateModule
   ],
+  providers: [GameSceneService],
   selector: 'app-pong-game',
   templateUrl: './pong-game.component.html',
   styleUrls: ['./pong-game.component.css']
@@ -26,6 +29,8 @@ export class PongGameComponent implements OnInit, AfterViewInit {
 
   private _match_type: string = "";
   private _match_id: string = "";
+  player1_nickname : string | null = null;
+  player2_nickname : string | null = null; 
 
   private _handleKeyDownBound: (event: KeyboardEvent) => void;
 
@@ -35,6 +40,7 @@ export class PongGameComponent implements OnInit, AfterViewInit {
     private _route: ActivatedRoute,
     private _router: Router,
     private translate: TranslateService,
+    private userService: UserService,
   ) {
       const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
       this.translate.use(preferredLanguage); 
@@ -57,6 +63,8 @@ export class PongGameComponent implements OnInit, AfterViewInit {
     this._match_type = this._route.snapshot.params['match_type'];
     this._match_id = this._route.snapshot.params['match_id'];
 
+    this.UsersDetail(this._match_type, this._match_id);
+
     if (!MatchType.isMatchType(this._match_type) || !this._isMatchId(this._match_id)) {
       this._router.navigate(['/404']);
       return;
@@ -64,6 +72,36 @@ export class PongGameComponent implements OnInit, AfterViewInit {
 
     this._gameSceneService.matchType = this._match_type;
     window.addEventListener('keydown', this._handleKeyDownBound);
+  }
+
+  UsersDetail(match_type: string, match_id: string)
+  {
+    const _match_id = Number(match_id);
+    
+    if (match_type == "1v1")
+    {
+      this.userService.matchPlayersDetail(_match_id).subscribe({
+        next : (data: any) => {
+          this.player1_nickname = data.player_1.nickname;
+          this.player2_nickname = data.player_2.nickname;
+        },
+      error : (err) => {
+        console.log("error message from fetching the nickname ", err);
+      }
+      })
+    }
+    else if (match_type == "tournament")
+    {
+      this.userService.tournamentMatchPlayerDetail(_match_id).subscribe({
+        next : (data: any) => {
+          this.player1_nickname = data.player_1.nickname;
+          this.player2_nickname = data.player_2.nickname;
+        },
+      error : (err) => {
+        console.log("error message from fetching the nickname ", err);
+      }
+      })
+    }
   }
 
   private _isMatchId(match_id: string): boolean {

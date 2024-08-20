@@ -240,6 +240,11 @@ export class UserService {
     // return this.http.get(`${this.auth_url}match/list/?user_id=${user_id}`);
   }
 
+  //Players Detail from 1v1 Match
+  matchPlayersDetail(match_id: number) : Observable<any>
+  {
+    return this.http.get(`${this.auth_url}matches/${match_id}`)
+  }
   //Tournament
   // Create Tournament
   createTournament(maxPlayers: number) : Observable<any>
@@ -286,6 +291,12 @@ export class UserService {
   fetchTournamentPlayers(id: number) : Observable<any>
   {
     return this.http.get(`${this.auth_url}tournaments/${id}/participants/`);
+  }
+
+  //show the players details from Tournament matches
+  tournamentMatchPlayerDetail(match_id: number) : Observable<any>
+  {
+    return this.http.get(`${this.auth_url}tournament-matches/${match_id}/`);
   }
 
 }

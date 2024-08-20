@@ -55,32 +55,3 @@ export class OAuthCallbackComponent implements OnInit {
 
 }
 
-
-
-
-
-  // validateTokens(refreshToken: string, accessToken: string) {
-  //   const validationUrl = 'http://localhost:8000/api/v1/validate-tokens/';  
-  //   const payload = { refresh_token: refreshToken, access_token: accessToken };
-
-  //   this.http.post(validationUrl, payload).subscribe(
-  //     (response: any) => {
-  //       if (response.isValid) {
-	// 				alert('VERIFICATION OF TOKENS  successful!');  
-  //         localStorage.setItem('refresh_token', refreshToken);
-  //         localStorage.setItem('access_token', accessToken);
-  //         this.router.navigate(['/home']);
-  //       } else {
-  //         console.error('Token validation failed');  
-  //         this.router.navigate(['/login']);
-  //       }
-  //     },
-  //     (error) => {
-	// 			alert('VERIFICATION OF TOKENS  failed!');  
-  //       console.error('Error validating tokens:', error);
-  //       this.router.navigate(['/login']);
-  //     }
-  //   );
-  // }
-
-

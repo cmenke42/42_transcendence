@@ -48,9 +48,10 @@ export function gameStatusKeyToString(key: GameStatus): string {
   return GameStatusButtonTexts[key];
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+// @Injectable({
+//   providedIn: 
+// })
+@Injectable()
 export class GameSceneService {
 
   private animationFrameId: number | null = null;

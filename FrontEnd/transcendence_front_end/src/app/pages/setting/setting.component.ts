@@ -50,9 +50,9 @@ export class SettingComponent implements OnInit, OnDestroy {
   this.userService.getterProfile().subscribe(nickname => {
     this.sender = nickname.nickname;
   });
-  this.list_timer = setInterval(() => {
-    this.showUserProfile();
-  }, 3000);
+  // this.list_timer = setInterval(() => {
+  //   this.showUserProfile();
+  // }, 3000);
   }
 
   ngOnDestroy(): void {

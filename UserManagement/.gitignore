@@ -11,3 +11,6 @@
 
 # Logs
 **/logs/*
+
+# avatars
+api/django_application/avatars/avatar
