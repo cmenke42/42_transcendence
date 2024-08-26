@@ -48,3 +48,5 @@ refresh_migrations:
 clear_python_cache:
 	find $(PROJECT_PATH) -type d -name "__pycache__" -exec rm -r {} +
 	find $(PROJECT_PATH) -type f -name "*.pyc" -exec rm -f {} +
+
+PHONY: run migrate test dump_database delete_database load_database create_python_env recreate_python_env clear_migrations refresh_migrations clear_python_cache

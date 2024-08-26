@@ -50,3 +50,6 @@
 
 # node
 node_modules/
+
+# gitkeep
+!**/.gitkeep

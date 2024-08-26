@@ -7,6 +7,10 @@ from match.models import Match1v1
 from .match_types import MatchType
 from tournament.models.tournament_match import TournamentMatch
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 @database_sync_to_async
 def get_match(match_type: MatchType, match_id: str):
     # Mapping of MatchType to their corresponding Django models
@@ -20,9 +24,9 @@ def get_match(match_type: MatchType, match_id: str):
     try:
         match = match_model.objects.select_related('player_1', 'player_2').get(id=match_id)
     except match_model.DoesNotExist:
-        print(f"Match with id {match_id} does not exist in {match_model.__name__} table")
+        logger.info(f"Match with id {match_id} does not exist in {match_model.__name__} table")
         return None
     if match.is_played:
-        print(f"Match with id {match_id} is already played")
+        logger.info(f"Match with id {match_id} is already played")
         return None
     return match

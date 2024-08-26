@@ -25,7 +25,7 @@ class MyObtainTokenPairView(TokenObtainPairView):
         try:
             serializer.is_valid(raise_exception=True)
         except Exception as e:
-            print(e) # print the error
+            logger.info(e) # print the error
             return Response({"detail": "Invalid credentials."}, status=status.HTTP_401_UNAUTHORIZED)
         
         user = serializer.user
@@ -51,6 +51,22 @@ class MyObtainTokenPairView(TokenObtainPairView):
         # If 2FA is not enabled, return the token as usual  
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
+# class VerifyOTPView(APIView):
+#     permission_classes = [AllowAny]
+    
+#     def post(self, request):
+#         serializer = OTPVerifySerializer(data=request.data)
+#         if serializer.is_valid():
+#             email = serializer.validated_data["email"]
+#             user = CustomUser.objects.get(email=email)
+#             # Issue JWT token
+#             refresh = RefreshToken.for_user(user)
+#             return Response({
+#                 'refresh': str(refresh),
+#                 'access': str(refresh.access_token),
+#             }, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class VerifyOTPView(APIView):
     permission_classes = [AllowAny]
     
@@ -61,13 +77,17 @@ class VerifyOTPView(APIView):
             user = CustomUser.objects.get(email=email)
             # Issue JWT token
             refresh = RefreshToken.for_user(user)
+            access = refresh.access_token
+
+            # Add custom claims
+            access['email'] = user.email
+            access['is_superuser'] = user.is_superuser
+            access['is_intra_user'] = user.is_intra_user
             return Response({
                 'refresh': str(refresh),
-                'access': str(refresh.access_token),
+                'access': str(access),
             }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 
 class LogoutView(APIView):

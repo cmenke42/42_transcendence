@@ -19,7 +19,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     is_active = models.BooleanField(
         verbose_name="active",
-        default=True,
+        default=False,
         help_text="Status of the user account",
     )
     is_intra_user = models.BooleanField(

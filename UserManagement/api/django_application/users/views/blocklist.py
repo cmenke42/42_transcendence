@@ -4,6 +4,10 @@ from rest_framework.views import APIView
 from ..models import Friend 
 from rest_framework.response import Response 
 from .friendship_view import validate_friend_id
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 # 	path('blocklist/add/', BlockListAddView.as_view(), name='blocklist-add'),
 
@@ -52,7 +56,7 @@ class BlockListAddView(APIView):
 			return Response(data = {'error': error}, status=400)
 		try:
 			relationship = Friend.objects.get(user_id=user_id, friend_id=blocked_id)
-			print(relationship.status)
+			logger.info(relationship.status)
 			if relationship.status == Friend.BLOCKED:
 				return Response(data = {'error': 'friend is already blocked'}, status=400)
 		except Friend.DoesNotExist:

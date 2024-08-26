@@ -8,6 +8,9 @@ from django.utils import timezone
 from django.db import transaction
 from django.db.models import F
 from django.db import IntegrityError
+import logging
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from .tournament_match import TournamentMatch
@@ -165,7 +168,7 @@ class Tournament(models.Model):
 
         # Assign bye matches
         for i in range(number_of_byes):
-            print("i: ",i)
+            logger.info("i: ",i)
             match = matches[i]
             match.player_1 = participants[i].player
             match.player_2 = None
@@ -175,7 +178,7 @@ class Tournament(models.Model):
         # Assign players to matches without byes
         j = number_of_byes
         for i in range(j, self.current_number_of_players, 2):
-            print("second i: ",i)
+            logger.info("second i: ",i)
             match = matches[j]
             match.player_1 = participants[i].player
             match.player_2 = participants[i + 1].player

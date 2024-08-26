@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, effect } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, effect, inject } from '@angular/core';
 import * as THREE from 'three';
 import { CommonModule } from '@angular/common';
 import { WebSocketSubject } from 'rxjs/webSocket';
@@ -18,7 +18,10 @@ import { toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
     CommonModule,
     TranslateModule
   ],
-  providers: [GameSceneService],
+  providers: [
+    GameSceneService,
+    RemoteGameService,
+  ],
   selector: 'app-pong-game',
   templateUrl: './pong-game.component.html',
   styleUrls: ['./pong-game.component.css']
@@ -36,17 +39,60 @@ export class PongGameComponent implements OnInit, AfterViewInit {
 
   private _handleKeyDownBound: (event: KeyboardEvent) => void;
 
+  // constructor(
+  //   private _gameSceneService: GameSceneService,
+  //   public remoteGameService: RemoteGameService,
+  //   private _route: ActivatedRoute,
+  //   private _router: Router,
+  //   private translate: TranslateService,
+  //   private userService: UserService,
+  // ) {
+  //     const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+  //     this.translate.use(preferredLanguage); 
+
+  //   effect(() => {
+  //     const gameEndData = this.remoteGameService.gameEnd();
+  //     if (gameEndData) {
+  //       this.showGameOver(gameEndData);
+  //     }
+  //   }, { allowSignalWrites: true });
+
+  //   effect(() => {
+  //     this.gameStatusButtonText = gameStatusKeyToString(this._gameSceneService.gameStatus);
+  //   });
+
+  //   this._handleKeyDownBound = this.handleKeyDown.bind(this);
+  // }
+
+  // ngOnInit() {
+  //   this._match_type = this._route.snapshot.params['match_type'];
+  //   this._match_id = this._route.snapshot.params['match_id'];
+
+  //   this.UsersDetail(this._match_type, this._match_id);
+
+  //   if (!MatchType.isMatchType(this._match_type) || !this._isMatchId(this._match_id)) {
+  //     this._router.navigate(['/404']);
+  //     return;
+  //   }
+
+  //   this._gameSceneService.matchType = this._match_type;
+  //   window.addEventListener('keydown', this._handleKeyDownBound);
+  // }
+
+  private  _gameSceneService = inject(GameSceneService);
   constructor(
-    private _gameSceneService: GameSceneService,
     public remoteGameService: RemoteGameService,
     private _route: ActivatedRoute,
     private _router: Router,
     private translate: TranslateService,
     private userService: UserService,
   ) {
-      const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
-      this.translate.use(preferredLanguage); 
 
+
+    console.log("GameSceneService", this._gameSceneService);
+
+
+    this._handleKeyDownBound = this.handleKeyDown.bind(this);
     effect(() => {
       const gameEndData = this.remoteGameService.gameEnd();
       if (gameEndData) {
@@ -54,14 +100,17 @@ export class PongGameComponent implements OnInit, AfterViewInit {
       }
     }, { allowSignalWrites: true });
 
+    window.addEventListener('keydown', this._handleKeyDownBound);
+
     effect(() => {
       this.gameStatusButtonText = gameStatusKeyToString(this._gameSceneService.gameStatus);
     });
-
-    this._handleKeyDownBound = this.handleKeyDown.bind(this);
   }
 
   ngOnInit() {
+    const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+    this.translate.use(preferredLanguage);
+
     this._match_type = this._route.snapshot.params['match_type'];
     this._match_id = this._route.snapshot.params['match_id'];
 
@@ -73,7 +122,6 @@ export class PongGameComponent implements OnInit, AfterViewInit {
     }
 
     this._gameSceneService.matchType = this._match_type;
-    window.addEventListener('keydown', this._handleKeyDownBound);
   }
 
   UsersDetail(match_type: string, match_id: string)
@@ -121,6 +169,7 @@ export class PongGameComponent implements OnInit, AfterViewInit {
     }
     window.removeEventListener('keydown', this._handleKeyDownBound);
     this.showGameOverModal = true;
+    // this.remoteGameService.gameEnd.set(null);
     this._gameSceneService.stop();
   }
 

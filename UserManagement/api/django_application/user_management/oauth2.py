@@ -4,6 +4,7 @@ import secrets
 import random
 import requests
 import uuid
+import logging
 
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -35,7 +36,7 @@ from user_management.settings import	API_42_AUTH_URL, API_42_REDIRECT_URI, \
 										EXCAHNGE_CODE_TIMEOUT
 
 
-
+logger = logging.getLogger(__name__)
 
 # Check if all required fields are present in the user profile info
 def validate_user_profile_info(user_profile_info):
@@ -129,7 +130,7 @@ def FortyTwoIntraLoginCallback(request):
 	if not decrypt_query_param(encrypted_state_2) :
 		return JsonResponse({'error': 'State from Intra callback cannot be decrypted'}, status=400)
 	if not(200 <= response.status_code < 300):
-		print(response.json())
+		logger.info(response.json())
 		return JsonResponse({'error': 'Failed to get access token from 42'}, status=401)
 	intra_access_token = response.json().get('access_token')
 	user_profile_info = retrieve_user_info(intra_access_token)

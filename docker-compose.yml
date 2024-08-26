@@ -21,3 +21,9 @@ volumes:
         type: none
         o: bind
         device: ./ssl/certs
+
+secrets:
+  ssl_cert:
+    file: ./ssl/certs/certificate.crt
+  ssl_key:
+    file: ./ssl/certs/private.key

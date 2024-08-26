@@ -11,7 +11,6 @@ import re
 #     Will return the path where to store the user avatar
 #     """
 #     base_path = get_base_user_directory_path(instance.user.id)
-#     print ("***************** get_user_avatar_path ', {0}user_profile/avatar".format(base_path))
 #     return "{0}user_profile/avatar".format(base_path)
 
 class UserProfile(models.Model):

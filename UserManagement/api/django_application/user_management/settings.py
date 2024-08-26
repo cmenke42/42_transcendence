@@ -286,7 +286,6 @@ GOOGLE_SCOPES        = [
 GOOGLE_AUTH_URI      =  'https://accounts.google.com/o/oauth2/auth'           # request for authentication
 GOOGLE_TOKEN_URI     =  'https://accounts.google.com/o/oauth2/token'          # request for token
 GOOGLE_USER_INFO_URI =  'https://www.googleapis.com/oauth2/v1/userinfo'       # request for user information
-#GOOGLE_REDIRECT_URI  =  f'https://{HOST_IP}:6010/api/v1/google_call_back/'     # FOR PRODUCTION! # redirect URI
 GOOGLE_REDIRECT_URI  =  f'https://localhost:6010/api/v1/google_call_back/'     # FOR PRODUCTION! # redirect URI
 
 
@@ -343,6 +342,8 @@ CORS_ALLOW_HEADERS = [
 
 # ----------------------- LOGGER SETTINGS -------------------------:
 #How to use logger:
+    # import logging
+    # logger = logging.getLogger(__name__)
     # add to code  logger.info('This is an info message')
     # add to code  logger.error('This is an error message')
 

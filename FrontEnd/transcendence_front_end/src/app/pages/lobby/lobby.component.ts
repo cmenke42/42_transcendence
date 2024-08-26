@@ -153,9 +153,9 @@ export class LobbyComponent implements OnInit{
     this.userService.startTournament(id).subscribe({
       next: (data: any) => {
         //alert(data.detail);
-        this.popupMessageService.showMessage(data.detail, 'info');
+        this.popupMessageService.showMessage('start tournament...', 'info');
         this.ngOnInit();
-        console.log('start tournament data...', data);
+       
       },
       error: (err: any) => {
         console.log('error from start tournament...', err);

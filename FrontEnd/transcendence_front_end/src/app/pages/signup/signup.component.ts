@@ -43,7 +43,7 @@ export class SignupComponent {
 			this.popupMessageService.showMessage('Please fill all the fields...', 'error');
 		else if (this.user.password !== this.confirmPassword)
 			this.popupMessageService.showMessage('Password and Confirm Password should be same...', 'error');
-		{
+		else {
 			this.userService.registerUser(this.user).subscribe(
 				{
 					next : response => {

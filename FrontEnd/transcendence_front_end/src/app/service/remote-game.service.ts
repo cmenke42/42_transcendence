@@ -26,9 +26,7 @@ export enum ConnectionStatus {
   DISCONNECTED = 'DISCONNECTED',
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class RemoteGameService {
   private connectConfig!: IConnectConfig;
   private subscription: any;

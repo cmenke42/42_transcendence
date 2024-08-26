@@ -13,8 +13,10 @@ services:
     ports:
       - "6010:443"
     volumes:
-      - ssl_certs:/etc/nginx/ssl
       - api-avatars:/app/django_application/avatars
+    secrets:
+      - ssl_cert
+      - ssl_key
     healthcheck:
       test: ["CMD", "curl", "-k", "-f", "https://localhost/nginx_status"]
       interval: 30s
@@ -41,7 +43,7 @@ services:
       - api-logs:/app/logs
 #- api-data:/app
     env_file:
-      - ./api/dev.env
+# - ./api/dev.env
       - ./api/.env
     expose:
       - 8000
@@ -65,7 +67,8 @@ services:
     volumes:
       - db-data:/var/lib/db
     env_file:
-      - ./api/dev.env
+#- ./api/dev.env
+      - ./api/.env
     expose:
       - 5432
     healthcheck:
@@ -74,7 +77,6 @@ services:
       timeout: 10s
       retries: 5
       start_period: 10s
-
 
 
 volumes:

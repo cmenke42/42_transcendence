@@ -1,14 +1,10 @@
-
 all: set_permissions
 	./UserManagement/nginx/entrypoint.sh
-	./ssl/generate_certificates.sh
 	./FrontEnd/docker/init.sh
 	$(MAKE) build
 
 set_permissions:
 	chmod +x UserManagement/nginx/entrypoint.sh \
-			 ssl/generate_certificates.sh \
-			 UserManagement/api/docker/init.sh \
 			 FrontEnd/docker/init.sh
 
 up:
@@ -30,3 +26,4 @@ clean:
 
 re: clean all
 
+PHONY: all set_permissions up build down clean re

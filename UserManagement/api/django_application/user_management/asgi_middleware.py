@@ -6,6 +6,10 @@ from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import AccessToken
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 User = get_user_model()
 
 class ASGI_SimpleJWT_AuthMiddleware(BaseMiddleware):
@@ -27,7 +31,7 @@ class ASGI_SimpleJWT_AuthMiddleware(BaseMiddleware):
             user = await self._get_user(user_id)
             scope['user'] = user
         except (TokenError, User.DoesNotExist, ValueError) as e:
-            print(f"Invalid token: {e}")
+            logger.info(f"Invalid token: {e}")
             scope['user'] = AnonymousUser()
 
         return await super().__call__(scope, receive, send)

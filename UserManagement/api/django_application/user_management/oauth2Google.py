@@ -4,6 +4,7 @@ import secrets
 import random
 import requests
 import uuid
+import logging
 
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -38,7 +39,7 @@ from user_management.settings import	GOOGLE_SCOPES, \
 										GOOGLE_REDIRECT_URI ,\
 										HOST_IP \
 
-
+logger = logging.getLogger(__name__)
 
 
 # Check if all required fields are present in the user profile info
@@ -116,9 +117,9 @@ def GoogleLoginCallback(request):
 	if not code:
 		return JsonResponse({'error': 'code hasn\'t been received from Google'}, status=400)  
 	 
-	print('get_env_or_file_value("GOOGLE_CLIENT_ID")', get_env_or_file_value("GOOGLE_CLIENT_ID"))
-	print('get_env_or_file_value("GOOGLE_CLIENT_SECRET")', get_env_or_file_value("GOOGLE_CLIENT_SECRET"))
-	#print('get_env_or_file_value("GOOGLE_REDIRECT_URI")', get_env_or_file_value("GOOGLE_REDIRECT_URI"))
+	logger.info('get_env_or_file_value("GOOGLE_CLIENT_ID")', get_env_or_file_value("GOOGLE_CLIENT_ID"))
+	logger.info('get_env_or_file_value("GOOGLE_CLIENT_SECRET")', get_env_or_file_value("GOOGLE_CLIENT_SECRET"))
+	#logger.info('get_env_or_file_value("GOOGLE_REDIRECT_URI")', get_env_or_file_value("GOOGLE_REDIRECT_URI"))
 	
 	token_request = {
 	'client_id'     : get_env_or_file_value("GOOGLE_CLIENT_ID"),

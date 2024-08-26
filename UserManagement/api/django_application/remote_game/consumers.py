@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 from typing import TYPE_CHECKING, Dict, Optional, Union
 
 from channels.db import database_sync_to_async
@@ -13,6 +14,9 @@ from .utils import get_match
 from channels.layers import get_channel_layer
 
 from .pong_game.pong_game import MatchTypeHint
+
+
+logger = logging.getLogger(__name__)
 
 class PlayerMovementSerializer(serializers.Serializer):
     direction = serializers.ChoiceField(choices=['up', 'down', 'neutral'])
@@ -85,7 +89,7 @@ class GameRoom:
         pass
 
     async def _handle_timeout(self):
-        print('starting joining timeout for game room', GAME_ROOM_JOINING_TIMEOUT_SECONDS)
+        #print('starting joining timeout for game room', GAME_ROOM_JOINING_TIMEOUT_SECONDS)
         await asyncio.sleep(GAME_ROOM_JOINING_TIMEOUT_SECONDS)
         room_manager = await GameRoomManagerSingleton.get_instance()
         await room_manager.delete_room(self.match_type, self.match_id)
@@ -134,14 +138,14 @@ class GameRoomManagerSingleton:
                 )
 
     async def delete_room(self, match_type: MatchType, match_id):
-        print("Deleting room......")
+        #print("Deleting room......")
         async with self.lock:
             game_room: Optional[GameRoom] = self.rooms[match_type].pop(match_id, None)
         if game_room is not None:
             game_room.delete()
             del game_room
-        print("Room deleted")
-        print(self.rooms)
+        #print("Room deleted")
+        #print(self.rooms)
 
 class PongGameConsumer(AsyncWebsocketConsumer):
     """
@@ -198,7 +202,7 @@ class PongGameConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        print("Player disconnected as player:", self.player_number)
+        #print("Player disconnected as player:", self.player_number)
         if self.game_room:
             user: UserType = self.scope['user']
             success = await self.game_room.remove_player(self.player_number, self.channel_name)
@@ -219,7 +223,7 @@ class PongGameConsumer(AsyncWebsocketConsumer):
                     elif validated_data['data']['direction'] == "neutral":
                         self.paddle.set_moving_direction(Paddle.Directions.NEUTRAL)
         except ValidationError as e:
-            print("Validation error: ", e.detail)
+            logger.error("Validation error: ", e.detail)
 
     async def game_state_update(self, event):
         message = {
@@ -238,11 +242,11 @@ class PongGameConsumer(AsyncWebsocketConsumer):
     
     async def game_disconnect(self, event):
         self.game_room = None
-        print("disconnecting player cause opponent didnt join in time")
+        #print("disconnecting player cause opponent didnt join in time")
         await self.close(code=1000)
 
     async def game_send_timer(self, event):
-        print("sending timer")
+        #print("sending timer")
         message = {
             "type": "game_timer",
             "data": event["message"] # something like (timestamp of start, duration, and purpose)

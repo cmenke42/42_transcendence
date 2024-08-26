@@ -17,6 +17,7 @@ from ..utils import get_match
 from tournament.models.tournament import Tournament, TournamentError
 from django.db import DatabaseError, IntegrityError
 from enum import Enum
+import logging
 
 if TYPE_CHECKING:
     from match.models import Match1v1
@@ -40,6 +41,8 @@ WALL_HEIGHT = 25 # Y axis
 MAX_TOURNAMENT_SAVE_RETRIES = 3
 MAX_PONG_GAME_SCORE = 5
 
+logger = logging.getLogger(__name__)
+
 class PongGame:
     _UPDATE_RATE: int = 80
     _UPDATE_INTERVAL: float = 1.0 / _UPDATE_RATE
@@ -57,7 +60,7 @@ class PongGame:
         self._match_id = match_id
     
     async def start(self):
-        print("starting game")
+        logger.info("starting game")
         async with self._game_task_lock:
             if self._game_task is not None:
                 return
@@ -67,7 +70,7 @@ class PongGame:
         await self._send_timer(start_time.isoformat())
         sleep_time = (start_time - timezone.now()).total_seconds()
         if sleep_time > 0:
-            print("sleeping", sleep_time)
+            logger.info("sleeping", sleep_time)
             await asyncio.sleep(sleep_time)
         async with self._game_task_lock:
             self._game_task = asyncio.create_task(
@@ -78,24 +81,24 @@ class PongGame:
     async def stop(self):
         async with self._game_task_lock:
             if self._game_task is not None:
-                print("stopping game")
+                logger.info("stopping game")
                 self._game_task.cancel()
                 self._game_task = None
 
     async def _enter_game_loop(self):
         try:
-            print("starting game")
+            logger.info("starting game")
             await self._game_loop()
         except asyncio.CancelledError:
-            print("Game loop cancelled")
+           logger.info("Game loop cancelled")
         finally:
             from ..consumers import GameRoomManagerSingleton
-            print("Game loo final handling")
+            logger.info("Game loo final handling")
             await self.handle_game_end()
             self._game_task = None
             room_manager = await GameRoomManagerSingleton.get_instance()
             await room_manager.delete_room(self._match_type, self._match_id)
-            print("Game loop ended finally")
+            logger.info("Game loop ended finally")
 
     async def _game_loop(self):
         previous_update_time = self._get_current_time()
@@ -117,7 +120,7 @@ class PongGame:
                 self._update_game_world(self._UPDATE_INTERVAL)
                 if self.winner_player_number:
                     await self._send_game_state_update()
-                    print("one player has won")
+                    logger.info("one player has won")
                     return
                 lag -= self._UPDATE_INTERVAL
 
@@ -160,7 +163,7 @@ class PongGame:
                     match.save()
                     return
             except (DatabaseError, IntegrityError) as e:
-                print(f"Attempt {attempt + 1} failed: {e}")
+                logger.info(f"Attempt {attempt + 1} failed: {e}")
                 if attempt == MAX_TOURNAMENT_SAVE_RETRIES - 1:
                     raise TournamentError("Failed to update match after multiple attempts.") from e
 
@@ -198,7 +201,7 @@ class PongGame:
         )
     
     async def _send_end_game_message(self, match: MatchTypeHint, reason: str = ""):
-        print("Sending end game message")
+        logger.info("Sending end game message")
         channel_layer = get_channel_layer()
         await channel_layer.group_send(
             self.channel_group_name,

@@ -3,17 +3,20 @@ name: frontend
 services:
 
   angular_nginx:
-    networks:
-    - frontend
+    depends_on:
+      - angular
     build:
       context: nginx
       dockerfile: Dockerfile
+    secrets:
+      - ssl_cert
+      - ssl_key
+    networks:
+    - frontend
     expose:
       - "443"
     ports:
       - "4010:443"
-    volumes:
-      - ssl_certs:/etc/nginx/ssl
     healthcheck:
       test: ["CMD", "curl", "-k", "-f", "https://localhost/nginx_status"]
       interval: 30s
@@ -21,25 +24,16 @@ services:
       timeout: 5s
       retries: 3
 
-    depends_on:
-      - angular
-
   angular:
     networks:
     - frontend
     build:
       context: ./transcendence_front_end
       dockerfile: ../docker/Dockerfile
-
-     # args:
-      #  - HOST_IP=${HOST_IP}
-   # environment:
-      #- HOST_IP=${HOST_IP}
-
     restart: unless-stopped
-    volumes:
-      #- ./transcendence_front_end:/app
-      - angular_cache:/app/.angular
+    # volumes:
+    #   - ./transcendence_front_end:/app
+    #   - angular_cache:/app/.angular
     expose:
       - 4200
     healthcheck:

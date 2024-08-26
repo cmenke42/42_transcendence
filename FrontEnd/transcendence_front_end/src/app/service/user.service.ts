@@ -117,7 +117,11 @@ export class UserService {
 
   toggleUserActivation(id: number, action: 'activate' | 'deactivate') : Observable<any> //not implemented in backend
   {
-    return this.http.patch(this.auth_url + 'users/' + id + '/', { is_active: action == 'activate' }); 
+    if (action === 'activate') {
+      return this.http.patch(this.auth_url + 'users/' + id + '/', { is_active: true, is_email_verified: true });
+    }
+    return this.http.patch(this.auth_url + 'users/' + id + '/', { is_active: false });
+    // return this.http.patch(this.auth_url + 'users/' + id + '/', { is_active: action == 'activate', is_email_verified: action == }); 
   }
 
   updateUser(user: User) : Observable<any>

@@ -131,8 +131,7 @@ def send_notification(user_id, friend_id, subject, type, data):
 	try:
 		# TO DO : CONNECT TO NOTIFICATION SERVICE(SEND NOTIFICATION)
 		#response = SendInternalRequest.post(url='http://localhost:8000/api/v1/notifications/', data = json.dumps(notification))
-		print ('Notification kinda was send ), 200')
-		response = {'message': 'Notification kinda was send )))', 'status_code': 200}
+		response = {'message': 'Notification was send )', 'status_code': 200}
 	except Exception as e:
 		raise Exception(f'Error sending notification: {e}')
 	if not (199 < response['status_code'] < 300):

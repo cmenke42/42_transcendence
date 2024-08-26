@@ -55,10 +55,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
             )
         except KeyError as e:
             # log or handle missing keys
-            print(f"Missing key in message payload: {e}")
+            logger.info(f"Missing key in message payload: {e}")
         except json.JSONDecodeError as e:
             # log or handle JSON decoding error
-            print(f"Invalid JSON received: {e}")
+            logger.info(f"Invalid JSON received: {e}")
         
         
     async def receive(self, text_data):
@@ -66,7 +66,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             try:
                 text_data_json = json.loads(text_data)
             except json.JSONDecodeError as e:
-                print(f"Invalid JSON received: {e}")
+                logger.info(f"Invalid JSON received: {e}")
                 return
             # text_data_json = json.loads(text_data)
             self.username = text_data_json.get('username', 'System')
@@ -154,10 +154,10 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
         try:
             return UserProfile.objects.get(nickname=nickname)
         except UserProfile.DoesNotExist:
-            print(f"some errro from get_user_profile function: {nickname}")
+            logger.info(f"some errro from get_user_profile function: {nickname}")
             return None
         except AttributeError:
-            print("User is not authenticated")
+            logger.info("User is not authenticated")
             return None
     
     @database_sync_to_async
@@ -181,18 +181,18 @@ class OnlineStatusConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         await self.accept()
-        print(f"New connection established. Total connections: {len(self.online_users)}")
+        logger.info(f"New connection established. Total connections: {len(self.online_users)}")
     
     async def disconnect(self, close_code):
         if hasattr(self, 'username'):
             if self.username in OnlineStatusConsumer.online_users:
                 OnlineStatusConsumer.online_users.remove(self.username)
-                print(f"User {self.username} disconnected. Remaining users: {OnlineStatusConsumer.online_users}")
+                logger.info(f"User {self.username} disconnected. Remaining users: {OnlineStatusConsumer.online_users}")
                 await self.broadcast_online_users()
             else:
-                print(f"User {self.username} not found in online_users set.")
+                logger.info(f"User {self.username} not found in online_users set.")
         else:
-            print("No username attribute found during disconnect.")
+            logger.info("No username attribute found during disconnect.")
         
     
     async def receive(self, text_data):
@@ -200,11 +200,11 @@ class OnlineStatusConsumer(AsyncWebsocketConsumer):
         if data['type'] == 'online':
             self.username = data['username']
             OnlineStatusConsumer.online_users.add(self.username)
-            print(f"User {self.username} connected. Total users: {OnlineStatusConsumer.online_users}")
+            logger.info(f"User {self.username} connected. Total users: {OnlineStatusConsumer.online_users}")
             await self.broadcast_online_users()
         elif data['type'] == 'offline':
             OnlineStatusConsumer.online_users.remove(self.username)
-            print(f"User {self.username} disconnected. Remaining users: {OnlineStatusConsumer.online_users}")
+            logger.info(f"User {self.username} disconnected. Remaining users: {OnlineStatusConsumer.online_users}")
             await self.broadcast_online_users()
         
     async def broadcast_online_users(self):
@@ -212,7 +212,7 @@ class OnlineStatusConsumer(AsyncWebsocketConsumer):
             'type': 'online_users',
             'online_users': list(OnlineStatusConsumer.online_users)
         }
-        print(f"Broadcasted online users: {OnlineStatusConsumer.online_users}")
+        logger.info(f"Broadcasted online users: {OnlineStatusConsumer.online_users}")
         await self.send(text_data=json.dumps(message))
 
 # remote player

@@ -45,7 +45,9 @@ from django.db.models import Q
 from .models import UserProfile
 from users.models import Friend
 from .serializers import UserProfileSerializer
+import logging
 
+logger = logging.getLogger(__name__)
 
 def check_permissions(func):
 	def wrapper(self, request, *args, **kwargs):
@@ -128,7 +130,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 			if new_language is not None:
 				user_profile.preferred_language = new_language
 			user_profile.save()
-			print('serializer.data', serializer.data)
+			logger.info('serializer.data', serializer.data)
 			return Response(serializer.data, status=200)	
 		return Response({"error": "BAD REQUEST", "details": serializer.errors}, status=400)
 		

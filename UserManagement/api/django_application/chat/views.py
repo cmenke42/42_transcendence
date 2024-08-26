@@ -83,7 +83,7 @@ def mark_message_as_read(request):
     # print(f'sender: {sender_nickname}, receiver: {receiver_nickname}')
     sender = get_object_or_404(UserProfile, nickname=sender_nickname)
     receiver = get_object_or_404(UserProfile, nickname=receiver_nickname)
-    print(f'sender: {sender}, receiver: {receiver}')
+    #print(f'sender: {sender}, receiver: {receiver}')
     PrivateChatMessage.objects.filter(
         sender=sender, receiver=receiver, is_read=False
         ).update(is_read=True)
