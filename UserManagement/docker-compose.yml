@@ -40,7 +40,6 @@ services:
     restart: unless-stopped
     volumes:
       - api-avatars:/app/django_application/avatars
-      - api-logs:/app/logs
 #- api-data:/app
     env_file:
 # - ./api/dev.env
@@ -93,12 +92,7 @@ volumes:
       type: none
       o: bind
       device: ./api/django_application/avatars
-  api-logs:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./api/django_application/logs
+
 
 networks:
   user_management:
