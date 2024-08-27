@@ -2,11 +2,11 @@
 GREEN=\033[0;32m
 RESET=\033[0m
 
-MANAGE_PY_PATH = ./django_application/manage.py
-PROJECT_PATH = ./django_application
+MANAGE_PY_PATH = ./srcs/manage.py
+PROJECT_PATH = ./srcs
 
 run:
-	daphne -e ssl:443:privateKey=/etc/nginx/ssl/private.key:certKey=/etc/nginx/ssl/certificate.crt django_application.asgi:application
+	daphne -e ssl:443:privateKey=/etc/nginx/ssl/private.key:certKey=/etc/nginx/ssl/certificate.crt srcs.asgi:application
 # python $(MANAGE_PY_PATH) runserver
 
 migrate:

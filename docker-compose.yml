@@ -7,20 +7,9 @@
 include:
   # - PgAdmin/docker-compose.yml
   - FrontEnd/docker-compose.yml
-  - UserManagement/docker-compose.yml
+  - Backend/docker-compose.yml
 
 name: transcendence
-
-# networks:
-#   user_management:
-#       driver: bridge
-volumes:
-  ssl_certs:
-    driver: local
-    driver_opts:
-        type: none
-        o: bind
-        device: ./ssl/certs
 
 secrets:
   ssl_cert:

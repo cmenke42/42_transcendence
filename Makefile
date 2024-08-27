@@ -1,11 +1,11 @@
 all: set_permissions
-	./UserManagement/nginx/entrypoint.sh
-	./FrontEnd/docker/init.sh
+	./Backend/nginx/tools/entrypoint.sh
+	./FrontEnd/angular/tools/init.sh
 	$(MAKE) build
 
 set_permissions:
-	chmod +x UserManagement/nginx/entrypoint.sh \
-			 FrontEnd/docker/init.sh
+	chmod +x Backend/nginx/tools/entrypoint.sh \
+			 FrontEnd/angular/tools/init.sh
 
 up:
 	echo "** Starting containers **"

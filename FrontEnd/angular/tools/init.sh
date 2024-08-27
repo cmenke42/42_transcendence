@@ -1,5 +1,5 @@
 
-env_file="UserManagement/api/.env"
+env_file=".env"
 echo -e "\e[36m* Run Frontend IP-define script * \e[0m"
 
 # Read HOST_IP from .env file
@@ -39,7 +39,8 @@ update_file() {
 }
 
 # Update development environment file
-update_file "$PWD/FrontEnd/transcendence_front_end/src/environments/environment.development.ts"
+update_file "$PWD/FrontEnd/angular/srcs/src/environments/environment.development.ts"
+
 
 # Update production environment file
-update_file "$PWD/FrontEnd/transcendence_front_end/src/environments/environment.ts"
+update_file "$PWD/FrontEnd/angular/srcs/src/environments/environment.ts"

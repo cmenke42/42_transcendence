@@ -1,49 +1,48 @@
-name: user_management
+name: backend
 
 services:
-
   api_nginx:
-    networks:
-    - user_management
+    container_name: api_nginx
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
     build:
-      context: nginx
+      context: ./nginx
       dockerfile: Dockerfile
+    secrets:
+      - ssl_cert
+      - ssl_key
+    volumes:
+      - api-avatars:/app/srcs/avatars
+    networks:
+    - backend
     expose:
       - "443"
     ports:
       - "6010:443"
-    volumes:
-      - api-avatars:/app/django_application/avatars
-    secrets:
-      - ssl_cert
-      - ssl_key
     healthcheck:
       test: ["CMD", "curl", "-k", "-f", "https://localhost/nginx_status"]
       interval: 30s
       start_period: 40s
       timeout: 5s
       retries: 3
-    depends_on:
-      api:
-        condition: service_healthy
-
         
   api:
-    networks:
-    - user_management
-    build:
-      context: ./api
-      dockerfile: docker/Dockerfile
     depends_on:
       db:
         condition: service_healthy
     restart: unless-stopped
+    build:
+      context: ./django
+      dockerfile: Dockerfile
     volumes:
-      - api-avatars:/app/django_application/avatars
-#- api-data:/app
+      #- ./django/srcs:/app
+      - api-avatars:/app/srcs/avatars
     env_file:
-# - ./api/dev.env
-      - ./api/.env
+    - ../.env
+    networks:
+    - backend
     expose:
       - 8000
     healthcheck:
@@ -59,15 +58,14 @@ services:
         max-file: "10"
 
   db:
-    networks:
-    - user_management
     image: postgres:14
     restart: unless-stopped
     volumes:
       - db-data:/var/lib/db
     env_file:
-#- ./api/dev.env
-      - ./api/.env
+      - ../.env
+    networks:
+    - backend
     expose:
       - 5432
     healthcheck:
@@ -77,23 +75,15 @@ services:
       retries: 5
       start_period: 10s
 
-
 volumes:
   db-data:
-  api-data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./api/django_application
   api-avatars:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ./api/django_application/avatars
-
+      device: ./django/srcs/avatars
 
 networks:
-  user_management:
+  backend:
     driver: bridge

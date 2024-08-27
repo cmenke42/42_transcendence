@@ -420,7 +420,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = f'https://{HOST_IP}:6010/avatars/'
 #MEDIA_ROOT = f'https://{HOST_IP}:6010/avatars/'
 
-MEDIA_ROOT = '/app/django_application/avatars/'
+MEDIA_ROOT = '/app/srcs/avatars/'
 
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # USE_X_FORWARDED_HOST = True

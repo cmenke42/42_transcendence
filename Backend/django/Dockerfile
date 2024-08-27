@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
+COPY ./conf/requirements.txt .
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
@@ -42,7 +42,7 @@ COPY --from=builder /usr/local /usr/local
 COPY . /app
 
 # Copy entrypoint script
-COPY ./docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY ./tools/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Create a non-privileged user that the app will run under.
@@ -64,8 +64,8 @@ RUN groupadd -g ${GID} appgroup && \
 USER appuser
 
 # Prepare the application.
-#CMD ["ls", "-la", "/app/django_application"]
+#CMD ["ls", "-la", "/app/srcs"]
 ENTRYPOINT [ "entrypoint.sh" ]
 
 # Run the application.
-CMD [ "python", "/app/django_application/manage.py", "runserver", "0.0.0.0:8000" ]
+CMD [ "python", "/app/srcs/manage.py", "runserver", "0.0.0.0:8000" ]

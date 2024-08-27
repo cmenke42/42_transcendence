@@ -13,8 +13,8 @@ from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 from django.urls import path
-from git_save.UserManagement.api.django_application.user_management.consumers import ChatConsumer
-from git_save.UserManagement.api.django_application.user_management.routing import websocket_urlpatterns
+from git_save.UserManagement.api.srcs.user_management.consumers import ChatConsumer
+from git_save.UserManagement.api.srcs.user_management.routing import websocket_urlpatterns
 
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'user_management.settings')

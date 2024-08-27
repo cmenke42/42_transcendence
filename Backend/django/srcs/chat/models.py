@@ -5,7 +5,7 @@ from user_profile.models import UserProfile
 
 
 """ 
-/home/ahsalam/42/git_save/UserManagement/api/django_application/user_profile/models.py
+/home/ahsalam/42/git_save/UserManagement/api/srcs/user_profile/models.py
 """
     # sender_nickname = models.CharField(max_length=50)
     # receiver_nickname = models.CharField(max_length=50)

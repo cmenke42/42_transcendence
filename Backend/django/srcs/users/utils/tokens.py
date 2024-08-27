@@ -72,7 +72,7 @@ class GenericTokenGenerator(PasswordResetTokenGenerator):
         self.timeout_setting_name = timeout_setting_name
         self.key_salt = (
             key_salt
-            or 'django_application.users.utils.tokens.GenericTokenGenerator'
+            or 'srcs.users.utils.tokens.GenericTokenGenerator'
         )
         self.user_attributes = kwargs.pop('user_attributes', [])
         self.kwargs = kwargs
@@ -189,12 +189,12 @@ class GenericTokenGenerator(PasswordResetTokenGenerator):
 
 account_activation_token_generator = GenericTokenGenerator(
     timeout_setting_name='ACCOUNT_ACTIVATION_TIMEOUT_SECONDS',
-    key_salt='django_application.users.utils.tokens.account_activation_token_generator',
+    key_salt='srcs.users.utils.tokens.account_activation_token_generator',
     user_attributes=['is_active', 'is_email_verified', 'email'],
 )
 
 change_email_token_generator = GenericTokenGenerator(
     timeout_setting_name='EMAIL_CHANGE_TIMEOUT_SECONDS',
-    key_salt='django_application.users.utils.tokens.change_email_token_generator',
+    key_salt='srcs.users.utils.tokens.change_email_token_generator',
     user_attributes=['is_active', 'is_email_verified', 'email', 'password'],
 )

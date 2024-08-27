@@ -1,12 +1,13 @@
 name: frontend
 
 services:
-
   angular_nginx:
+    container_name: angular_nginx
     depends_on:
       - angular
+    restart: unless-stopped
     build:
-      context: nginx
+      context: ./nginx
       dockerfile: Dockerfile
     secrets:
       - ssl_cert
@@ -25,29 +26,21 @@ services:
       retries: 3
 
   angular:
+    container_name: angular
+    restart: unless-stopped
+    build:
+      context: ./angular
+      dockerfile: Dockerfile
     networks:
     - frontend
-    build:
-      context: ./transcendence_front_end
-      dockerfile: ../docker/Dockerfile
-    restart: unless-stopped
-    # volumes:
-    #   - ./transcendence_front_end:/app
-    #   - angular_cache:/app/.angular
     expose:
-      - 4200
+      - "4200"
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://angular:4200 || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 3
       start_period: 10s
-
-
-
-volumes:
-  node_modules:
-  angular_cache:
 
 networks:
   frontend:

@@ -13,7 +13,7 @@ RUN apk add --no-cache tini \
     && chown -R node:node /app/.angular
 
 # Copy package.json and package-lock.json
-COPY package.json package-lock.json ./
+COPY ./srcs/package.json ./srcs/package-lock.json ./
 
 
 RUN npm ci
@@ -22,7 +22,7 @@ RUN npm ci
 USER node
 
 # Copy the rest of the source files into the image.
-COPY --chown=node:node . /app
+COPY --chown=node:node ./srcs /app
 
 # Expose the port that the application listens on.
 EXPOSE 4200
