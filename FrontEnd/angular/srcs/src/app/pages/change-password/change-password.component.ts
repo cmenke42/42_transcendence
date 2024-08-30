@@ -128,8 +128,8 @@ export class ChangePasswordComponent implements OnInit {
             }
           else
           {
-            this.message = error.error.status || error.error.non_field_errors ||
-              'Something went wrong. Please try again later.';
+            this.message = error.error?.status || error.error?.non_field_errors
+              || this.translate.instant('SOMETHING_WENT_WRONG');
           }
           return of(error);
         }),

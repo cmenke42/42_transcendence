@@ -9,20 +9,20 @@ set_permissions:
 
 up:
 	echo "** Starting containers **"
-	docker-compose up
+	docker compose up
 
 build:
 	echo "** Starting build **"
-	docker-compose up --build
+	docker compose up --build
 	echo "** Build has been completed **"
 
 down:
 	echo "** Stopping containers **"
-	docker-compose down
+	docker compose down
 
 clean:
 	echo "** Cleaning up down -v **"
-	docker-compose down -v
+	docker compose down -v
 
 re: clean all
 

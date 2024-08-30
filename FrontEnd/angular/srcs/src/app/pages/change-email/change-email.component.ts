@@ -65,7 +65,7 @@ export class ChangeEmailComponent implements OnInit {
       }),
       catchError((error) => {
         this.isLoading = false;
-        this.message = error.error.status || error.error.non_field_errors ||
+        this.message = error.error?.status || error.error?.non_field_errors ||
         this.translate.instant('SOMETHING_WENT_WRONG');
         return of(error);
       }),

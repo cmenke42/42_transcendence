@@ -98,7 +98,7 @@
 			  </li>
 			</ul>
 		  </div>
-		  <form class="d-flex" *ngIf="receiver_data">
+		  <form class="d-flex" *ngIf="receiver_data" (keydown.enter)="sendMessage()">
 			<input type="text" class="form-control mr-2" [(ngModel)]="message" name="message" placeholder="{{ 'Type a message...' | translate }}">
 			<button type="button" class="btn btn-info" (click)="sendMessage()">{{ 'Send' | translate }}</button>
 		  </form>

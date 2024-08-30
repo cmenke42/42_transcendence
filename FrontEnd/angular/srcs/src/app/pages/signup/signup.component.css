@@ -35,7 +35,7 @@ body, html {
 
 .input-group {
   position: relative;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 input {
@@ -48,8 +48,23 @@ input {
   font-size: 16px;
 }
 
+input.ng-touched.ng-invalid,
+input.ng-dirty.ng-invalid,
+input.ng-dirty.password-mismatch {
+  border: 1px solid red;
+}
+
 input::placeholder {
   color: rgba(77, 247, 255, 0.5);
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #4df7ff;
+  cursor: pointer;
 }
 
 .neon-button {

@@ -13,7 +13,7 @@ RUN apk add --no-cache tini \
     && chown -R node:node /app/.angular
 
 # Copy package.json and package-lock.json
-COPY ./srcs/package.json ./srcs/package-lock.json ./
+COPY srcs/package.json srcs/package-lock.json /app/
 
 
 RUN npm ci

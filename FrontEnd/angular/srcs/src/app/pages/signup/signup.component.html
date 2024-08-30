@@ -1,21 +1,73 @@
 <div class="tron-background">
-  <div class="register-container">
-    <h2 class="neon-text">{{ 'Register' | translate }}</h2>
-    <form #registrationForm="ngForm" (ngSubmit)="userRegisteration()">
-      <div class="input-group">
-        <input type="email" id="email" [(ngModel)]="user.email" name="email" required placeholder="{{ 'Email' | translate }}">
-      </div>
-      <div class="input-group">
-        <input type="password" id="password" [(ngModel)]="user.password" name="password" required placeholder="{{ 'Password' | translate }}">
-      </div>
-      <div class="input-group">
-        <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required placeholder="{{'Confirm Password' | translate }}">
-      </div>
-      <button type="submit" class="neon-button blue" [disabled]="!registrationForm.valid"> {{ 'Signup' | translate }} </button>
-    </form>
-    <p class="neon-text">
-      {{ 'Already have account?' | translate }}' 
-      <a routerLink="/login" class="neon-link">{{ 'Login?' | translate }} </a>
-    </p>
-  </div>
+    <div class="register-container">
+        <h2 class="neon-text">{{ 'Register' | translate }}</h2>
+
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+                <input type="email" id="email" formControlName="email" placeholder="{{ 'Email' | translate }}"
+                    autocomplete="username">
+                <div *ngIf="(email?.dirty || email?.touched)" class="text-danger">
+                    <ul>
+                        <li *ngIf="email?.hasError('required')">{{ getErrorMessage(email!, 'required') }}</li>
+                        <li *ngIf="email?.hasError('email')">{{ getErrorMessage(email!, 'email') }}</li>
+                        @if (emailError.value) {
+                            <li *ngFor="let error of emailError?.value">{{ error }}</li>
+                        }   
+                    </ul>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="input-group">
+                    <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password"
+                        placeholder="{{ 'Password' | translate }}" autocomplete="new-password">
+                    <span class="password-toggle" (click)="togglePasswordVisibility()">
+                        {{ showPassword ? 'HIDE' : 'SHOW' }}
+                    </span>
+                </div>
+                <div *ngIf="(password?.dirty || password?.touched)" class="text-danger">
+                    <ul>
+                        <li *ngIf="password?.hasError('required')">{{ getErrorMessage(password!, 'required') }}</li>
+                        @if (passwordError.value) {
+                            <li *ngFor="let error of passwordError?.value">{{ error }}</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="input-group">
+                    <input [type]="showPassword ? 'text' : 'password'" id="confirm_password"
+                        formControlName="confirm_password" placeholder="{{ 'Confirm Password' | translate }}"
+                        autocomplete="new-password" [class.password-mismatch]="signupForm.errors?.['passwordMatchError']
+                            && confirm_password.value !== ''">
+                    <span class="password-toggle" (click)="togglePasswordVisibility()">
+                        {{ showPassword ? 'HIDE' : 'SHOW' }}
+                    </span>
+                </div>
+                <div *ngIf="(confirm_password?.dirty || confirm_password?.touched)"
+                    class="text-danger">
+                    <ul>
+                        <li *ngIf="confirm_password?.hasError('required')">{{ getErrorMessage(confirm_password!,
+                            'required') }}</li>
+                        <li *ngIf="signupForm.errors?.['passwordMatchError'] && confirm_password.value !== ''">
+                            {{ getErrorMessage(confirm_password!, 'passwordMatchError') }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <button type="submit" class="neon-button blue" [disabled]="!signupForm.valid"> {{ 'Signup' | translate }}
+            </button>
+        </form>
+
+        <div [ngClass]=" {
+      'text-success': success,
+      'text-danger': !success
+      }">
+            {{ message }}
+        </div>
+
+        <p class="neon-text">
+            {{ 'Already have account?' | translate }}'
+            <a routerLink="/login" class="neon-link">{{ 'Login?' | translate }} </a>
+        </p>
+    </div>
 </div>

@@ -95,7 +95,7 @@ export class ChangeEmailLinkComponent implements OnInit{
             this.emailError?.setValue(fieldErrors.email);
           }
           else {
-            this.message = error.error.status || 'Something went wrong. Please try again later.';
+            this.message = error.error?.status || this.translate.instant('SOMETHING_WENT_WRONG');
           }
           return of(error);
         }),

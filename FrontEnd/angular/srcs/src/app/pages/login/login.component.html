@@ -1,6 +1,8 @@
 <div class="tron-background">
   <div class="login-container">
     <h2 class="neon-text">{{ 'Login' | translate }}</h2>
+
+    <!-- Form to sign in -->
     <form (ngSubmit)="loginUser()">
       <div class="input-group">
         <input type="email" [(ngModel)]="user.email" name="email" required placeholder="{{ 'Email' | translate }}">
@@ -13,6 +15,9 @@
       </div>
       <button type="submit" class="neon-button blue">{{ 'LOGIN' | translate }}</button>
     </form>
+
+
+    <!-- Start of buttons -->
     <div class="oauth-buttons">
       <button class="neon-button orange" (click)="loginGoogleOAuth()">
         <i class="fab fa-google"></i> {{ 'Google' | translate }}
@@ -36,7 +41,7 @@
   </div>
 </div>
 
-
+<!-- OTP Modal -->
 <div *ngIf="show2fa" class="modal">
   <div class="modal-content">
     <span class="close" (click)="closePopup()">&times;</span>
