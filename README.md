@@ -1,3 +1,15 @@
+[![Contributors][contributors-shield]][contributors-url]
+[![Commits][commits-shield]][commits-url]
+![Project passed][project-shield]
+
+[contributors-shield]: https://img.shields.io/badge/Contributors-3-orange
+[contributors-url]: https://github.com/cmenke42/ft_transcendence/graphs/contributors
+
+[commits-shield]: https://img.shields.io/badge/Last%20commit-September%202024-blue
+[commits-url]:  https://github.com/cmenke42/ft_transcendence/graphs/commit-activity
+
+[project-shield]:https://img.shields.io/badge/Project%20passed-121%25-green
+
 ## Developed by :
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -16,8 +28,10 @@
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## Project
-
 ft_transcendence is the final project of the 42 school curriculum, challenging students to create a fully-featured web application. This project focuses on building a single-page application which includes a real-time multiplayer game of pong and a live chat.
+
+## Short demo
+https://github.com/user-attachments/assets/7aa148a2-9c60-4426-bd4a-477e983b192f
 
 ## Features
 
